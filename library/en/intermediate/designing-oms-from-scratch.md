@@ -25,6 +25,10 @@ Think of your OMS as owning three ledgers at once. The first is intent: a strate
 
 A common design mistake is conflating these three. Teams build a single `Order` object, mutate it in place from multiple threads, and call it done. That works until a cancel request races an unsolicited fill, and now your object holds status `CANCELLED` while a fill sits unaccounted for in a log file somewhere. If you take one lesson from this chapter, take this: separate the record of what you tried from the record of what happened, and reconcile them explicitly rather than assuming they match.
 
+![Three ledgers an OMS reconciles: intent, wire protocol, and truth](figures/designing-oms-from-scratch-02.svg)
+
+*Figure 1: An OMS keeps intent, wire-protocol state, and confirmed exchange truth as distinct ledgers and reconciles them explicitly rather than assuming they match.*
+
 Your OMS also owns idempotency. Every order you send to an exchange needs a client-generated identifier that survives retries. If your network call times out, you have no way of knowing whether the exchange received it. Resending with the same client order ID and checking the exchange's response for "already exists" is the only sane way to avoid duplicate orders. Skip this step and you will eventually double an order size during a network blip, usually on the worst possible day for it.
 
 You will also need to decide, deliberately, what "ownership" means across multiple deployment instances of your own system. Run redundant OMS processes for failover, and only one of them can be actively sending orders for a given account at any moment. Otherwise you risk two processes independently retrying the same logical order and producing two live orders instead of one. A leader-election mechanism, backed by a distributed lock or a consensus store, needs to gate who is allowed to submit new orders at any given time. The standby instance needs to be genuinely passive, not just idle: it shouldn't even attempt to reconnect to the exchange with trading permissions until it has confirmed it holds the lock. Get this wrong and your redundancy design, meant to increase reliability, becomes the source of a duplicate-order incident instead.
@@ -45,6 +49,10 @@ PENDING_NEW -> NEW -> PARTIALLY_FILLED -> FILLED
                  v
               REJECTED (from PENDING_NEW only)
 ```
+
+![Order state machine showing valid transitions between PENDING_NEW, NEW, PARTIALLY_FILLED, FILLED, PENDING_CANCEL, CANCELLED, and REJECTED](figures/designing-oms-from-scratch-01.svg)
+
+*Figure 2: The order lifecycle as a finite state machine; every edge fires only through a validated `apply_event()` call, never a direct field write.*
 
 The key discipline is that transitions are one-directional and explicit. You never let application code just set `order.status = "CANCELLED"`. Instead you call `order.apply_event(CancelAckEvent(...))` and let the state machine validate whether that transition is legal from the current state. If it is not, say a cancel ack arrives for an order already in `FILLED`, you log it as an anomaly rather than silently overwriting state. This single guardrail catches an enormous fraction of the bugs that would otherwise surface as "why does our position not match the exchange."
 
@@ -91,6 +99,10 @@ class OrderActor:
             self.state.apply(event)
             self.publish_state_change()
 ```
+
+![Single-writer actor model: strategy, market data, and reconciliation events feed one queue into one order state machine](figures/designing-oms-from-scratch-03.svg)
+
+*Figure 3: A single-writer actor per order serializes all writers (strategy, market data, reconciliation) through one queue, eliminating torn reads.*
 
 This costs some throughput compared to a naive shared-memory approach. It buys correctness you cannot get any other way without extremely careful lock design, and lock-based order state machines are notoriously easy to get subtly wrong.
 

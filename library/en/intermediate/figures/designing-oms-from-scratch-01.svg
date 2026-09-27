@@ -1,0 +1,54 @@
+<svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="360" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Order State Machine: Valid Transitions</text>
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#58a6ff"/>
+    </marker>
+    <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f85149"/>
+    </marker>
+    <marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#3fb950"/>
+    </marker>
+  </defs>
+  <g fill="#161b22" stroke="#30363d" stroke-width="1.5">
+    <rect x="20" y="55" width="120" height="46" rx="6"/>
+    <rect x="200" y="55" width="100" height="46" rx="6"/>
+    <rect x="360" y="55" width="140" height="46" rx="6"/>
+    <rect x="580" y="55" width="100" height="46" rx="6"/>
+    <rect x="20" y="170" width="120" height="46" rx="6" stroke="#f85149"/>
+    <rect x="290" y="170" width="140" height="46" rx="6"/>
+    <rect x="200" y="280" width="120" height="46" rx="6" stroke="#3fb950"/>
+    <rect x="420" y="280" width="180" height="46" rx="6" stroke="#3fb950"/>
+  </g>
+  <g fill="#c9d1d9" text-anchor="middle" font-size="12">
+    <text x="80" y="82">PENDING_NEW</text>
+    <text x="250" y="82">NEW</text>
+    <text x="430" y="78">PARTIALLY_</text>
+    <text x="430" y="92">FILLED</text>
+    <text x="630" y="82">FILLED</text>
+    <text x="80" y="192">REJECTED</text>
+    <text x="80" y="206" fill="#8b949e" font-size="10">(from PENDING_NEW)</text>
+    <text x="360" y="192">PENDING_CANCEL</text>
+    <text x="360" y="206" fill="#8b949e" font-size="10">(fill may still land)</text>
+    <text x="260" y="302">CANCELLED</text>
+    <text x="510" y="302">CANCELLED</text>
+    <text x="510" y="316" fill="#8b949e" font-size="10">(with residual fill)</text>
+  </g>
+  <g stroke="#58a6ff" stroke-width="1.5" fill="none" marker-end="url(#a1)">
+    <line x1="140" y1="78" x2="200" y2="78"/>
+    <line x1="300" y1="78" x2="360" y2="78"/>
+    <line x1="500" y1="78" x2="580" y2="78"/>
+    <line x1="250" y1="101" x2="340" y2="170"/>
+    <line x1="430" y1="101" x2="380" y2="170"/>
+  </g>
+  <g stroke="#f85149" stroke-width="1.5" fill="none" marker-end="url(#a2)">
+    <line x1="80" y1="101" x2="80" y2="170"/>
+  </g>
+  <g stroke="#3fb950" stroke-width="1.5" fill="none" marker-end="url(#a3)">
+    <line x1="330" y1="216" x2="260" y2="280"/>
+    <line x1="390" y1="216" x2="500" y2="280"/>
+  </g>
+  <text x="350" y="345" fill="#8b949e" font-size="11" text-anchor="middle">Application code never sets status directly; each edge fires only via a validated apply_event() call.</text>
+</svg>
