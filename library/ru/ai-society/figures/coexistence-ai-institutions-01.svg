@@ -1,0 +1,17 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Институциональный разрыв (иллюстративно)</text>
+  <text x="320" y="44" fill="#8b949e" font-size="11" text-anchor="middle">Технология и институциональный ответ развиваются с разной скоростью</text>
+
+  <line x1="90" y1="260" x2="580" y2="260" stroke="#30363d" stroke-width="1"/>
+  <text x="335" y="288" fill="#8b949e" font-size="12" text-anchor="middle">время</text>
+
+  <path d="M90,250 C 250,210 400,100 580,70" fill="none" stroke="#f85149" stroke-width="2.5"/>
+  <text x="585" y="66" fill="#f85149" font-size="10" text-anchor="start">внедрение технологии</text>
+
+  <path d="M90,255 C 250,250 400,210 580,170" fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+  <text x="585" y="174" fill="#58a6ff" font-size="10" text-anchor="start">институциональный ответ</text>
+
+  <polygon points="400,100 580,70 580,170 400,210" fill="#f85149" opacity="0.08"/>
+  <text x="420" y="150" fill="#f85149" font-size="10">разрыв</text>
+</svg>

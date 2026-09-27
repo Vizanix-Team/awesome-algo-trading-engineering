@@ -33,6 +33,10 @@ total_impact(t) = permanent_impact(cumulative_volume_traded_by_t)
 
 The permanent component depends on how much you've traded in total up to time t; the temporary component depends on how fast you're trading right now, and decays once you stop. Confusing these two, or modeling only one, is one of the most common sources of a backtest overestimating live execution performance in impact-sensitive strategies.
 
+![Price path rising during a trading window then partially reverting after trading stops, settling above the pre-trade price at a new permanent level](figures/advanced-microstructure-price-impact-01.svg)
+
+*Figure 1: Price moves up while trading consumes liquidity, then partially reverts once trading stops; the portion that never reverts is the permanent impact.*
+
 ## 2. The Square-Root Impact Model and Its Foundations
 
 Across a wide range of empirical studies of trading costs in liquid markets, one specific functional form recurs with notable consistency: impact scaling approximately with the square root of the ratio of your order size to typical daily volume, rather than scaling linearly. A commonly used parametric form:
@@ -53,6 +57,10 @@ Treat `calibrated_c` as the single most important, and most fragile, parameter i
 
 The exponent itself, fixed at one-half in the canonical form, is worth periodically re-examining rather than accepting as universal law across every market and instrument class you trade. Some empirical work in specific market segments finds exponents that deviate meaningfully from one-half, and a rigorous practice re-estimates both the coefficient and the exponent jointly from your own data on a periodic basis, rather than assuming the textbook exponent transfers cleanly to every new instrument class or venue your trading expands into. A poorly-fitting exponent produces systematically biased cost estimates specifically at the extremes of your typical order size range, understating cost for very large orders if the true exponent is higher than assumed, or overstating it if the true exponent is lower, exactly the two failure directions that matter most for the sizing decisions this model exists to inform.
 
+![Curve of impact in basis points against order size, comparing sublinear square-root growth to naive linear growth](figures/advanced-microstructure-price-impact-02.svg)
+
+*Figure 2: Impact growing with the square root of participation rate rises fast for small orders but stays well below a naive linear assumption at larger sizes.*
+
 ## 3. Order Book Resilience and Liquidity Replenishment
 
 The rate at which liquidity replenishes after being consumed, resilience, is a distinct, measurable property from the static depth you observe in an order book snapshot, and it matters enormously for sequencing decisions within an execution schedule. An instrument with shallow displayed depth but fast resilience (liquidity providers quickly re-quote after being hit) tolerates a faster execution pace than an instrument with the same displayed depth but slow resilience, where consumed liquidity takes meaningfully longer to return.
@@ -68,6 +76,10 @@ def measure_resilience(book_snapshots_after_trade, pre_trade_depth, threshold=0.
 ```
 
 Incorporate measured resilience into your scheduling logic directly: for instruments with fast measured resilience, a more front-loaded, aggressive execution schedule captures the benefit of low patience cost without paying an outsized impact penalty, since the book recovers quickly between your child orders. For slow-resilience instruments, spacing child orders further apart, even at the cost of additional timing risk exposure, tends to produce a better realized outcome than an aggressive schedule that repeatedly hits a book that hasn't had time to recover.
+
+![Depth-at-touch dropping after a trade and recovering quickly in one instrument versus slowly in another](figures/advanced-microstructure-price-impact-03.svg)
+
+*Figure 3: The same displayed depth can hide very different resilience; a fast-recovering book supports a more aggressive schedule than a slow-recovering one.*
 
 Resilience itself is not a static instrument property; it varies through the trading day and degrades noticeably during periods of market-wide stress, when liquidity providers across the board become more cautious about replenishing consumed liquidity quickly. A resilience estimate calibrated during calm conditions will overstate how quickly the book recovers during a stress event, precisely when an execution schedule that assumes fast recovery will do the most damage by trading too aggressively into a book that isn't actually refilling at its historical rate. Track resilience as a live, continuously updated metric rather than a fixed instrument characteristic set once, and build your scheduling logic to react to a measured degradation in real time rather than trusting a stale, historically-average resilience figure through a live stress event.
 
@@ -102,6 +114,10 @@ total_cost_vector = ImpactMatrix @ trade_vector
 where `ImpactMatrix[i][j]` captures how trading instrument `j` impacts the price of instrument `i`, including the diagonal (own-impact) and off-diagonal (cross-impact) terms. Estimating this full matrix reliably requires substantially more data than single-instrument calibration and is only worth the added complexity for portfolios where correlated multi-leg execution is a routine, material part of the trading activity, rather than an occasional edge case.
 
 A pragmatic middle ground between ignoring cross-impact entirely and estimating a full, dense impact matrix is grouping instruments into a small number of clusters based on known structural relationships (sector membership, shared underlying exposure, index composition) and estimating a single cross-impact coefficient per cluster pair rather than per individual instrument pair. This dramatically reduces the number of parameters you need to estimate reliably while still capturing the dominant cross-impact effects for the relationships that matter most, and it degrades far more gracefully under limited data than attempting a full matrix estimation that ends up dominated by estimation noise for any instrument pair without a large, dedicated history of correlated joint execution to calibrate against.
+
+![Grid of four instruments showing a strong own-impact diagonal and varying shades of cross-impact between related instrument pairs](figures/advanced-microstructure-price-impact-04.svg)
+
+*Figure 4: The impact matrix's diagonal captures each instrument's own-impact; off-diagonal cells capture how trading one instrument moves related ones.*
 
 ## 6. Optimal Execution as a Control Problem
 

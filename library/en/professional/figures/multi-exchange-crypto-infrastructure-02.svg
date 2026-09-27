@@ -1,0 +1,16 @@
+<svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="280" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Exchange Distress Escalation Ladder</text>
+  <g fill="#161b22" stroke="#3fb950" stroke-width="1.5"><rect x="60" y="50" width="520" height="45" rx="6"/></g>
+  <g fill="#161b22" stroke="#d29922" stroke-width="1.5"><rect x="60" y="105" width="520" height="45" rx="6"/></g>
+  <g fill="#161b22" stroke="#da3633" stroke-width="1.5"><rect x="60" y="160" width="520" height="45" rx="6"/></g>
+  <g fill="#c9d1d9" font-size="12">
+    <text x="80" y="70" fill="#3fb950">Single delayed withdrawal</text>
+    <text x="80" y="86" fill="#8b949e" font-size="10">-&gt; closer monitoring only</text>
+    <text x="80" y="125" fill="#d29922">Delays + degraded API responsiveness</text>
+    <text x="80" y="141" fill="#8b949e" font-size="10">-&gt; halt new position increases on that exchange</text>
+    <text x="80" y="180" fill="#da3633">Signals suggest compromise or insolvency</text>
+    <text x="80" y="196" fill="#8b949e" font-size="10">-&gt; immediate, aggressive exposure reduction</text>
+  </g>
+  <text x="320" y="235" fill="#8b949e" font-size="11" text-anchor="middle">Codify these tiers in advance; the cost of overreacting to a false alarm is real too.</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Square-Root Impact vs Linear Impact</text>
+  <line x1="60" y1="240" x2="580" y2="240" stroke="#30363d"/>
+  <line x1="60" y1="60" x2="60" y2="240" stroke="#30363d"/>
+  <polyline points="60,240 130,190 200,160 270,138 340,118 410,102 480,88 550,75" fill="none" stroke="#3fb950" stroke-width="2.5"/>
+  <polyline points="60,240 130,220 200,200 270,180 340,160 410,140 480,120 550,100" fill="none" stroke="#8b949e" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="500" y="70" fill="#3fb950" font-size="11" text-anchor="middle">sqrt(Q/ADV)</text>
+  <text x="500" y="115" fill="#8b949e" font-size="11" text-anchor="middle">linear (naive)</text>
+  <text x="320" y="265" fill="#8b949e" font-size="11" text-anchor="middle">Order size relative to average daily volume (Q / ADV)</text>
+  <text x="25" y="150" fill="#8b949e" font-size="11" text-anchor="middle" transform="rotate(-90 25 150)">Impact (bps)</text>
+</svg>

@@ -1,0 +1,17 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Оптимальная траектория исполнения</text>
+
+  <line x1="60" y1="240" x2="580" y2="240" stroke="#30363d"/>
+  <line x1="60" y1="60" x2="60" y2="240" stroke="#30363d"/>
+  <text x="320" y="270" fill="#8b949e" font-size="12" text-anchor="middle">время исполнения t</text>
+  <text x="30" y="150" fill="#8b949e" font-size="12" text-anchor="middle" transform="rotate(-90 30 150)">остаток объёма</text>
+
+  <path d="M60,70 Q150,90 250,140 T450,210 T580,235" stroke="#a371f7" stroke-width="2.5" fill="none"/>
+  <text x="180" y="90" fill="#a371f7" font-size="11" text-anchor="middle">агрессивнее в начале (κ высокая)</text>
+
+  <path d="M60,70 L580,235" stroke="#58a6ff" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+  <text x="450" y="150" fill="#58a6ff" font-size="11" text-anchor="middle">линейный TWAP (для сравнения)</text>
+
+  <text x="320" y="60" fill="#8b949e" font-size="11" text-anchor="middle">remaining(t) = Q · sinh(κ(T−t)) / sinh(κT)</text>
+</svg>

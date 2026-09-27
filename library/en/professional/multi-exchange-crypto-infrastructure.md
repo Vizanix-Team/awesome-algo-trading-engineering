@@ -58,6 +58,10 @@ Precision handling deserves special engineering attention: every exchange enforc
 
 Error code normalization deserves the same rigor as status and precision normalization, and is frequently neglected because it seems like a lower-priority detail until an incident makes clear it isn't. Each exchange returns its own vocabulary of error codes and messages for conceptually similar failures, insufficient balance, invalid price, rate limit exceeded, market closed, often with inconsistent formatting, inconsistent HTTP status code usage, and occasionally overlapping or ambiguous codes that mean different things depending on which endpoint returned them. Build a normalized internal error taxonomy and map every exchange's raw error responses into it explicitly, maintaining this mapping as a living, tested artifact, since your retry logic, alerting, and automated remediation all depend on correctly classifying what kind of failure just occurred. A misclassified error (treating a genuine insufficient-balance rejection as a transient, retryable network error, for instance) can produce a retry loop that never succeeds and burns through your rate-limit budget for no benefit.
 
+![Four exchange-specific APIs each passing through their own adapter into one common internal representation](figures/multi-exchange-crypto-infrastructure-01.svg)
+
+*Figure 1: Every exchange's status codes, precision rules, and error taxonomy are normalized inside the adapter layer, so core trading logic never sees a venue-specific quirk directly.*
+
 ## 3. Custody, Wallets, and the Counterparty Risk Layer
 
 Unlike traditional markets where a regulated custodian or clearing house holds assets on your behalf under a well-defined legal framework, crypto exchange balances typically represent an unsecured claim against that exchange. If the exchange becomes insolvent or is compromised, your balance there is at direct risk with limited recourse. This counterparty risk needs explicit, quantified engineering treatment, not an implicit assumption that exchange balances are as safe as a bank deposit.
@@ -81,6 +85,10 @@ class ExchangeExposureMonitor:
 Design your withdrawal automation to run continuously, moving excess balances beyond active trading needs to more secure custody (cold storage or a qualified custodian) on a regular schedule, rather than treating withdrawal as a manual, ad hoc process. The value of automated exposure reduction is precisely that it acts before a human notices a problem, and by the time a human notices exchange distress publicly, an automated system watching the right signals should already have reduced exposure.
 
 Build a genuine escalation ladder for exchange distress signals rather than a single binary alert, since the appropriate response scales with signal severity and the cost of overreacting to a false alarm is itself real. A single delayed withdrawal might warrant closer monitoring alone. A pattern of delays combined with degraded API responsiveness might warrant halting new position increases on that exchange while existing positions continue trading normally. A severe combination of signals, particularly anything suggesting the exchange itself may be compromised or insolvent, warrants immediate, aggressive exposure reduction regardless of the cost of doing so quickly. Codify these escalation tiers explicitly in advance, during calm conditions, rather than trying to improvise the right response threshold while an actual crisis is unfolding and every additional minute of exposure carries real, growing risk.
+
+![Three escalation tiers for exchange distress signals, from closer monitoring through halting new positions to immediate exposure reduction](figures/multi-exchange-crypto-infrastructure-02.svg)
+
+*Figure 2: The response to a distress signal scales with its severity, from passive monitoring up to immediate, aggressive exposure reduction.*
 
 ## 4. Settlement Asymmetry and Cross-Exchange Balance Management
 
@@ -130,6 +138,10 @@ class ResilientWebSocketClient:
 
 The `resync_fn` call on every reconnect is essential and frequently skipped by less careful implementations. Many exchanges' WebSocket feeds deliver incremental updates (order book deltas, position changes) that are only meaningful relative to a known starting snapshot, and resuming delta processing after a reconnect without first re-establishing that baseline snapshot produces silently corrupted state that looks superficially normal until a downstream calculation goes visibly wrong.
 
+![State diagram of a WebSocket client moving from connected to disconnected to reconnected, fetching a fresh snapshot before resuming delta processing](figures/multi-exchange-crypto-infrastructure-03.svg)
+
+*Figure 3: A reconnect must fetch an authoritative snapshot before resuming incremental delta processing, or local state silently drifts from the exchange's true state.*
+
 Sequence number validation on the delta stream itself provides an important additional layer of defense beyond the reconnect-time resync. Many exchanges include a sequence number on each incremental update specifically so a receiving client can detect a dropped message even while the connection itself remains nominally open. A gap in sequence numbers without a disconnect event is a real, if less common, failure mode, and a client that doesn't check for it will silently apply deltas out of order or with a gap, corrupting its local order book copy without any connection-level signal that anything went wrong. Validate every incoming sequence number against the expected next value, and treat any gap as equivalent to a disconnect for recovery purposes, forcing an immediate resync rather than continuing to apply subsequent deltas on top of state you already know is potentially wrong.
 
 ## 6. Rate Limits as a First-Class Design Constraint
@@ -165,6 +177,10 @@ Watch specifically for the compounding failure mode where rate-limit exhaustion 
 ## 7. Cross-Exchange Arbitrage Infrastructure
 
 A cross-exchange price discrepancy is only a real, capturable opportunity if you can act on both legs fast enough and with enough confidence that both will actually execute, a classic execution risk problem specific to needing simultaneous or near-simultaneous fills across two independent, unrelated venues with no mechanism to guarantee both legs complete together. Design arbitrage execution logic to explicitly manage this leg risk: define a maximum acceptable delay between the two legs, and build automated unwind logic for the case where one leg fills and the other does not within that window, since holding an unintended, unhedged one-legged position is a real risk outcome that will happen periodically no matter how well-tuned your latency is.
+
+![Timeline of an arbitrage pair where leg A fills immediately but leg B remains unfilled past its deadline, triggering an automated unwind](figures/multi-exchange-crypto-infrastructure-04.svg)
+
+*Figure 4: When leg B fails to fill within the maximum acceptable delay, automated unwind logic closes the exposed leg A position rather than leaving it unhedged.*
 
 ```
 def execute_arbitrage_pair(leg_a_order, leg_b_order, max_leg_delay_ms):

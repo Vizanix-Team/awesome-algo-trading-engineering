@@ -60,6 +60,10 @@ Design the kill switch check to be cheap and impossible to accidentally bypass t
 
 Consider also the failure mode of the kill switch mechanism itself becoming unreachable. If the shared kill flag lives in a distributed coordination service and that service becomes unavailable, your gateway needs a defined behavior for that specific scenario, and per the fail-closed principle discussed later in this chapter, unavailability of the kill switch check itself should default to blocking new orders, not permitting them. Test this specific failure path deliberately: simulate the coordination service becoming unreachable while trading is active, and confirm the gateway actually halts rather than defaulting open, since this exact scenario, the safety mechanism's own dependency failing, is precisely the kind of interaction that's easy to overlook when each component is tested only in isolation against its own happy path.
 
+![Four independent kill switch layers: application, gateway, exchange, and physical, each able to halt trading on its own](figures/production-risk-systems-01.svg)
+
+*Figure 1: The gateway layer is the most reliable chokepoint because every order to an exchange must pass through it regardless of which upstream process generated it.*
+
 ## 3. Limit Hierarchies: Firm, Desk, Strategy, Instrument
 
 Limits need to exist at multiple aggregation levels simultaneously, because a strategy operating within its own limit can still contribute to a firm-wide breach if enough strategies are correlated or if a single instrument's exposure aggregates dangerously across otherwise-independent strategies. Structure limits hierarchically: firm-wide gross and net exposure, desk-level sublimits within the firm limit, strategy-level sublimits within the desk limit, and instrument-level concentration limits that cut across the strategy hierarchy entirely.
@@ -83,6 +87,10 @@ class LimitHierarchy:
 Every level of this hierarchy needs its own owner responsible for setting and reviewing that specific limit, and the limits need periodic review against realized usage. A limit set once at system launch and never revisited tends to either become meaninglessly loose (usage has grown but the limit never adjusted, providing false comfort) or artificially constraining (market conditions changed and the limit no longer reflects appropriate risk appetite), and neither state is safe to leave unaddressed for long.
 
 Correlated breach risk across the hierarchy deserves specific attention during limit design: if a single market event (a sudden broad sell-off, a major index-level move) is likely to cause many strategies to simultaneously want to trade in the same direction, sizing each strategy's individual limit without considering this correlation can leave the firm-level limit dramatically under-protective relative to what happens when many individually-compliant strategies breach in the same direction at once. Explicitly model plausible correlated-breach scenarios during limit calibration, sizing firm and desk-level limits with an awareness that individual strategy limits summing to well below the aggregate limit provides false comfort if those strategies' risk-taking is likely to be highly correlated under exactly the stress conditions the limits exist to guard against.
+
+![Limit hierarchy tree from firm-wide exposure down through desks and strategies, with an instrument concentration limit cutting across all of them](figures/production-risk-systems-02.svg)
+
+*Figure 2: Limits nest hierarchically from firm to strategy, while an instrument-level concentration limit cuts across the strategy hierarchy entirely.*
 
 ## 4. Circuit Breakers and Rate-of-Change Controls
 
@@ -111,6 +119,10 @@ class CircuitBreaker:
             self.trip(strategy_id, "LOSS_RATE_ANOMALY")
 ```
 
+![Order submission rate spiking far above its historical threshold, triggering a circuit breaker trip and halting the strategy](figures/production-risk-systems-03.svg)
+
+*Figure 3: A circuit breaker on order rate catches a stuck-in-a-loop bug well before the resulting notional exposure would ever trip a static limit.*
+
 The rate-of-change dimension is what catches a "stuck in a loop" bug, a strategy that has entered some pathological state and is now sending orders far faster than any legitimate trading logic would, well before that malfunction accumulates enough notional exposure to trip a static limit. Tune the thresholds against your own historical distribution of legitimate order rates and P&L volatility per strategy. A generic threshold copied from another firm's configuration will either trip constantly on your normal activity or fail to trip on your actual anomalies, since normal operating ranges vary enormously across strategy types.
 
 Recalibrate these thresholds on a defined schedule rather than treating them as set-once configuration, since a strategy's legitimate operating range genuinely shifts as it evolves, as market conditions change, and as trading volume grows over time. A circuit breaker threshold calibrated when a strategy was new and trading small size will trip constantly once that strategy has scaled up its normal operation, training the team to treat trips from that strategy as routine noise, which defeats the entire purpose of having a circuit breaker in the first place. Build threshold recalibration into the same regular operational review cadence as limit review, so both evolve together and neither drifts silently out of sync with the trading activity it's meant to govern.
@@ -122,6 +134,10 @@ Every safety-critical decision point needs an explicit answer to "what happens i
 This fail-closed discipline has a real, ongoing cost: it means your trading system will sometimes halt or reject legitimate activity due to a transient infrastructure hiccup that has nothing to do with an actual risk problem, and that cost is a deliberate, accepted tradeoff, not a design flaw to be optimized away.
 
 Distinguish carefully between genuine uncertainty that warrants fail-closed behavior and mere latency that a slightly more patient design could absorb without sacrificing safety. If a risk check's data source is simply slow to respond under normal, healthy operation, the right fix is a faster data path or a tighter timeout budget for that specific dependency, not a blanket policy of failing closed on every momentary delay. Reserve fail-closed behavior specifically for genuine uncertainty about whether the answer is safe, not as a substitute for fixing an underlying performance problem that's better solved directly, since conflating the two leads teams to tolerate unnecessary trading halts that a proper latency fix would have eliminated without compromising the fail-closed principle at all. The alternative, fail-open, where uncertainty defaults to permitting activity, trades a bounded, recoverable cost (some missed trading opportunity during a transient outage) for an unbounded, potentially catastrophic one (unconstrained trading during exactly the moment your safety infrastructure is compromised). Any engineer proposing to relax a fail-closed check to reduce false-positive halts needs to explicitly justify why the specific failure mode being tolerated cannot coincide with a genuine risk event, which in practice is a very hard case to make convincingly.
+
+![Decision point comparing fail-closed (reject or hold, bounded cost) against fail-open (approve, unbounded cost) when a risk check cannot confirm a safe answer](figures/production-risk-systems-04.svg)
+
+*Figure 4: Fail-closed trades a bounded, recoverable cost for the unbounded, potentially catastrophic cost of fail-open behavior under genuine uncertainty.*
 
 Make this justification process a formal, documented gate in your engineering review culture, not an informal conversation that leaves no trace. Require any change that weakens a fail-closed safety check to go through a review specifically focused on the scenario where the weakened check would have mattered, with sign-off from someone in a risk-oversight role who is organizationally independent of the pressure to ship the underlying feature faster. This kind of structural separation between the people who feel the cost of a false-positive halt most acutely and the people responsible for evaluating a proposed weakening of the safety net protects against the natural, understandable pressure to erode fail-closed discipline gradually over time in the name of reducing operational friction.
 

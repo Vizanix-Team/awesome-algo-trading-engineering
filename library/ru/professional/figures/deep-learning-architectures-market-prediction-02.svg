@@ -1,0 +1,45 @@
+<svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="320" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Механизм внимания на исторической последовательности</text>
+
+  <g fill="#161b22" stroke="#30363d" stroke-width="1.5">
+    <rect x="60" y="80" width="60" height="40" rx="4"/>
+    <rect x="140" y="80" width="60" height="40" rx="4"/>
+    <rect x="220" y="80" width="60" height="40" rx="4"/>
+    <rect x="300" y="80" width="60" height="40" rx="4"/>
+    <rect x="380" y="80" width="60" height="40" rx="4"/>
+    <rect x="460" y="80" width="60" height="40" rx="4"/>
+    <rect x="540" y="80" width="60" height="40" rx="4"/>
+  </g>
+  <g fill="#8b949e" font-size="9" text-anchor="middle">
+    <text x="90" y="103">t-6</text>
+    <text x="170" y="103">t-5</text>
+    <text x="250" y="103">t-4</text>
+    <text x="330" y="103">t-3</text>
+    <text x="410" y="103">t-2</text>
+    <text x="490" y="103">t-1</text>
+    <text x="570" y="103">t</text>
+  </g>
+
+  <g fill="#161b22" stroke="#a371f7" stroke-width="2">
+    <rect x="300" y="220" width="60" height="40" rx="4"/>
+  </g>
+  <text x="330" y="243" fill="#a371f7" font-size="10" text-anchor="middle">выход</text>
+
+  <path d="M90,120 L320,220" stroke="#58a6ff" stroke-width="0.8" opacity="0.3" marker-end="url(#arrowK)"/>
+  <path d="M170,120 L320,220" stroke="#58a6ff" stroke-width="2.5" opacity="0.85" marker-end="url(#arrowK)"/>
+  <path d="M250,120 L325,220" stroke="#58a6ff" stroke-width="0.8" opacity="0.3" marker-end="url(#arrowK)"/>
+  <path d="M330,120 L330,220" stroke="#58a6ff" stroke-width="1" opacity="0.4" marker-end="url(#arrowK)"/>
+  <path d="M410,120 L335,220" stroke="#58a6ff" stroke-width="3" opacity="0.9" marker-end="url(#arrowK)"/>
+  <path d="M490,120 L340,220" stroke="#58a6ff" stroke-width="0.8" opacity="0.3" marker-end="url(#arrowK)"/>
+  <path d="M570,120 L345,220" stroke="#58a6ff" stroke-width="1.2" opacity="0.5" marker-end="url(#arrowK)"/>
+
+  <text x="350" y="290" fill="#8b949e" font-size="12" text-anchor="middle">Толщина связи — вес внимания: t-5 и t-2 значимы для текущего предсказания,</text>
+  <text x="350" y="308" fill="#8b949e" font-size="12" text-anchor="middle">даже несмотря на бóльшую дистанцию, чем ближайшие моменты</text>
+
+  <defs>
+    <marker id="arrowK" markerWidth="6" markerHeight="6" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L5,2.5 L0,5 Z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+</svg>

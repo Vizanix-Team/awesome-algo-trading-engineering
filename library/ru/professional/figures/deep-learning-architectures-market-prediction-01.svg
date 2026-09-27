@@ -1,0 +1,48 @@
+<svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="340" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Концептуальная схема ячейки LSTM</text>
+
+  <g fill="#161b22" stroke="#30363d" stroke-width="2">
+    <rect x="150" y="70" width="400" height="200" rx="10"/>
+  </g>
+  <text x="350" y="95" fill="#8b949e" font-size="12" text-anchor="middle">ячейка в момент t</text>
+
+  <g fill="#161b22" stroke="#f85149" stroke-width="1.5">
+    <circle cx="220" cy="150" r="26"/>
+  </g>
+  <text x="220" y="154" fill="#f85149" font-size="11" text-anchor="middle">forget</text>
+
+  <g fill="#161b22" stroke="#3fb950" stroke-width="1.5">
+    <circle cx="300" cy="150" r="26"/>
+  </g>
+  <text x="300" y="154" fill="#3fb950" font-size="11" text-anchor="middle">input</text>
+
+  <g fill="#161b22" stroke="#a371f7" stroke-width="1.5">
+    <circle cx="380" cy="150" r="26"/>
+  </g>
+  <text x="380" y="154" fill="#a371f7" font-size="11" text-anchor="middle">cell</text>
+
+  <g fill="#161b22" stroke="#58a6ff" stroke-width="1.5">
+    <circle cx="460" cy="150" r="26"/>
+  </g>
+  <text x="460" y="154" fill="#58a6ff" font-size="11" text-anchor="middle">output</text>
+
+  <line x1="150" y1="230" x2="550" y2="230" stroke="#8b949e" stroke-width="2"/>
+  <text x="350" y="250" fill="#8b949e" font-size="11" text-anchor="middle">cell state C[t-1] → C[t] (long-term память)</text>
+
+  <path d="M60,290 L150,230" stroke="#58a6ff" stroke-width="1.5" marker-end="url(#arrowJ)"/>
+  <text x="60" y="305" fill="#58a6ff" font-size="11" text-anchor="middle">h[t-1]</text>
+  <path d="M60,120 L150,150" stroke="#58a6ff" stroke-width="1.5" marker-end="url(#arrowJ)"/>
+  <text x="60" y="105" fill="#58a6ff" font-size="11" text-anchor="middle">x[t]</text>
+
+  <path d="M550,150 L640,150" stroke="#3fb950" stroke-width="1.5" marker-end="url(#arrowJ)"/>
+  <text x="640" y="140" fill="#3fb950" font-size="11" text-anchor="middle">h[t]</text>
+
+  <text x="350" y="310" fill="#8b949e" font-size="11" text-anchor="middle">Гейты регулируют, что забыть, что добавить и что вывести из состояния ячейки</text>
+
+  <defs>
+    <marker id="arrowJ" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#8b949e"/>
+    </marker>
+  </defs>
+</svg>
