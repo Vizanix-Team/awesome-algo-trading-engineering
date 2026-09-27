@@ -77,6 +77,10 @@ The rigorous caveat that separates professional use from naive enthusiasm: atten
 
 Attention weight visualization offers a genuinely useful interpretability angle specific to this architecture family, distinct from the general interpretability techniques discussed later in this chapter. Inspecting which assets the model is attending to most heavily when producing a given prediction can reveal whether the learned relationships match a domain expert's economic intuition (a semiconductor stock's prediction drawing heavily on its direct supply chain peers, for instance) or whether the model has instead learned a spurious, sample-specific pattern with no obvious economic justification. Build this visualization into your standard model evaluation workflow for any attention-based architecture, since an accurate-looking model whose attention pattern makes no economic sense is a strong warning sign of overfitting that a pure accuracy metric alone would not surface.
 
+![Four assets connected by attention weights of varying thickness, with Asset A attending strongly to Asset B and weakly to the others](figures/deep-learning-architectures-market-prediction-02.svg)
+
+*Figure 2: Visualizing attention weights lets you check whether the model's learned inter-asset relationships match economic intuition or look like a spurious, sample-specific pattern.*
+
 ## 4. Regularization as the Central Engineering Challenge
 
 Given the persistent risk of overfitting to noise discussed throughout this chapter, regularization deserves more engineering attention in financial deep learning than architecture selection itself. Beyond standard dropout and weight decay, financial-specific regularization approaches include restricting model capacity deliberately below what the raw data volume would technically support (fewer parameters than a naive scaling rule would suggest), using ensemble averaging across multiple models trained on different historical windows or with different random initializations to reduce variance in the final prediction, and explicitly penalizing model confidence to counteract the tendency of an overfit model to produce overconfident predictions on noise-driven training patterns.
@@ -115,6 +119,10 @@ def mc_dropout_uncertainty(model, x, n_passes=30):
 
 Feed this uncertainty estimate directly into position sizing logic. Scale position size down, or skip the trade entirely, when the model's own uncertainty estimate for a given prediction is high relative to its typical range, rather than treating every prediction from the model as equally trustworthy regardless of the model's own internal confidence in that specific instance.
 
+![Scatter of repeated Monte Carlo dropout forward passes clustering tightly for a low-uncertainty input and scattering widely for a high-uncertainty one](figures/deep-learning-architectures-market-prediction-03.svg)
+
+*Figure 3: Running many dropout-enabled forward passes turns spread across the resulting predictions into a usable uncertainty estimate for position sizing.*
+
 Calibration itself needs independent validation, not just the mechanical production of an uncertainty number. A model's stated uncertainty is only useful if it's genuinely calibrated, meaning that among predictions the model claims to be, say, 80% confident in a given direction, roughly 80% actually turn out correct over a large enough sample. Validate this explicitly with a reliability diagram, plotting stated confidence against realized accuracy across confidence buckets, and recalibrate (through a simple post-hoc adjustment, such as temperature scaling) if the raw model output shows systematic over- or under-confidence, which deep models frequently do without this correction, tending toward overconfidence in particular given their capacity to fit training data closely.
 
 ## 7. Model Interpretability for Risk and Compliance
@@ -140,6 +148,10 @@ Deploying a deep model into a live trading pipeline introduces engineering conce
 Version and serve models through a dedicated model-serving layer that decouples the model artifact from the trading application code calling it, allowing model updates (retraining, architecture changes) to deploy independently from trading logic changes, with careful tracking of exactly which model version produced which historical prediction, since this traceability becomes essential for both interpretability requests described above and for debugging any unexpected shift in the strategy's behavior.
 
 Deploy new model versions through the same staged, canary-style rollout discipline this library recommends for other production systems, rather than switching a strategy's entire live traffic to a newly retrained model the moment training completes. Route a small fraction of trading decisions through the new model version while the bulk continues on the previous, proven version, comparing realized outcomes between the two over a meaningful observation window before completing the rollout. This staged approach catches the specific and recurring failure mode where a newly retrained model looks superior on its own held-out validation set but underperforms once exposed to genuinely live, real-time market conditions that its validation period, however carefully constructed, did not fully anticipate.
+
+![Live order flow split mostly to a proven production model and a small fraction to a canary model, with outcomes compared before full rollout](figures/deep-learning-architectures-market-prediction-04.svg)
+
+*Figure 4: Routing a small fraction of live traffic to a newly retrained model before a full rollout catches validation-to-live performance gaps a static held-out test set would miss.*
 
 ```
 class ModelServingLayer:
