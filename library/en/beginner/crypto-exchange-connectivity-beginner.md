@@ -33,6 +33,10 @@ A non-custodial approach, common in decentralized exchanges, lets you keep contr
 
 For your first automated trading project, a custodial exchange is the more approachable starting point. The API patterns resemble the general exchange APIs from the previous book closely, and you don't need to simultaneously learn blockchain-specific concepts on top of everything else. Just go in aware that "custodial" means real counterparty risk: only keep on any given exchange the amount you're genuinely comfortable being unable to access if that exchange has a serious problem.
 
+![Side-by-side comparison of custodial exchanges holding your funds versus non-custodial wallets you control](figures/crypto-exchange-connectivity-beginner-01.svg)
+
+*Figure 1: Custodial exchanges trade counterparty risk for a familiar, approachable API pattern.*
+
 ## 3. Spot, Margin, and Derivatives: Know What You're Connecting To
 
 Crypto exchanges typically offer several distinct trading products, and connecting to the wrong one by mistake is a genuinely common beginner error. Spot trading means buying or selling the actual asset directly, exactly as described throughout this library: you pay cash and receive the coin, or vice versa.
@@ -88,6 +92,10 @@ Move through this progression deliberately, and resist the urge to skip steps be
 Fourth, if you move to real funds, start with an amount you'd be completely fine losing entirely, treating it explicitly as tuition for learning the operational realities of live connectivity rather than as a serious trading allocation. Fifth, only after your system has run reliably, with proper error handling and logging as covered in the previous book, for a meaningful stretch of time, consider gradually increasing the capital involved.
 
 Every step in this progression exists because a real, specific failure mode is common at that stage: rejected orders from precision mistakes, dropped connections your code doesn't notice, or a leaked key doing real damage. Walking through them in order, rather than jumping straight to live trading with real capital, is the single highest-leverage habit this book can hand you.
+
+![Five-step progression: read-only key, WebSocket feed, testnet orders, small real funds, gradual scaling](figures/crypto-exchange-connectivity-beginner-02.svg)
+
+*Figure 2: A deliberate, ordered path from zero to a live connection, catching a different failure mode at each stage.*
 
 ## Summary
 

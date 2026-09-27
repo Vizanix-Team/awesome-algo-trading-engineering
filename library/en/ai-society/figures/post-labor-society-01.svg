@@ -1,0 +1,34 @@
+<svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="380" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">The Several Functions Paid Work Performs</text>
+  <text x="320" y="44" fill="#8b949e" font-size="11" text-anchor="middle">Conceptual breakdown, not a weighted ranking</text>
+
+  <circle cx="320" cy="200" r="55" fill="#161b22" stroke="#a371f7" stroke-width="2"/>
+  <text x="320" y="196" fill="#c9d1d9" font-size="12" text-anchor="middle">Paid</text>
+  <text x="320" y="212" fill="#c9d1d9" font-size="12" text-anchor="middle">work</text>
+
+  <g stroke="#3b4453" stroke-width="1.5">
+    <line x1="320" y1="145" x2="320" y2="90"/>
+    <line x1="270" y1="165" x2="150" y2="110"/>
+    <line x1="270" y1="235" x2="150" y2="290"/>
+    <line x1="320" y1="255" x2="320" y2="320"/>
+    <line x1="370" y1="235" x2="490" y2="290"/>
+    <line x1="370" y1="165" x2="490" y2="110"/>
+  </g>
+  <g fill="#161b22" stroke="#58a6ff">
+    <rect x="270" y="60" width="100" height="34" rx="5"/>
+    <rect x="70" y="85" width="120" height="34" rx="5"/>
+    <rect x="70" y="280" width="120" height="34" rx="5"/>
+    <rect x="270" y="325" width="100" height="34" rx="5"/>
+    <rect x="450" y="280" width="120" height="34" rx="5"/>
+    <rect x="450" y="85" width="120" height="34" rx="5"/>
+  </g>
+  <g fill="#c9d1d9" font-size="11" text-anchor="middle">
+    <text x="320" y="81">Subsistence</text>
+    <text x="130" y="106">Status</text>
+    <text x="130" y="301">Structure</text>
+    <text x="320" y="346">Connection</text>
+    <text x="510" y="301">Identity</text>
+    <text x="510" y="106">Civic glue</text>
+  </g>
+</svg>

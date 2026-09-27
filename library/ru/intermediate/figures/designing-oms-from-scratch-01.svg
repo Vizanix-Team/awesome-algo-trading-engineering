@@ -1,0 +1,61 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="420" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Конечный автомат жизненного цикла ордера</text>
+
+  <g fill="#161b22" stroke="#30363d" stroke-width="1.5">
+    <rect x="30" y="60" width="130" height="42" rx="6"/>
+    <rect x="280" y="60" width="130" height="42" rx="6"/>
+    <rect x="530" y="60" width="130" height="42" rx="6"/>
+    <rect x="280" y="150" width="130" height="42" rx="6"/>
+    <rect x="530" y="150" width="130" height="42" rx="6"/>
+    <rect x="30" y="150" width="130" height="42" rx="6"/>
+    <rect x="280" y="240" width="130" height="42" rx="6"/>
+    <rect x="530" y="240" width="130" height="42" rx="6"/>
+  </g>
+  <g fill="#c9d1d9" text-anchor="middle" font-size="12">
+    <text x="95" y="86">PENDING_NEW</text>
+    <text x="345" y="86">PENDING_ACK</text>
+    <text x="595" y="86">REJECTED</text>
+    <text x="345" y="176">LIVE</text>
+    <text x="595" y="176">PENDING_CANCEL</text>
+    <text x="95" y="176">UNKNOWN</text>
+    <text x="345" y="266">PARTIALLY_FILLED</text>
+    <text x="595" y="266">CANCELLED</text>
+  </g>
+
+  <g stroke="#58a6ff" stroke-width="1.5" fill="none" marker-end="url(#arrow2)">
+    <path d="M160,81 L280,81"/>
+    <path d="M410,81 L530,81"/>
+    <path d="M345,102 L345,150"/>
+    <path d="M410,171 L530,171"/>
+    <path d="M345,192 L345,240"/>
+  </g>
+  <g stroke="#3fb950" stroke-width="1.5" fill="none" marker-end="url(#arrow2g)">
+    <path d="M345,240 Q345,210 345,192" transform="translate(60,0)"/>
+    <path d="M340,282 Q250,300 160,192" fill="none"/>
+  </g>
+  <g stroke="#f85149" stroke-width="1.5" fill="none" marker-end="url(#arrow2r)">
+    <path d="M595,240 Q500,120 410,90" fill="none"/>
+  </g>
+  <text x="345" y="220" fill="#3fb950" font-size="11" text-anchor="middle">FullFill</text>
+  <text x="595" y="215" fill="#f85149" font-size="11" text-anchor="middle">CancelReject → LIVE</text>
+  <text x="100" y="130" fill="#8b949e" font-size="11" text-anchor="middle">timeout / нет Ack</text>
+
+  <text x="350" y="330" fill="#8b949e" font-size="11" text-anchor="middle">FILLED и CANCELLED — терминальные состояния; UNKNOWN требует процедуры восстановления</text>
+  <g fill="#161b22" stroke="#a371f7" stroke-width="1.5">
+    <rect x="270" y="345" width="160" height="40" rx="6"/>
+  </g>
+  <text x="350" y="369" fill="#a371f7" font-size="12" text-anchor="middle">FILLED</text>
+
+  <defs>
+    <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#58a6ff"/>
+    </marker>
+    <marker id="arrow2g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#3fb950"/>
+    </marker>
+    <marker id="arrow2r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f85149"/>
+    </marker>
+  </defs>
+</svg>

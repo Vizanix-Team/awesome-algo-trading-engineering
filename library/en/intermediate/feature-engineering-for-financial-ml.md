@@ -31,6 +31,10 @@ Leakage is the single most common reason a financial ML model looks excellent in
 
 Look-ahead in rolling calculations is common: computing a rolling average "centered" on the current observation instead of trailing it means the calculation implicitly uses future data points. Always use trailing windows and double check your library's default behavior. Some default to centered windows, which silently leaks future information into what looks like an innocent moving average feature.
 
+![Timeline showing a centered rolling window spanning both past and future relative to the current row, versus a trailing window using only the past](figures/feature-engineering-for-financial-ml-01.svg)
+
+*Figure 1: A centered window at row t reaches into rows that were not yet known at t; a trailing window only reaches backward.*
+
 Label-feature timing mismatch: if your label is "return over the next hour" but your feature uses a data point that itself was only fully known at the end of that hour (a daily-adjusted volume figure that gets revised throughout the day, say), you've built a feature that couldn't have existed at prediction time in live trading.
 
 Universe survivorship in feature construction: computing a cross-sectional percentile rank feature using today's universe of tradeable instruments, when historically some of those instruments didn't exist yet or had different characteristics, silently biases your historical feature distribution.
@@ -121,6 +125,10 @@ def triple_barrier_label(prices, entry_idx, upper_pct, lower_pct, max_holding):
     return 0  # time barrier hit, neither triggered
 ```
 
+![Price paths hitting an upper barrier, a lower barrier, or a time barrier first, each producing a different label](figures/feature-engineering-for-financial-ml-02.svg)
+
+*Figure 2: A triple-barrier label is assigned by whichever of the upper, lower, or time barrier the price path touches first, mirroring how a real stop-loss/take-profit strategy would exit.*
+
 Whichever labeling scheme you choose, be explicit and consistent about it across your research pipeline, since comparing model performance across experiments that silently used different labeling logic produces conclusions that aren't actually comparable.
 
 ## 7. Feature Stability and Decay
@@ -130,6 +138,10 @@ A feature that predicted returns well two years ago may predict them poorly toda
 Building this monitoring into your pipeline as an ongoing process, rather than a one-time research exercise, is what separates a research artifact from a production-grade feature set. A feature dashboard tracking rolling information coefficient (the correlation between a feature and forward returns, recomputed over a trailing window) per feature over time gives you an early warning system for exactly this kind of decay.
 
 Distinguish feature decay from feature regime-dependence carefully, since they call for different responses. A feature that's decaying monotonically, with information coefficient trending steadily toward zero over an extended period, is likely being arbitraged away and should eventually be retired. A feature whose information coefficient oscillates between clearly positive and clearly negative depending on identifiable market conditions (positive in trending regimes and negative in range-bound ones, say) isn't decaying at all. It's regime-dependent, and the right response is to condition the feature's use on a regime signal rather than discarding it, since it still carries real, usable information within the regimes where it performs well.
+
+![Two information-coefficient time series: one trending steadily toward zero, the other oscillating between positive and negative with market regime](figures/feature-engineering-for-financial-ml-03.svg)
+
+*Figure 3: A monotonically decaying information coefficient signals a feature being arbitraged away; an oscillating one signals regime-dependence that calls for conditioning, not retirement.*
 
 ## 8. Building a Feature Pipeline You Can Trust
 

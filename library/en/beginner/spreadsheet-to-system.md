@@ -25,6 +25,10 @@ This is a perfectly reasonable starting point, and this book treats it as one ra
 
 This book takes exactly this kind of spreadsheet idea and walks it through every step to becoming a small working system, using the vocabulary and concepts already introduced throughout this library: market data, backtesting, exchange APIs, and risk management. Nothing here is exotic. It's the practical stitching together of what you've already learned.
 
+![Six-stage journey from a spreadsheet idea to precise rules, a Python decision function, a real backtest, a live loop with testnet, and small real capital](figures/spreadsheet-to-system-01.svg)
+
+*Figure 1: The full path this book walks, one deliberate step at a time.*
+
 ## 2. Formalizing the Idea Into Rules
 
 Before opening any code editor, write your strategy's rules in plain, unambiguous language, precise enough that another person, or a computer, could follow them without needing to ask you a clarifying question. Vague phrasing like "buy when the trend looks strong" isn't a rule yet, it's a feeling. A real rule looks more like "buy when the twenty-period moving average of the closing price is above the fifty-period moving average, and I currently hold no position in this instrument."
@@ -32,6 +36,10 @@ Before opening any code editor, write your strategy's rules in plain, unambiguou
 Write down the exit rule with equal precision. When do you sell? Is there a stop loss, and at what level or distance from entry? Is there a target profit level where you take gains? Is there a maximum holding time after which you exit regardless of price? Leaving the exit vague is one of the most common ways a strategy that seemed clear in your head turns into something inconsistent once you try to code it.
 
 Finally, write down the position sizing rule from the risk management book of this library: exactly how much capital or how many units you commit per trade, and how that might change based on your available capital or the instrument's recent volatility. A complete strategy definition has all three: an entry rule, an exit rule, and a sizing rule, each stated precisely enough to remove any need for judgment calls in the moment.
+
+![Three boxes labeled entry rule, exit rule, and sizing rule, each with a concrete example](figures/spreadsheet-to-system-02.svg)
+
+*Figure 2: A complete strategy definition needs all three rules stated precisely enough for a computer to follow.*
 
 ## 3. From Spreadsheet Formulas to Code
 

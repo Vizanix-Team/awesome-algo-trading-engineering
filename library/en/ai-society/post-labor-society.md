@@ -29,6 +29,10 @@ To reason clearly about a lower-labor future, it helps to disentangle the severa
 
 The most obvious function is subsistence: work as the mechanism by which people obtain the resources needed to survive and meet basic material needs. But work has also historically served as a primary source of social status and hierarchy, of daily structure and time organization, of social connection to a network of colleagues outside one's family, of a sense of contribution and competence, mastering a skill and applying it usefully, and of identity. The common social reflex of introducing oneself by profession is not an accident. It reflects how deeply occupation has become entangled with self-conception in industrial and post-industrial societies specifically, a pattern that is itself a relatively recent historical development rather than a human universal. Pre-industrial and non-market societies have organized status, structure, and identity around other axes, kinship, craft guild membership, religious role, land tenure, suggesting these functions can in principle attach to something other than paid employment, even if paid employment is what currently carries them for most people in modern economies.
 
+![A hub-and-spoke diagram showing paid work connected to six distinct functions it performs: subsistence, status, structure, connection, identity, and civic glue](figures/post-labor-society-01.svg)
+
+*Figure 1: Paid work currently bundles several distinct functions together. A lower-labor future has to find some replacement for each, not just for the subsistence function.*
+
 This distinction matters because it reframes the post-labor question. The economically necessary version of work, work as subsistence mechanism, is the version most directly addressed by AI-driven productivity gains and potential redistribution mechanisms. The socially and psychologically load-bearing version of work, work as status, structure, connection, and identity, is a much harder problem. It is not obviously solved by simply providing people with income absent employment. It requires some replacement mechanism for the non-economic functions work has been serving, and history offers limited, mixed guidance on how societies have handled this when it has arisen on a smaller scale before.
 
 ## 3. The Psychological Research on Work and Well-Being
@@ -76,6 +80,10 @@ Caregiving and community-oriented activity, for children, for aging family membe
 Lifelong education and genuinely open-ended intellectual or creative exploration, pursued for its own sake rather than instrumentally toward employment, represents a third plausible candidate, one that becomes considerably more economically feasible in a world where AI-driven productivity gains have, in the more optimistic economic scenarios discussed in the companion prosperity essay, meaningfully lowered the cost of both material subsistence and the tools, educational content, mentorship substitutes, needed to pursue serious learning outside formal institutional structures.
 
 None of these candidates is a guaranteed or complete substitute for what paid work currently provides. A realistic assessment should expect a mixed, imperfect, and unevenly distributed patchwork of replacement structures rather than any single clean solution, mirroring the genuinely uneven historical record on how well past leisure classes managed the same underlying challenge.
+
+![A spectrum diagram placing three scenarios for a lower-labor future, gradual hour reduction, a bifurcated labor market, and a cultural revaluation of non-market work, by the degree of cultural change each would require](figures/post-labor-society-02.svg)
+
+*Figure 2: Three distinct scenarios for a lower-labor future, arranged by how much cultural change each would require. This is a way of organizing possibilities, not a probability ranking.*
 
 ## 8. The Civic Dimension: Work as Social Glue
 

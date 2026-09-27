@@ -33,6 +33,10 @@ The third is a simulation engine: the code that walks through the historical dat
 
 The engine typically works one time step at a time: look at the data available up to and including this moment, ask the strategy whether it wants to act, simulate the resulting trade if so, then move to the next time step and repeat. This step-by-step discipline, never letting the strategy see data from the future relative to its current simulated moment, is the single most important property a correct backtest engine must have. It's exactly what the next section addresses in detail.
 
+![The backtest engine loop: look at data up to time t, ask the strategy, simulate the trade, advance](figures/introduction-to-backtesting-01.svg)
+
+*Figure 1: The engine repeats this loop one time step at a time, never peeking beyond the current moment.*
+
 At the end of the run, you get a record of every simulated trade along with a time series of your simulated portfolio's value, from which you calculate performance measures covered later in this book.
 
 ## 3. Look-Ahead Bias: The Silent Killer
@@ -53,6 +57,10 @@ The risk grows every time you adjust a parameter, add a rule, or try a variation
 
 A practical defense is splitting your historical data into separate periods: one for developing and tuning your strategy (in-sample data), and one you don't touch until you're finished tuning, used only once at the very end to check performance (out-of-sample data). If a strategy performs dramatically worse on out-of-sample data than on the data you tuned it against, that gap is a strong warning sign of overfitting.
 
+![Historical data split into an earlier in-sample period and a later out-of-sample period](figures/introduction-to-backtesting-03.svg)
+
+*Figure 2: The out-of-sample slice is touched only once, at the very end, to honestly check performance.*
+
 A related discipline is preferring simple strategies with few parameters over complex ones with many. Every additional parameter you tune gives overfitting another way to sneak in. A strategy you can describe in one or two sentences, with one or two parameters, is far easier to reason about honestly than one with a dozen interacting thresholds.
 
 ## 5. Modeling Real-World Costs
@@ -68,6 +76,10 @@ Strategies that trade frequently are especially sensitive to cost assumptions, s
 A backtest typically reports a handful of summary numbers: total return, the overall percentage gain or loss over the tested period; maximum drawdown, the largest peak-to-trough decline your simulated portfolio experienced along the way; and some measure of risk-adjusted return, which weighs your profit against how much your portfolio value bounced around to get there.
 
 Look at the full equity curve, the chart of simulated portfolio value over time, not just the final summary numbers. A strategy that ends with an attractive total return might have gotten there through one lucky period concentrated in a small slice of your test, with the rest of the time essentially flat or losing. That tells a very different story than a smooth, steadily rising curve.
+
+![Two equity curves for the same strategy: a smooth rising line with no costs, and a choppier line with realistic costs](figures/introduction-to-backtesting-02.svg)
+
+*Figure 3: Including realistic slippage and fees from the start reveals a materially different, more honest equity curve.*
 
 Pay close attention to drawdown and how long recovery from it took. A strategy with an excellent average return but occasional brutal drawdowns might be mathematically profitable over a long enough horizon while being practically unbearable to actually hold through, since real capital and real nerves have limits that a spreadsheet doesn't.
 

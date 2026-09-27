@@ -1,0 +1,18 @@
+<svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="340" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Capability Sets the Pie; Institutions Divide It</text>
+  <text x="320" y="44" fill="#8b949e" font-size="11" text-anchor="middle">Conceptual illustration, not a forecast of outcomes</text>
+
+  <line x1="120" y1="300" x2="120" y2="80" stroke="#30363d" stroke-width="1"/>
+  <line x1="120" y1="300" x2="560" y2="300" stroke="#30363d" stroke-width="1"/>
+  <text x="340" y="325" fill="#8b949e" font-size="12" text-anchor="middle">Institutional / policy response: weak → strong</text>
+  <text x="55" y="190" fill="#8b949e" font-size="12" text-anchor="middle" transform="rotate(-90 55 190)">AI-driven productivity gain: low → high</text>
+
+  <line x1="340" y1="80" x2="340" y2="300" stroke="#21262d" stroke-dasharray="4 4"/>
+  <line x1="120" y1="190" x2="560" y2="190" stroke="#21262d" stroke-dasharray="4 4"/>
+
+  <text x="225" y="235" fill="#8b949e" font-size="11" text-anchor="middle">Stagnation</text>
+  <text x="450" y="235" fill="#f85149" font-size="11" text-anchor="middle">Narrow enrichment</text>
+  <text x="225" y="130" fill="#8b949e" font-size="11" text-anchor="middle">Chaotic transition</text>
+  <text x="450" y="130" fill="#3fb950" font-size="11" text-anchor="middle">Broad prosperity</text>
+</svg>

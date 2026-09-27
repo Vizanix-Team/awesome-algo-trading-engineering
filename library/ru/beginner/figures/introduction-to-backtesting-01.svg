@@ -1,0 +1,40 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Базовая петля бэктеста</text>
+
+  <g font-size="10.5" fill="#c9d1d9" text-anchor="middle">
+    <rect x="30" y="60" width="105" height="55" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="82" y="82">Доступная</text>
+    <text x="82" y="96">на момент T</text>
+    <text x="82" y="108" fill="#8b949e" font-size="8">информация</text>
+
+    <rect x="150" y="60" width="105" height="55" rx="6" fill="#161b22" stroke="#a371f7"/>
+    <text x="202" y="90">Сигнал</text>
+    <text x="202" y="105" fill="#8b949e" font-size="8">купить/продать/держать</text>
+
+    <rect x="270" y="60" width="105" height="55" rx="6" fill="#161b22" stroke="#f85149"/>
+    <text x="322" y="82">Размер и цена</text>
+    <text x="322" y="96">с издержками</text>
+
+    <rect x="390" y="60" width="105" height="55" rx="6" fill="#161b22" stroke="#3fb950"/>
+    <text x="442" y="82">Обновить</text>
+    <text x="442" y="96">портфель</text>
+
+    <rect x="510" y="60" width="100" height="55" rx="6" fill="#161b22" stroke="#8b949e"/>
+    <text x="560" y="90">Записать</text>
+    <text x="560" y="105" fill="#8b949e" font-size="8">результат</text>
+  </g>
+  <g stroke="#8b949e" stroke-width="1.5" marker-end="url(#a6)">
+    <line x1="135" y1="87" x2="148" y2="87"/>
+    <line x1="255" y1="87" x2="268" y2="87"/>
+    <line x1="375" y1="87" x2="388" y2="87"/>
+    <line x1="495" y1="87" x2="508" y2="87"/>
+  </g>
+  <path d="M560,115 L560,150 L82,150 L82,118" fill="none" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a6)"/>
+  <text x="320" y="145" fill="#8b949e" font-size="9" text-anchor="middle">повторить для следующего момента T+1</text>
+  <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#8b949e"/></marker></defs>
+
+  <text x="320" y="195" fill="#f85149" font-size="12" text-anchor="middle">Ключевая ошибка: использовать в шаге 1 данные из будущего T</text>
+  <text x="320" y="220" fill="#8b949e" font-size="11" text-anchor="middle">Пишите цикл так, будто вы сидите перед экраном в момент T и видите</text>
+  <text x="320" y="238" fill="#8b949e" font-size="11" text-anchor="middle">только то, что было бы видно тогда</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Markout: Price Behavior After a Fill</text>
+  <line x1="60" y1="150" x2="580" y2="150" stroke="#8b949e" stroke-dasharray="3,3"/>
+  <text x="590" y="154" fill="#8b949e" font-size="10">mid at fill</text>
+  <circle cx="240" cy="150" r="6" fill="#c9d1d9"/>
+  <text x="240" y="135" fill="#c9d1d9" font-size="11" text-anchor="middle">t = 0 (fill)</text>
+
+  <polyline points="60,145 120,148 180,150 240,150 300,175 360,195 420,200 480,198" fill="none" stroke="#f85149" stroke-width="2.5"/>
+  <text x="420" y="220" fill="#f85149" font-size="11" text-anchor="middle">Toxic fill: price falls after a buy (negative markout)</text>
+
+  <polyline points="60,145 120,148 180,150 240,150 300,140 360,120 420,115 480,118" fill="none" stroke="#3fb950" stroke-width="2.5"/>
+  <text x="420" y="100" fill="#3fb950" font-size="11" text-anchor="middle">Clean fill: price holds or improves (neutral/positive markout)</text>
+
+  <text x="320" y="270" fill="#8b949e" font-size="11" text-anchor="middle">Markout = direction x (mid price at t+100ms/1s minus fill price)</text>
+</svg>

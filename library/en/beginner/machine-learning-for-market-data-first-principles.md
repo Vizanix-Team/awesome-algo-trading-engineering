@@ -25,6 +25,10 @@ The appeal of machine learning for market data is straightforward. Rather than m
 
 The catch, which this entire book is really about, is that "found a pattern in historical data" and "found a genuine, repeatable, exploitable pattern" are very different claims, and the gap between them is wider and easier to fall into in trading than in almost any other application of machine learning, for reasons the statistics-for-trading and neural network books of this library already began to explain. This book walks through the concrete, practical steps that keep that gap from swallowing your project.
 
+![Six-stage workflow: frame the problem, build features, define labels, split by time, train a simple model, evaluate with costs](figures/machine-learning-for-market-data-first-principles-01.svg)
+
+*Figure 1: The disciplined workflow this book walks through, each stage designed to keep look-ahead bias and overfitting out.*
+
 ## 2. Framing the Prediction Problem Correctly
 
 Before touching any data, define precisely what you're trying to predict, at what point in time you'd know the inputs, and at what point in time you'd know whether the prediction was right. This sounds obvious, but vague framing here is the single most common source of the look-ahead bias the backtesting book of this library warned about, now hiding inside a machine learning pipeline instead of a hand-written strategy rule.
@@ -54,6 +58,10 @@ Consider also whether a binary label, "up" or "down," discards useful informatio
 The backtesting book's discussion of in-sample and out-of-sample data applies here with extra force, because machine learning models are specifically designed to find and fit patterns in whatever data you show them, which is exactly the mechanism that makes overfitting so easy if you're not careful. Split your historical data into a training set, used to fit the model's parameters, and a genuinely separate test set, touched only once, at the very end, to check how the model performs on data it never saw during training.
 
 For market data specifically, this split must respect chronological order: train on an earlier period, test on a strictly later period, never on data shuffled randomly across time. Randomly shuffling before splitting, a common default in general machine learning tutorials that don't consider time series, would let information from the future leak into your training process indirectly, since nearby time points in market data are often correlated with each other, producing an optimistic, misleading test result.
+
+![A correct chronological train/validation/test split compared with an incorrect randomly shuffled split](figures/machine-learning-for-market-data-first-principles-02.svg)
+
+*Figure 2: Splitting by time keeps correlated nearby observations from leaking between training and testing.*
 
 A further refinement, called a validation set, gives you a third, separate slice of data for making decisions about the model itself, like choosing how many layers a neural network should have, without touching your final test set until every such decision is already locked in. This matters because if you repeatedly check your test set performance while adjusting the model, you've effectively turned the test set into part of your training process, through the same data snooping mechanism the statistics-for-trading book of this library warned about, quietly undermining the very independence that made it useful as a check in the first place.
 

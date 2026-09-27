@@ -34,6 +34,10 @@ OrderBook {
 }
 ```
 
+![Limit order book shown as two sorted price-level structures, bids descending and asks ascending, each with a FIFO queue of orders](figures/market-microstructure-for-engineers-01.svg)
+
+*Figure 1: The order book as two sorted structures; the best bid and best ask form the top of book, and each price level holds a FIFO (or pro-rata) queue of resting orders.*
+
 The best bid and best ask define the "top of book," and the gap between them is the spread. Everything about how orders execute against this structure follows from two simple properties: price priority (better prices execute first) and, within a price level, time priority (earlier orders execute before later ones at the same price) on most exchanges. Some venues use pro-rata allocation instead, splitting fills proportionally by size at a price level rather than strictly by arrival time.
 
 Understanding this data structure directly, not just abstractly, matters because it explains behavior that otherwise looks mysterious. It explains why a limit order sitting at the best price for a long time without filling might still be "worth" more than it looks (queue position has value), and why canceling and resubmitting an order at the same price resets you to the back of the queue, a cost many new systems accidentally incur by canceling and replacing orders more often than necessary.
@@ -70,11 +74,19 @@ The practical lesson for engineers building order routing logic: you are never j
 
 Pro-rata matching deserves a concrete example because it inverts intuitions built on time-priority venues. Imagine three resting orders at the best price: 100, 300, and 600 shares, in that arrival order. Under time priority, a new incoming order for 200 shares fully executes against the first order and part of the second, in strict arrival sequence. Under pro-rata, that same 200-share incoming order splits proportionally across all three resting orders roughly according to their relative size, meaning the largest resting order captures the largest share of the fill regardless of when it arrived. This changes the optimal strategy for a market maker meaningfully. On a pro-rata venue, posting large size matters more than posting early. On a time-priority venue, being first at a price level matters more than being large.
 
+![Comparison of a 200-share incoming order filling under time priority versus pro-rata allocation across three resting orders](figures/market-microstructure-for-engineers-02.svg)
+
+*Figure 2: The same 200-share incoming order fills very differently under time priority (strict arrival order) versus pro-rata (proportional to resting size).*
+
 ## 3. Spread, Depth, and What They Tell You
 
 The bid-ask spread is the most visible but least informative single number in microstructure. A tight spread signals competitive liquidity provision at the very top of book, but tells you nothing about how much size sits behind that top price. Depth, the cumulative quantity available at each price level moving away from the touch, tells you how much you can trade before your own order starts consuming multiple levels and paying a worse average price.
 
 A useful engineering habit is computing "depth-adjusted spread" or an effective spread for a hypothetical order size: given you need to trade Q shares right now with a market order, what average price do you actually get, compared to the mid price before you traded? This single number, computed programmatically from live book snapshots, is far more useful for sizing decisions than staring at the raw top-of-book spread.
+
+![Curve of effective execution cost in basis points rising with order size as an order consumes deeper price levels](figures/market-microstructure-for-engineers-03.svg)
+
+*Figure 3: Effective cost stays flat while an order fits within top-of-book depth, then rises sharply once it must walk multiple price levels.*
 
 ```
 def effective_cost_bps(book_side, quantity, mid_price):

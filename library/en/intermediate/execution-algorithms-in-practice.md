@@ -44,6 +44,10 @@ def twap_schedule(total_qty, start, end, interval_seconds):
 
 TWAP's appeal is predictability and simplicity: no dependency on volume forecasts, easy to audit, easy to explain to a risk committee. Its weakness is that real trading volume is never uniform across a session. It typically spikes at the open and close and sags at midday. A pure TWAP schedule trades a larger fraction of a thin period's volume than it should, increasing impact exactly when liquidity is scarcest.
 
+![Bar chart comparing TWAP's equal-sized clips against VWAP's volume-shaped clips across the trading session](figures/execution-algorithms-in-practice-01.svg)
+
+*Figure 1: TWAP spreads clips evenly across time, while VWAP concentrates clips near the open and close to match the market's typical U-shaped volume curve.*
+
 In practice, engineers rarely deploy pure equal-interval TWAP for anything beyond a benchmark or a fallback algorithm when better volume data is unavailable. It remains valuable precisely because it is simple enough to reason about when everything else is failing.
 
 A useful refinement that still keeps TWAP's simplicity is randomized interval jitter. Instead of sending exactly 1,000 shares every sixty seconds on the dot, randomize both the interval (55 to 65 seconds) and the clip size (900 to 1,100 shares) around the nominal schedule. This doesn't change the algorithm's fundamental behavior or its exposure to volume-shape mismatch, but it meaningfully reduces the pattern's visibility to other participants watching for a metronomic, easily detected order flow signature. Any production TWAP implementation worth deploying includes this kind of randomization as a default, not an optional extra.
@@ -89,6 +93,10 @@ def front_loaded_schedule(total_qty, n_slices, front_weight=1.5):
 
 This produces a decaying schedule: bigger clips early, smaller clips late, front-loading urgency without dumping the whole order at once.
 
+![Bar chart of a front-loaded implementation shortfall schedule with decaying clip sizes](figures/execution-algorithms-in-practice-02.svg)
+
+*Figure 2: A front-loaded schedule trades urgently early to cut timing risk, then tapers to smaller, more patient clips as the order is worked down.*
+
 The right amount of front-loading depends on a genuine, quantifiable input: your estimate of the asset's short-term volatility relative to its typical impact cost. A highly volatile instrument with modest impact cost justifies aggressive front-loading, since the risk of adverse drift dominates the cost calculus. A relatively stable instrument with high impact cost per unit traded justifies a flatter, more patient schedule, since impact cost dominates and there's little timing risk to hedge against by rushing. Production implementation shortfall algorithms typically expose this balance as a single tunable urgency parameter, letting a trader dial the schedule shape between something close to a flat TWAP and something close to an aggressive front-loaded execution, based on their specific read of current conditions for that specific order.
 
 ## 5. Participation-Rate Algorithms
@@ -114,6 +122,10 @@ market_drift = benchmark_price - arrival_price
 your_impact  = avg_exec_price - benchmark_price
 total_shortfall = avg_exec_price - arrival_price  # = market_drift + your_impact
 ```
+
+![Waterfall chart decomposing total shortfall into arrival price, market drift, your impact, and average execution price](figures/execution-algorithms-in-practice-03.svg)
+
+*Figure 3: Total implementation shortfall splits into market drift (the benchmark moving against you) and your own impact (execution price versus benchmark).*
 
 This decomposition, even when approximate, tells you something actionable. If your impact term is consistently large relative to peers trading similar sizes, your algorithm's clip sizing or aggressiveness needs tuning. If drift dominates, the problem may be more about timing decisions upstream of the algorithm than the algorithm itself.
 

@@ -49,6 +49,10 @@ The civil society and public legitimacy layer, often the most neglected in techn
 
 Each layer requires different expertise, different institutional forms, and operates on a different timescale. A comprehensive approach to AI institutional design needs to make progress on all four simultaneously rather than treating any single layer as sufficient on its own, a mistake that has recurred in how public discourse sometimes fixates on one layer, usually either pure technical safety research or pure international treaty-making, to the neglect of the others.
 
+![A stacked diagram of four institutional layers: technical safety, domestic regulatory, international coordination, and civil society and public legitimacy](figures/coexistence-ai-institutions-01.svg)
+
+*Figure 1: The four layers of AI institutional design that need simultaneous attention, each requiring distinct expertise and moving on a distinct timescale.*
+
 ## 4. Domestic Governance: Balancing Innovation and Precaution
 
 Within any given jurisdiction, AI governance design faces a genuine, unresolved tradeoff between fostering beneficial innovation and guarding against the misuse, accident, and structural risks documented in the danger-of-advanced-AI essay in this collection, and reasonable, well-informed people disagree substantially about where the appropriate balance lies, a disagreement this essay does not attempt to resolve given its analytical rather than advocacy purpose.
@@ -84,6 +88,10 @@ Concrete institutional mechanisms for addressing this gap remain underdeveloped 
 ## 8. Designing for Adaptability Under Deep Uncertainty
 
 Given the pervasive uncertainty documented throughout this collection about AI's actual trajectory, perhaps the single most important design principle for any institution built to govern this technology is adaptability: the capacity to update rules, oversight intensity, and priorities relatively quickly in response to new evidence, rather than locking in a specific framework designed around today's best guess about tomorrow's technology, a guess the superintelligence timelines essay in this collection suggests should be held with considerable humility.
+
+![A four-node feedback loop diagram showing monitor evidence, update rules, deploy, and observe outcomes cycling continuously](figures/coexistence-ai-institutions-02.svg)
+
+*Figure 2: Adaptability as a continuous feedback loop, rather than a one-time regulatory framework fixed to today's best guess about the technology.*
 
 This design principle has concrete institutional implications. Sunset clauses and mandatory periodic review requirements, common in some regulatory frameworks but not universal, help prevent rules calibrated to an earlier, potentially outdated understanding of the technology from persisting well past their usefulness. Modular governance structures, where narrow, specific risk categories such as biological misuse potential can be addressed with more rapid, targeted mechanisms while broader, more contested questions proceed through slower, more deliberative processes, allow different parts of the governance system to move at the pace appropriate to their specific evidentiary maturity rather than forcing everything through a single, uniformly slow or uniformly fast process. And sustained investment in the monitoring and forecasting infrastructure discussed in the superintelligence timelines essay provides the actual evidentiary basis that adaptive institutions need in order to update meaningfully, rather than adapting based on incomplete information or public sentiment alone.
 

@@ -1,0 +1,29 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Латентность: перцентили вместо среднего</text>
+
+  <line x1="50" y1="250" x2="600" y2="250" stroke="#30363d"/>
+  <g fill="#58a6ff">
+    <rect x="60" y="220" width="30" height="30"/>
+    <rect x="100" y="190" width="30" height="60"/>
+    <rect x="140" y="150" width="30" height="100"/>
+    <rect x="180" y="110" width="30" height="140"/>
+    <rect x="220" y="150" width="30" height="100"/>
+    <rect x="260" y="200" width="30" height="50"/>
+    <rect x="300" y="230" width="30" height="20"/>
+    <rect x="340" y="242" width="30" height="8"/>
+    <rect x="380" y="247" width="30" height="3"/>
+  </g>
+  <g fill="#f85149">
+    <rect x="500" y="243" width="14" height="7"/>
+  </g>
+
+  <line x1="195" y1="100" x2="195" y2="260" stroke="#3fb950" stroke-dasharray="4 3"/>
+  <text x="195" y="90" fill="#3fb950" font-size="11" text-anchor="middle">p50</text>
+  <line x1="315" y1="220" x2="315" y2="260" stroke="#a371f7" stroke-dasharray="4 3"/>
+  <text x="315" y="210" fill="#a371f7" font-size="11" text-anchor="middle">p95</text>
+  <line x1="507" y1="230" x2="507" y2="260" stroke="#f85149" stroke-dasharray="4 3"/>
+  <text x="507" y="220" fill="#f85149" font-size="11" text-anchor="middle">p99.9 (хвост)</text>
+
+  <text x="320" y="280" fill="#8b949e" font-size="11" text-anchor="middle">разница между p50 и p99.9 говорит о риске больше, чем среднее значение</text>
+</svg>

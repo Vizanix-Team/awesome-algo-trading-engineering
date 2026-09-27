@@ -1,0 +1,35 @@
+<svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="260" fill="#0d1117"/>
+  <text x="320" y="28" fill="#c9d1d9" font-size="16" text-anchor="middle">Временные горизонты алгоритмической торговли</text>
+  <line x1="50" y1="140" x2="600" y2="140" stroke="#30363d" stroke-width="2"/>
+  <!-- scale marks -->
+  <g font-size="10" fill="#8b949e" text-anchor="middle">
+    <line x1="90" y1="134" x2="90" y2="146" stroke="#8b949e"/>
+    <text x="90" y="160">микросекунды</text>
+    <line x1="230" y1="134" x2="230" y2="146" stroke="#8b949e"/>
+    <text x="230" y="160">внутри дня</text>
+    <line x1="370" y1="134" x2="370" y2="146" stroke="#8b949e"/>
+    <text x="370" y="160">несколько дней</text>
+    <line x1="510" y1="134" x2="510" y2="146" stroke="#8b949e"/>
+    <text x="510" y="160">недели / месяцы</text>
+  </g>
+  <!-- markers -->
+  <circle cx="90" cy="140" r="8" fill="#f85149"/>
+  <text x="90" y="110" fill="#c9d1d9" font-size="11" text-anchor="middle">HFT</text>
+  <text x="90" y="95" fill="#8b949e" font-size="9" text-anchor="middle">близость к серверам</text>
+
+  <circle cx="230" cy="140" r="8" fill="#58a6ff"/>
+  <text x="230" y="110" fill="#c9d1d9" font-size="11" text-anchor="middle">Intraday</text>
+  <text x="230" y="95" fill="#8b949e" font-size="9" text-anchor="middle">обычный сервер</text>
+
+  <circle cx="370" cy="140" r="8" fill="#3fb950"/>
+  <text x="370" y="110" fill="#c9d1d9" font-size="11" text-anchor="middle">Свинг</text>
+  <text x="370" y="95" fill="#8b949e" font-size="9" text-anchor="middle">низкие требования к скорости</text>
+
+  <circle cx="510" cy="140" r="8" fill="#a371f7"/>
+  <text x="510" y="110" fill="#c9d1d9" font-size="11" text-anchor="middle">Среднесрочные квант-стратегии</text>
+  <text x="510" y="95" fill="#8b949e" font-size="9" text-anchor="middle">статистика важнее скорости</text>
+
+  <text x="320" y="200" fill="#8b949e" font-size="11" text-anchor="middle">Выбор горизонта определяет требования к инфраструктуре сильнее, чем что-либо ещё</text>
+  <text x="320" y="220" fill="#8b949e" font-size="11" text-anchor="middle">Оптимизация скорости кода для стратегии, держащей позиции днями — усилие уходит не туда</text>
+</svg>

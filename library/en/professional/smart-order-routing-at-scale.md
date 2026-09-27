@@ -23,6 +23,10 @@
 
 A single instrument today often trades across a dozen or more distinct venues, lit exchanges, dark pools, single-dealer platforms, each with its own order book, its own fee structure, and its own latency characteristics from your infrastructure's vantage point. A smart order router's job is to make this fragmentation invisible to the strategy submitting an order: the strategy asks for "buy 10,000 shares," and the router decides how to split, sequence, and place that demand across venues to get the best realistic outcome.
 
+![A 10,000-share parent order split across four venues, with fill amounts shown for each and residual quantity still working](figures/smart-order-routing-at-scale-01.svg)
+
+*Figure 1: The router splits the parent order across lit and dark venues; here 7,300 shares are filled across three venues while 2,700 remain resting at a fourth.*
+
 The professional-level complexity here is that "best outcome" is not a single well-defined number to optimize. It's a tradeoff across price improvement, fill probability, information leakage, and fee/rebate economics, and the right balance depends on the specific order's urgency, size relative to available liquidity, and the strategy's own tolerance for signaling risk. A router that mechanically always routes to the venue showing the best displayed price will underperform a router that accounts for these second-order effects, sometimes badly.
 
 This is worth dwelling on because it's the single most common mistake teams make when first building routing infrastructure: treating the router as a solved problem once it can correctly parse and compare displayed quotes across venues. Quote comparison is the easy 20% of the problem. The hard 80% is building the infrastructure to measure your own realized outcomes accurately enough to know whether your routing decisions are actually good ones, and building the discipline to keep refining routing logic against that measured reality rather than against a static, once-validated set of assumptions about venue behavior that inevitably drifts as venues change their own mechanics, fee schedules, and competitive dynamics over time.
@@ -85,6 +89,10 @@ def allocate_order(total_qty, venues, mid_price):
 
 The quadratic leakage penalty term is deliberate: consuming a large fraction of a venue's displayed size is disproportionately more revealing than consuming a small fraction spread across many venues, and squaring the consumption ratio encodes that the cost of concentration grows faster than linearly. Calibrate `LEAKAGE_COEFFICIENT` against your own measured post-trade price reversion (how much the price moves against you immediately after your fills, then partially reverts), which is the most direct empirical proxy for information leakage cost you have available.
 
+![Curve showing leakage penalty rising quadratically as an order consumes a larger fraction of a venue's displayed size](figures/smart-order-routing-at-scale-02.svg)
+
+*Figure 2: Squaring the consumption ratio makes concentrating size at one venue disproportionately costlier than spreading the same size thinly across several.*
+
 Treat this optimization as a per-order-context decision rather than a single global configuration. A large, urgent order justifies a smaller leakage coefficient relative to price cost, since accepting more visible footprint is the necessary price of speed. A patient order, with no particular urgency, justifies weighting leakage more heavily, spreading size thinner across more venues and accepting a slower fill in exchange for a smaller footprint. Expose this weighting as an explicit input the calling strategy or trader sets per order, informed by their own read of that order's urgency, rather than baking a single fixed tradeoff into the router's core logic that's wrong for some meaningful fraction of the order flow it handles.
 
 ## 4. Handling Partial Fills Across Venues
@@ -126,6 +134,10 @@ def markout_bps(fill_price, side, mid_price_later):
 
 A production router should track rolling markout statistics per venue and, where available, per counterparty flag, and use this as a live input to routing decisions, deprioritizing or entirely avoiding venues or flow segments with a persistent pattern of negative markout, even if their displayed prices look attractive in isolation. This is one of the more advanced and valuable capabilities a mature router develops, because it directly targets a cost that a naive price-only router is structurally blind to.
 
+![Price paths after a fill: one drifting away from the trader (toxic fill, negative markout) and one holding steady (clean fill)](figures/smart-order-routing-at-scale-03.svg)
+
+*Figure 3: Markout compares the mid price shortly after a fill to the fill price itself; a persistent negative markout at a venue signals adverse selection.*
+
 Be careful about sample size and statistical significance when acting on markout data, particularly for lower-volume venues or narrower counterparty segments where you accumulate fewer observations. A venue that shows negative average markout over a small number of fills may simply be exhibiting normal statistical noise rather than a genuine, persistent pattern, and deprioritizing it based on an insufficiently sized sample costs you access to what might actually be perfectly good liquidity. Apply a minimum sample size threshold before treating a markout signal as actionable, and prefer a Bayesian shrinkage approach that pulls a thin-sample venue's estimate toward the overall population average rather than trusting its raw, noisy point estimate outright.
 
 Segmenting markout analysis further by time of day and market regime often reveals patterns a single aggregate number obscures entirely. A venue might show perfectly acceptable markout during calm, liquid trading hours and materially worse markout during the volatile minutes around a scheduled economic release, when faster, better-informed participants are more active relative to the venue's typical liquidity mix. A router sophisticated enough to condition its venue preferences on current market regime, rather than applying a single static preference ranking at all times, captures meaningfully better outcomes than one that doesn't.
@@ -166,6 +178,10 @@ class VenueHealthMonitor:
 On reconnect, never assume the venue's state resumed exactly where you left off. Explicitly query current order status for any orders you believe were outstanding there when the disconnect occurred, since an order could have filled, been rejected, or expired during the outage window, and your router's belief about that order's status needs reconciling against the venue's authoritative answer before you trust it again.
 
 Partial venue degradation, a venue that's technically connected but responding unusually slowly, or accepting orders but rejecting an unusually high fraction of them, is harder to detect and handle correctly than a clean disconnect, and deserves its own explicit monitoring rather than being lumped into the same binary healthy/unhealthy classification as a full outage. Track rolling reject rate and rolling response latency per venue continuously, and define an intermediate "degraded" state that triggers reduced allocation to that venue (rather than a full cutoff) when these metrics cross a soft threshold, escalating to a full cutoff only if degradation continues or worsens. This graduated response captures much of the safety benefit of a hard cutoff while avoiding the cost of prematurely abandoning a venue that's merely having a rough few minutes rather than genuinely failing.
+
+![State machine with Healthy, Degraded, and Unavailable venue states and the reject-rate and latency triggers that move a venue between them](figures/smart-order-routing-at-scale-04.svg)
+
+*Figure 4: A graduated Degraded state between Healthy and Unavailable lets the router shrink allocation to a struggling venue before cutting it off entirely.*
 
 ## 9. Measuring Router Performance
 

@@ -73,6 +73,10 @@ Finally, a monitoring and logging layer records everything that happened, so you
 
 Even a tiny hobby project touches all five layers, just in a simpler form. Recognizing the layers early helps you organize code sensibly instead of writing one giant tangled script.
 
+![The five-layer pipeline of a trading system, from market data feed to monitoring](figures/algorithmic-trading-first-map-01.svg)
+
+*Figure 1: Data flows through data feed, strategy, risk management, order management, and monitoring layers, in that order.*
+
 ## 5. Strategy Types You Will Encounter
 
 Trend-following strategies bet that an asset moving in one direction will keep moving that way for a while. If a stock has risen steadily for two weeks, a trend follower buys, expecting the momentum to continue.
@@ -96,6 +100,10 @@ A strategy that holds for minutes to hours needs faster data updates, tighter ri
 A strategy that holds for seconds or less, the domain of high-frequency trading, needs specialized infrastructure: colocated servers physically close to the exchange, highly optimized code, and a deep understanding of exchange mechanics. This tier is expensive and competitive. It's not where a beginner should start.
 
 As a new algo developer, pick a time horizon that matches your available time, capital, and infrastructure. Trading on hourly or daily bars with a laptop and a free data feed is a completely legitimate place to begin, and the lessons transfer upward if you later want to move faster.
+
+![Bar chart showing infrastructure complexity rising sharply as holding period shortens](figures/algorithmic-trading-first-map-02.svg)
+
+*Figure 2: Shorter holding periods demand disproportionately more infrastructure, and a beginner should start on the left.*
 
 ## 7. Where Beginners Get Confused
 

@@ -37,6 +37,10 @@ A limit order says "buy or sell, but only at this price or better." If you place
 
 A stop order activates only after the price crosses a certain level, at which point it typically converts into a market order. Traders use these to limit losses. If you own an asset at $100 and place a stop order at $90, your position sells automatically if the price falls to $90, capping further loss.
 
+![Three order types plotted against a hypothetical current price of $100](figures/how-markets-actually-work-01.svg)
+
+*Figure 1: A market order fills immediately, a limit order waits for its price, and a stop order triggers past a threshold.*
+
 Orders also carry a side (buy or sell), a quantity, and often a time-in-force instruction that says how long the order should remain active. It might stay open for the rest of the trading day, until canceled, or be marked immediately-or-cancel, meaning it fills what it can right away and cancels the rest.
 
 Every order you place becomes visible, in aggregate, in the exchange's order book, the running list of everyone waiting to trade. The next chapter, and a dedicated book in this library, cover it in more detail.
@@ -60,6 +64,10 @@ The difference between the ask and the bid is the spread. A tight spread, say a 
 The spread matters enormously to anyone trading frequently, because every time you cross it, buying at the ask and later selling at the bid, you pay that cost. A strategy that trades a hundred times a day needs the spread cost built into its expected profit calculation. Otherwise it will look profitable on paper and lose money in practice.
 
 Market makers, introduced in the first book of this library, earn their living by capturing the spread repeatedly, buying at the bid and selling at the ask, while managing the risk that the price moves against their open inventory before they can offload it.
+
+![A tight two-cent spread compared with a wide three-dollar spread on the same style of instrument](figures/how-markets-actually-work-02.svg)
+
+*Figure 2: A tight spread signals a liquid, active market, while a wide spread signals uncertainty or thin trading.*
 
 ## 5. Exchanges, Venues, and Fragmentation
 

@@ -1,0 +1,22 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Triple-barrier разметка таргета</text>
+
+  <line x1="60" y1="220" x2="580" y2="220" stroke="#30363d"/>
+  <path d="M60,150 L150,140 L220,160 L300,110 L360,170 L420,90"
+        stroke="#58a6ff" stroke-width="2" fill="none"/>
+
+  <line x1="60" y1="90" x2="420" y2="90" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="450" y="94" fill="#3fb950" font-size="11">верхний барьер (профит)</text>
+
+  <line x1="60" y1="190" x2="420" y2="190" stroke="#f85149" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="450" y="194" fill="#f85149" font-size="11">нижний барьер (стоп)</text>
+
+  <line x1="420" y1="70" x2="420" y2="230" stroke="#a371f7" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="420" y="245" fill="#a371f7" font-size="11" text-anchor="middle">временной барьер</text>
+
+  <circle cx="420" cy="90" r="6" fill="#3fb950"/>
+  <text x="420" y="60" fill="#3fb950" font-size="12" text-anchor="middle">барьер прибыли достигнут первым → метка +1</text>
+
+  <text x="320" y="280" fill="#8b949e" font-size="11" text-anchor="middle">Таргет — какой из трёх барьеров достигнут первым, отражая реальную механику стратегии</text>
+</svg>

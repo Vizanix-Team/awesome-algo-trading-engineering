@@ -36,7 +36,15 @@ Bids (buy orders): $100.00 for 60 units, $99.95 for 90 units, $99.90 for 150 uni
 
 Each row is called a price level, and the size at each level tells you how much quantity is waiting to trade at that exact price. The best bid here is $100.00, the best ask is $100.05, so the spread is five cents.
 
+![A sample order book snapshot with three bid levels and three ask levels around $100](figures/reading-the-order-book-01.svg)
+
+*Figure 1: Bar length shows size at each price level; thicker levels act like walls that are harder to clear.*
+
 If you send a market order to buy 100 units, the exchange fills 40 units at $100.05, clearing that whole level, then fills the remaining 60 units at $100.10, since the first level didn't have enough quantity. Your average fill price ends up above $100.05. That's the slippage effect the previous book introduced, now visible directly in the book's structure.
+
+![A 100-unit market buy filling 40 units at $100.05 and 60 units at $100.10](figures/reading-the-order-book-02.svg)
+
+*Figure 2: Walking the book across two price levels produces an average fill price of $100.08, worse than the first quote.*
 
 Reading a single snapshot like this tells you the immediate supply and demand picture. A thick level, one with a large size, acts like a wall: it takes a lot of buying or selling pressure to clear it entirely. A thin level offers little resistance and can disappear in a single trade.
 
@@ -71,6 +79,10 @@ Traders use imbalance as one input among several, since heavy skew toward one si
 A related concept is "pressure": the pace at which one side of the book is being consumed by trades relative to how quickly it's being replenished by new orders. If asks are getting eaten by market buy orders faster than new sell orders arrive to replace them, the ask side is thinning, and the price may need to step up to the next level to find enough supply. This pattern is sometimes visible just before a short, sharp price move.
 
 Treat these signals as pieces of evidence rather than certainties. A beginner strategy built entirely around order book imbalance, without other confirmation, tends to generate a lot of false signals in practice, since imbalance can be driven by orders that vanish before ever leading to a trade.
+
+![Bar chart comparing 500 units of bid quantity against 150 units of ask quantity](figures/reading-the-order-book-03.svg)
+
+*Figure 3: A bid/ask imbalance of 0.77 suggests more nearby buying interest, though it is only one noisy signal among several.*
 
 ## 6. Spoofing, Iceberg Orders, and Other Wrinkles
 

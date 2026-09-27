@@ -33,6 +33,10 @@ A concrete analogy helps here. Imagine you're deciding whether to bring an umbre
 
 One neuron alone can only express fairly simple relationships between its inputs and its output, roughly equivalent to drawing a single straight dividing line between two outcomes. The real power of neural networks comes from connecting many neurons together, which is exactly what the next section covers.
 
+![Three inputs, weighted and summed with a bias, passed through a squashing function to a single output](figures/neural-networks-explained-for-traders-01.svg)
+
+*Figure 1: The umbrella example: each input is weighted by how much it matters, and the weights are learned, not hand-set.*
+
 ## 3. Layers: Stacking Simple Votes Into Complex Judgments
 
 A layer is simply a group of neurons that each look at the same set of inputs but combine them with their own independent weights, producing several different outputs from the same input data. Stack multiple layers so that one layer's outputs become the next layer's inputs, and you get what's called a deep neural network, "deep" referring simply to having several layers stacked in sequence rather than to any deeper meaning of the word.
@@ -55,6 +59,10 @@ A neural network applied to trading needs numerical inputs, called features, tha
 
 The network's output, correspondingly, might be a predicted future return, a probability that the price rises over the next period, or a classification into a small number of categories like "up," "down," or "flat." Whatever the specific output, it needs to be a concrete, testable prediction the network can be trained against using historical data where you already know what actually happened next.
 
+![Four input features feeding two hidden layers of neurons, ending in a single output predicting the probability of a price rise](figures/neural-networks-explained-for-traders-02.svg)
+
+*Figure 2: A small network built from returns, volatility, order book imbalance, and volume as its input features.*
+
 Building this pipeline connects directly to earlier books in this library. You need clean market data, as covered in the market data and Python books. You need it structured into meaningful features rather than raw prices. And critically, you need the same rigorous backtesting discipline, including strict chronological ordering and honest out-of-sample validation, applied to a neural network's predictions exactly as you'd apply it to any simpler rule-based strategy. A neural network doesn't exempt you from any of the testing discipline covered earlier in this library. If anything, it demands more of it, for reasons the next section explains.
 
 ## 6. Why This Is Harder Than It Looks in Markets
@@ -70,6 +78,10 @@ None of this means neural networks are useless for market data. It means they de
 The backtesting book of this library introduced overfitting as fitting a strategy's rules too closely to historical noise. Neural networks amplify this risk substantially, because they have vastly more adjustable parameters than a simple rule with one or two thresholds, giving them correspondingly more room to find and exploit coincidental patterns that exist only in your specific historical sample.
 
 A neural network trained without care can achieve outstanding accuracy on its training data while performing no better than random guessing, or worse, on genuinely new data it hasn't seen. This is exactly the overfitting failure mode described earlier in this library, just occurring more severely and less obviously than with a simpler strategy. Detecting this requires strict discipline: a clear separation between data used to train the network and a genuinely untouched portion used only once, at the very end, to check whether the learned pattern generalizes at all.
+
+![Training accuracy climbing steadily while accuracy on new, unseen data peaks and then declines](figures/neural-networks-explained-for-traders-03.svg)
+
+*Figure 3: Past the crossover point, the network has started memorizing training noise rather than a real pattern.*
 
 Simpler techniques from the statistics-for-trading book, like checking whether your sample size and number of independent trades are large enough to draw any real conclusion, apply here with even more force, since a neural network's flexibility means an impressive-but-fake result is easier to accidentally produce and easier to be fooled by than a corresponding result from a much simpler rule-based strategy.
 

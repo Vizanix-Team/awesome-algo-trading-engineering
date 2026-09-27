@@ -1,0 +1,41 @@
+<svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="320" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Event-Driven Backtest Loop</text>
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <g fill="#161b22" stroke="#30363d" stroke-width="1.5">
+    <rect x="20" y="130" width="130" height="60" rx="6" stroke="#a371f7"/>
+    <rect x="200" y="60" width="120" height="50" rx="6"/>
+    <rect x="200" y="200" width="120" height="50" rx="6"/>
+    <rect x="380" y="60" width="120" height="50" rx="6"/>
+    <rect x="380" y="200" width="120" height="50" rx="6"/>
+    <rect x="560" y="130" width="120" height="60" rx="6" stroke="#3fb950"/>
+  </g>
+  <g fill="#c9d1d9" text-anchor="middle" font-size="12">
+    <text x="85" y="155" fill="#a371f7">Priority Queue</text>
+    <text x="85" y="170" fill="#a371f7">(timestamp, seq)</text>
+    <text x="260" y="82">MarketEvent</text>
+    <text x="260" y="96" fill="#8b949e" font-size="10">strategy.on_market</text>
+    <text x="260" y="222">SignalEvent</text>
+    <text x="260" y="236" fill="#8b949e" font-size="10">portfolio.on_signal</text>
+    <text x="440" y="82">OrderEvent</text>
+    <text x="440" y="96" fill="#8b949e" font-size="10">exchange_sim.on_order</text>
+    <text x="440" y="222">FillEvent</text>
+    <text x="440" y="236" fill="#8b949e" font-size="10">portfolio.on_fill</text>
+    <text x="620" y="155" fill="#3fb950">Equity Curve</text>
+    <text x="620" y="170" fill="#3fb950">&amp; Trade Log</text>
+  </g>
+  <g stroke="#58a6ff" stroke-width="1.5" fill="none" marker-end="url(#ar)">
+    <line x1="150" y1="150" x2="200" y2="90"/>
+    <line x1="320" y1="90" x2="380" y2="90"/>
+    <path d="M500,90 C540,90 540,150 500,150" />
+    <line x1="500" y1="150" x2="380" y2="220"/>
+    <line x1="320" y1="220" x2="200" y2="220"/>
+    <path d="M200,220 C160,220 150,190 150,190" />
+    <line x1="500" y1="220" x2="560" y2="165"/>
+  </g>
+  <text x="350" y="295" fill="#8b949e" font-size="11" text-anchor="middle">All events sort by (timestamp, seq); every handler only sees events that already happened.</text>
+</svg>

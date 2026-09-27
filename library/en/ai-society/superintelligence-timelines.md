@@ -53,11 +53,19 @@ Economic and structural bottleneck analysis examines the physical and institutio
 
 The most methodologically honest current forecasts tend to combine elements of all three approaches and explicitly report wide uncertainty ranges rather than point estimates, a practice that is unfortunately underrepresented in how such forecasts often get compressed into single, more dramatic-sounding headline numbers once they reach public discourse.
 
+![A three-column diagram comparing trend extrapolation, expert elicitation, and bottleneck analysis, each with one strength and one limitation listed](figures/superintelligence-timelines-02.svg)
+
+*Figure 2: The three main forecasting methods used for capability timelines, each with a genuine strength and a genuine, well-documented limitation.*
+
 ## 5. What the Current Range of Expert Opinion Actually Looks Like
 
 Without attributing views to any specific named individual or organization, it is fair to characterize the current landscape of serious expert opinion on superintelligence timelines as spanning a genuinely wide range, from researchers who assign meaningful probability to broad superhuman capability arriving within the current decade, to researchers who consider multiple additional decades, or even the possibility of a fundamentally different architectural paradigm being required before such capability is reached at all, more likely.
 
 This spread is not primarily explained by some researchers having access to better information than others, though information access does play some role. It is substantially explained by genuine differences in underlying methodological assumptions: how much weight to place on current scaling trends continuing without a major bottleneck intervening, how to interpret the significance of current systems' specific remaining weaknesses in areas like long-horizon planning and robust real-world reasoning, and differing philosophical views on what specifically constitutes the relevant capability threshold in the first place, a definitional disagreement that alone accounts for a meaningful share of the apparent disagreement in headline timeline numbers.
+
+![A diagram showing overlapping illustrative bands of expert opinion across a qualitative timeline from this decade to fifty-plus years, labeled as a spread rather than a poll result](figures/superintelligence-timelines-01.svg)
+
+*Figure 1: A qualitative sketch of how widely serious expert opinion spreads across possible timelines. The bands are illustrative, not a summary of any specific survey.*
 
 It is worth noting, as a matter of intellectual honesty, that the distribution of expert opinion has itself shifted over the past several years, with median estimates in most serious surveys of AI researchers trending toward nearer-term timelines than equivalent surveys conducted a decade earlier. A genuine data point worth taking seriously, while also applying the same historical humility documented above: a shifting median estimate over a short window is informative but not proof that the shift will continue in the same direction indefinitely, given the field's demonstrated history of both overshooting and undershooting its own predictions in the past.
 

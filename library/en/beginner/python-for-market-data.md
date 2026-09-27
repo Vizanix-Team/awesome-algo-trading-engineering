@@ -69,11 +69,19 @@ A histogram, a chart showing how often values fall into different ranges, is inv
 
 Keep your exploratory plots simple at first: a single line for price, a bar chart for volume, a histogram for returns. Fancy multi-panel dashboards have their place later, but early on, a few clear, basic charts examined carefully teach you more than one cluttered chart glanced at quickly.
 
+![Histogram of daily returns clustering near zero with a few larger moves in the tails](figures/python-for-market-data-02.svg)
+
+*Figure 2: A return histogram reveals typical behavior versus rare, extreme behavior at a glance.*
+
 ## 7. Writing Your First Analysis Script
 
 A good first exercise ties everything in this book together: load a CSV of daily bars for one instrument, convert the date column to a proper time-based index, compute daily returns as the percentage change from each day's close to the next, plot the price series with volume beneath it, and plot a histogram of the returns.
 
 Structure this as a script with clearly separated steps, load, clean, transform, visualize, rather than one long unbroken block of code. Each step should be simple enough that you could explain what it does in one sentence. This structure isn't just tidiness for its own sake. It directly mirrors the pipeline you'll build for real strategy development later, where the same stages, loading, cleaning, transforming, and now decision-making, reappear in a more elaborate form.
+
+![Four-stage pipeline: load CSV, clean, transform into returns, visualize](figures/python-for-market-data-01.svg)
+
+*Figure 1: A first analysis script broken into four simple, explainable, reusable steps.*
 
 Once this script works reliably on one instrument, test it against a second instrument with a different data source or format. If it breaks, you've likely hardcoded an assumption, like a specific column name, that doesn't generalize. Fixing this now, while the stakes are low, builds habits that prevent much costlier bugs once real strategy logic depends on your data pipeline.
 

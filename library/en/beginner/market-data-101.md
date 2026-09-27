@@ -43,6 +43,10 @@ Building a bar from ticks is a simple aggregation once you understand the rule: 
 
 There are variations beyond simple time-based bars. Volume bars close after a fixed amount of quantity has traded, regardless of how much time that takes. Tick bars close after a fixed number of trades. These alternatives can behave more consistently during periods of wildly different activity levels, though time-based bars remain the most common starting point for beginners because nearly every data source and charting tool supports them natively.
 
+![Irregular trade ticks over one minute aggregated into a single OHLCV bar](figures/market-data-101-01.svg)
+
+*Figure 1: Open is the first tick's price, close is the last, and high/low mark the extremes touched in between.*
+
 ## 4. Candlesticks: Bars With Extra Information
 
 A candlestick is simply a visual representation of a bar, drawn to make the relationship between open, close, high, and low immediately visible at a glance. Picture a small rectangle, called the body, spanning from the open price to the close price. If the close is higher than the open, the body is typically shown in one color (commonly green or white); if the close is lower, it's shown in another (commonly red or black). Thin lines called wicks or shadows extend above and below the body to mark the high and low reached during the period.
@@ -52,6 +56,10 @@ This visual encoding lets a trader scan a chart of hundreds of candles and immed
 Some traders build entire strategies around named candlestick shapes and sequences, believing certain visual patterns predict future price movement. As a beginner, treat these patterns with healthy skepticism. They describe what already happened in a visually memorable way, but whether a particular shape reliably predicts the future is a claim that needs rigorous statistical testing, not just visual pattern-matching, before you trust it with real capital. The backtesting book in this library shows you how to test such claims properly.
 
 Candlesticks contain exactly the same information as a plain OHLC (open-high-low-close) bar. The value is purely in how quickly a human eye can extract meaning from the picture rather than from a table of four numbers.
+
+![A green bullish candlestick and a red bearish candlestick with bodies and wicks labeled](figures/market-data-101-02.svg)
+
+*Figure 2: The body spans open to close; the thin wicks above and below mark the high and low reached in the period.*
 
 ## 5. Choosing a Timeframe
 
@@ -68,6 +76,10 @@ Volume, the total quantity traded during a period, gets less attention than pric
 Volume also matters practically. It's your best simple proxy for liquidity when deeper order book data isn't available. If an instrument's typical daily volume is small relative to the position size you want to trade, expect meaningful slippage, regardless of how attractive its price chart looks.
 
 Get in the habit of looking at volume alongside price on every chart you study, not as an afterthought squeezed into a small panel at the bottom, but as a genuine second dimension of the story the data is telling you.
+
+![The same price rise shown with high trading volume beside it and with low trading volume beside it](figures/market-data-101-03.svg)
+
+*Figure 3: An identical price move carries very different implications depending on how much volume accompanied it.*
 
 ## 7. Data Quality Problems You Will Hit
 

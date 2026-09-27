@@ -51,6 +51,10 @@ The critical, and genuinely uncertain, question is where the diminishing-returns
 
 This is, in fact, one of the more productive frames for evaluating the hypothesis. Not "will recursive self-improvement happen, yes or no," but "which real-world constraints will bind first, and how tight is the loop relative to those constraints." Compute manufacturing, energy infrastructure, high-quality training data availability, and the genuine difficulty of certain remaining scientific problems in AI architecture are all plausible binding constraints, and reasonable, technically informed people currently disagree about which will bind first and how hard.
 
+![A diagram of the AI capability to AI research productivity feedback loop, with compute, energy, data, and open scientific problems shown as constraints that could bind first](figures/the-singularity-explained-01.svg)
+
+*Figure 1: The recursive-improvement loop reduced to its mechanism, with the real-world constraints that determine whether it accelerates unboundedly or settles into a gradual, bounded pattern.*
+
 ## 5. What Would Have to Be True for This to Happen
 
 Laying out the hypothesis's load-bearing assumptions explicitly is more useful than simply asserting belief or disbelief in the outcome. At minimum, a strong version of the recursive improvement scenario requires three things. AI systems' contribution to AI research itself has to keep growing as a share of total research productivity rather than plateauing at a fixed, bounded multiplier. The physical and infrastructural inputs required, compute, energy, specialized talent to oversee the process, have to scale fast enough to avoid becoming the binding constraint before the feedback loop meaningfully accelerates. And no fundamental scientific wall can exist between current AI paradigms and the kind of open-ended, cross-domain research capability the strongest versions of the hypothesis assume, as opposed to a wall that requires a genuinely new paradigm no one has yet identified.
@@ -66,6 +70,10 @@ Current AI systems, however impressive at narrow benchmarks, still show meaningf
 Skeptics also point out that "intelligence," whatever that ultimately means for a machine system, is not obviously the sole or even primary bottleneck on real-world impact. Plenty of the hardest remaining problems in science, medicine, and engineering are rate-limited by the physical world itself, the time it takes to run a clinical trial, grow a crystal, or observe a rare physical phenomenon, rather than by a shortage of cognitive horsepower applied to interpreting the results. A system with vastly more cognitive capability than any human does not obviously get to skip the physical world's own clock speed on many of the problems that matter most, an argument echoed in the medicine-and-science essay elsewhere in this series.
 
 These skeptical arguments do not conclusively refute the hypothesis. They do establish that treating the singularity as a near-certain or even highly probable near-term outcome requires more evidentiary support than currently exists, and they justify significant weight being placed on more gradual, bounded scenarios in any calibrated forecast.
+
+![A line chart comparing three hypothetical growth shapes over time: a bounded S-curve, a gradual accelerating curve, and a hypothetical hyperbolic curve, all labeled as illustrative scenarios rather than predictions](figures/the-singularity-explained-02.svg)
+
+*Figure 2: Three illustrative growth shapes a recursive-improvement process could in principle follow. None is presented as the predicted outcome; the historical base rate favors the bounded shape.*
 
 ## 7. Historical Precedent: Have We Seen Anything Like This Before
 

@@ -1,0 +1,31 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Многоуровневая модель хранения ключей</text>
+
+  <g fill="#161b22" stroke="#f85149" stroke-width="1.5">
+    <rect x="60" y="70" width="140" height="50" rx="6"/>
+  </g>
+  <text x="130" y="94" fill="#f85149" font-size="12" text-anchor="middle">Горячий кошелёк</text>
+  <text x="130" y="110" fill="#f85149" font-size="11" text-anchor="middle">малая доля капитала</text>
+
+  <g fill="#161b22" stroke="#a371f7" stroke-width="2">
+    <rect x="450" y="70" width="140" height="50" rx="6"/>
+  </g>
+  <text x="520" y="94" fill="#a371f7" font-size="12" text-anchor="middle">Холодное хранение</text>
+  <text x="520" y="110" fill="#a371f7" font-size="11" text-anchor="middle">мультиподпись</text>
+
+  <path d="M450,110 L200,95" stroke="#3fb950" stroke-width="1.5" marker-end="url(#arrowH)"/>
+  <text x="325" y="80" fill="#3fb950" font-size="11" text-anchor="middle">автопополнение по порогу</text>
+
+  <path d="M200,110 L450,125" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowH)"/>
+  <text x="325" y="150" fill="#8b949e" font-size="11" text-anchor="middle">редкие крупные переводы: требуют нескольких подтверждений</text>
+
+  <text x="320" y="220" fill="#8b949e" font-size="12" text-anchor="middle">Компромисс между удобством непрерывной торговли</text>
+  <text x="320" y="240" fill="#8b949e" font-size="12" text-anchor="middle">и безопасностью хранения основного капитала</text>
+
+  <defs>
+    <marker id="arrowH" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#8b949e"/>
+    </marker>
+  </defs>
+</svg>

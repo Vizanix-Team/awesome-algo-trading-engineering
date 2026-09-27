@@ -41,6 +41,10 @@ Volatility measures how much returns typically vary around that mean, most commo
 
 Volatility matters enormously in practice because it's directly connected to risk, as covered in the dedicated risk management book of this library. A high-volatility instrument requires wider stop losses, smaller position sizes for the same dollar risk, and a trader psychologically prepared for larger swings along the way, even if its average return over the long run looks identical to a calmer instrument's.
 
+![Two return series with the same average, one steady near the mean and one swinging widely around it](figures/statistics-for-trading-02.svg)
+
+*Figure 1: Identical mean returns can hide very different volatility, and therefore very different risk.*
+
 Calculate both numbers for any instrument or strategy before trading it, and get comfortable thinking about return and volatility as a pair, never one without the other. A return figure quoted alone tells you almost nothing about whether that return came with a bumpy or a smooth ride.
 
 ## 4. Distributions and Why Extreme Moves Happen More Than You'd Guess
@@ -50,6 +54,10 @@ A distribution describes how often different outcomes occur across a full range 
 Many introductory statistical methods assume returns follow a bell-shaped normal distribution, where extreme outcomes become rapidly and predictably rarer the further they sit from the average. Real financial returns very often disagree with this assumption, producing what statisticians call fat tails: extreme moves, both up and down, that occur meaningfully more often than a normal distribution would predict. A day when a price moves further than any of your typical calculations anticipated happens more frequently in real markets than a naive normal-distribution assumption suggests.
 
 This matters directly for risk management, since a strategy or a stop loss calibrated only against typical, everyday volatility can be badly unprepared for the more frequent extreme moves that fat tails imply. A practical response is to look directly at your own instrument's actual historical distribution, including its most extreme observed moves, rather than relying purely on an average and a standard deviation computed under an assumption of normality that the real data doesn't fully satisfy.
+
+![A bell-shaped normal curve overlaid with a fatter-tailed real return distribution](figures/statistics-for-trading-01.svg)
+
+*Figure 2: Real returns produce extreme moves, in both directions, more often than a normal distribution predicts.*
 
 ## 5. Correlation, Revisited With Numbers
 
@@ -66,6 +74,10 @@ Sample size refers to how many independent observations, in trading terms usuall
 The core intuition is that random noise has more room to produce a misleadingly good or bad-looking result when you have fewer observations, and that room shrinks, though it never disappears entirely, as your sample size grows. A strategy tested across five hundred independent trades spanning multiple different market conditions gives you meaningfully more confidence than the same apparent performance achieved over just fifteen trades concentrated in a single calm month.
 
 This directly connects back to the backtesting book's warning about overfitting: with a small number of trades, it's especially easy to tune a strategy's parameters until it happens to look good on that specific limited sample, without that apparent edge reflecting anything real or repeatable. As a practical habit, always report and consider how many independent trades sit behind any performance number you're evaluating, your own or someone else's, before assigning it real weight.
+
+![Bar chart showing uncertainty shrinking as trade count grows from 10 to 500 trades](figures/statistics-for-trading-03.svg)
+
+*Figure 3: A performance number backed by ten trades carries far less confidence than one backed by five hundred.*
 
 ## 7. Risk-Adjusted Return: Comparing Strategies Fairly
 

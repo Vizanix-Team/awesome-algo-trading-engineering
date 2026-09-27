@@ -1,0 +1,38 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Кто стоит по другую сторону сделки</text>
+  <g font-size="11" text-anchor="middle">
+    <circle cx="120" cy="110" r="52" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+    <text x="120" y="105" fill="#c9d1d9" font-size="11">Маркет-</text>
+    <text x="120" y="120" fill="#c9d1d9" font-size="11">мейкеры</text>
+
+    <circle cx="260" cy="110" r="52" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
+    <text x="260" y="100" fill="#c9d1d9" font-size="10">Институцио-</text>
+    <text x="260" y="113" fill="#c9d1d9" font-size="10">нальные</text>
+    <text x="260" y="126" fill="#c9d1d9" font-size="10">инвесторы</text>
+
+    <circle cx="400" cy="110" r="52" fill="#161b22" stroke="#f85149" stroke-width="2"/>
+    <text x="400" y="105" fill="#c9d1d9" font-size="11">Розничные</text>
+    <text x="400" y="120" fill="#c9d1d9" font-size="11">трейдеры</text>
+
+    <circle cx="540" cy="110" r="52" fill="#161b22" stroke="#a371f7" stroke-width="2"/>
+    <text x="540" y="100" fill="#c9d1d9" font-size="10">Другие</text>
+    <text x="540" y="113" fill="#c9d1d9" font-size="10">алгоритмы</text>
+    <text x="540" y="126" fill="#c9d1d9" font-size="10">(HFT)</text>
+  </g>
+  <g font-size="9" fill="#8b949e" text-anchor="middle">
+    <text x="120" y="195">обеспечивают ликвидность,</text>
+    <text x="120" y="207">зарабатывают на спреде</text>
+
+    <text x="260" y="195">исполняют крупные объёмы,</text>
+    <text x="260" y="207">минимизируя воздействие</text>
+
+    <text x="400" y="195">небольшие объёмы,</text>
+    <text x="400" y="207">новости и техника</text>
+
+    <text x="540" y="195">реагируют на изменения</text>
+    <text x="540" y="207">за микросекунды</text>
+  </g>
+  <text x="320" y="250" fill="#8b949e" font-size="11" text-anchor="middle">Резкий скачок цены на большом объёме — скорее институциональный инвестор,</text>
+  <text x="320" y="268" fill="#8b949e" font-size="11" text-anchor="middle">исполняющий крупный заказ, а не признак фундаментальных новостей</text>
+</svg>

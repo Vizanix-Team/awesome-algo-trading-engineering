@@ -1,0 +1,34 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Ансамблирование моделей снижает дисперсию</text>
+
+  <g fill="#161b22" stroke="#30363d" stroke-width="1.5">
+    <rect x="60" y="60" width="120" height="40" rx="6"/>
+    <rect x="60" y="115" width="120" height="40" rx="6"/>
+    <rect x="60" y="170" width="120" height="40" rx="6"/>
+  </g>
+  <g fill="#c9d1d9" text-anchor="middle" font-size="11">
+    <text x="120" y="84">модель 1 (шум A)</text>
+    <text x="120" y="139">модель 2 (шум B)</text>
+    <text x="120" y="194">модель 3 (шум C)</text>
+  </g>
+
+  <g fill="#161b22" stroke="#3fb950" stroke-width="2">
+    <rect x="420" y="115" width="160" height="50" rx="6"/>
+  </g>
+  <text x="500" y="145" fill="#3fb950" font-size="12" text-anchor="middle">усреднённый прогноз</text>
+
+  <g stroke="#58a6ff" stroke-width="1.5" marker-end="url(#arrow9)">
+    <path d="M180,80 C300,80 300,135 420,135" fill="none"/>
+    <path d="M180,135 L420,135" fill="none"/>
+    <path d="M180,190 C300,190 300,145 420,145" fill="none"/>
+  </g>
+
+  <text x="320" y="240" fill="#8b949e" font-size="12" text-anchor="middle">Шум некоррелирован между моделями, но реальный сигнал согласован во всех</text>
+
+  <defs>
+    <marker id="arrow9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+</svg>

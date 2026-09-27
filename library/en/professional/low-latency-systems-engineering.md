@@ -41,6 +41,10 @@ The engineering discipline this implies is significant. Every optimization decis
 
 Percentiles computed over too short a sampling window can also mislead you in a specific, dangerous way. A 99.9th percentile calculated over only a thousand samples is really just reporting the single worst observation, and a single outlier caused by an unrelated, transient condition (a one-off OS scheduling hiccup, a background process briefly stealing CPU) can dominate a report that then gets treated as representative system behavior. Compute tail percentiles over sample sizes large enough that individual outliers don't dominate the statistic, and separately track the true maximum and outlier frequency as their own metrics. A rare true outlier and a systemically elevated tail are different problems requiring different remediation, and conflating them into a single percentile number obscures which one you're actually looking at.
 
+![Two latency distributions compared: a lower-average system with a heavy tail spike versus a slightly higher-average system with a tight tail](figures/low-latency-systems-engineering-01.svg)
+
+*Figure 1: System A's lower average hides a rare 5ms spike that loses races; System B's higher average but tight p99.9 wins more of them.*
+
 ## 2. Kernel Bypass and the Network Stack
 
 The standard operating system network stack, sockets, the kernel's TCP/IP implementation, interrupt-driven packet delivery, adds latency and, more importantly for our purposes, latency variance that a low-latency trading system cannot tolerate. Every packet traversing the standard stack incurs a context switch from user space to kernel space, competes with other processes for CPU scheduling, and is subject to interrupt coalescing delays that trade average throughput for worse tail latency.
@@ -63,6 +67,10 @@ while (running) {
 The operational cost is real: kernel bypass setups require dedicated hardware, dedicated CPU cores that can never be shared with other work, and specialized operational knowledge (driver configuration, memory pinning, interrupt affinity) that most engineering teams don't need for the majority of their systems. Reserve this technique for the specific hot-path components where nanoseconds genuinely matter, typically the market data ingestion and order submission paths, and keep everything else on the standard, far simpler and more maintainable network stack.
 
 Debuggability suffers under kernel bypass in ways worth planning for explicitly before you commit to the approach. Standard tools for inspecting network traffic (packet capture utilities that hook into the kernel's networking stack) see nothing when traffic bypasses that stack entirely, which means you need to build your own tap or mirroring capability at the application layer specifically to preserve the ability to inspect traffic during an incident. Budget this tooling as part of the initial kernel-bypass investment rather than discovering the gap during your first production incident involving the bypassed path, when the lack of visibility will cost you exactly the diagnostic time you can least afford to lose.
+
+![Comparison of the standard kernel network stack's multiple hops against a kernel-bypass path that polls the NIC directly](figures/low-latency-systems-engineering-02.svg)
+
+*Figure 2: Kernel bypass removes the interrupt, kernel stack, and context-switch hops entirely, trading a dedicated busy-polling core for predictable latency.*
 
 ## 3. Memory Management: Avoiding the Allocator and the Garbage Collector
 
@@ -94,6 +102,10 @@ Warm-up matters as much as allocation avoidance for runtimes with just-in-time c
 ## 4. CPU Affinity, NUMA, and Cache Behavior
 
 On modern multi-socket, multi-core hardware, memory access latency depends heavily on which physical CPU core is accessing which physical memory bank. Non-Uniform Memory Access (NUMA) means a core accessing "local" memory on its own socket sees meaningfully lower latency than a core accessing memory attached to a different socket. A latency-sensitive process that gets scheduled across cores unpredictably, or that allocates memory without NUMA awareness, pays this cross-socket penalty inconsistently, which shows up as unexplained tail latency variance.
+
+![Diagram of two CPU sockets showing fast local DRAM access on socket 0 versus a slower cross-socket path to socket 1's memory](figures/low-latency-systems-engineering-03.svg)
+
+*Figure 3: A core accessing its own socket's local memory pays a fraction of the latency of reaching across to another socket's DRAM.*
 
 Pin your critical threads to specific physical cores using CPU affinity settings, and ensure the operating system scheduler never migrates them elsewhere. Migration itself costs cache-warming time even before considering NUMA effects, since a thread moved to a new core starts with cold L1 and L2 caches. Allocate memory for that thread's working set from the NUMA node local to its pinned core, and avoid any shared data structure that would force cross-socket cache coherency traffic on your hottest path.
 
@@ -145,6 +157,10 @@ class SPSCRingBuffer:
 ```
 
 Be honest about the cost of this approach: lock-free code is dramatically harder to reason about and verify correct than lock-based code, and subtle bugs (particularly around memory ordering on architectures with weaker memory models) can produce failures that only manifest under specific timing conditions in production, essentially never in testing. Reserve genuinely lock-free structures for the specific, narrow interfaces where they're proven necessary, and keep the rest of your system on well-understood, simpler concurrency primitives.
+
+![Circular ring buffer diagram with a producer write index and consumer read index chasing each other around fixed slots](figures/low-latency-systems-engineering-04.svg)
+
+*Figure 4: A single-producer single-consumer ring buffer coordinates through atomic index updates alone, with no lock either side must wait on.*
 
 Memory ordering deserves specific mention because it's the single most common source of subtle lock-free bugs. Modern CPUs and compilers are permitted to reorder memory operations for performance, as long as that reordering is invisible to a single-threaded observer, but a second thread genuinely can observe the reordering, seeing writes happen in a different order than the program text suggests. Explicit memory ordering annotations (acquire semantics on reads that must see a prior write, release semantics on writes that must be visible before a subsequent read) prevent this, but every single shared variable access in lock-free code needs its ordering requirement reasoned through individually and explicitly. Skipping this reasoning in favor of "it worked when I tested it" is exactly how a lock-free ring buffer accumulates a bug that surfaces only on a specific CPU architecture, under specific load, months after deployment.
 

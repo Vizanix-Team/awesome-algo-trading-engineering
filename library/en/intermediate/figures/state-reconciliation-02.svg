@@ -1,0 +1,22 @@
+<svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="320" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Break Classification: Magnitude x Persistence</text>
+  <line x1="100" y1="260" x2="560" y2="260" stroke="#30363d"/>
+  <line x1="100" y1="60" x2="100" y2="260" stroke="#30363d"/>
+  <text x="330" y="290" fill="#8b949e" font-size="11" text-anchor="middle">Persistence (age in reconciliation cycles)</text>
+  <text x="40" y="160" fill="#8b949e" font-size="11" text-anchor="middle" transform="rotate(-90 40 160)">Magnitude</text>
+
+  <rect x="100" y="60" width="230" height="100" fill="#238636" opacity="0.35"/>
+  <rect x="330" y="60" width="230" height="100" fill="#d29922" opacity="0.35"/>
+  <rect x="100" y="160" width="230" height="100" fill="#d29922" opacity="0.35"/>
+  <rect x="330" y="160" width="230" height="100" fill="#da3633" opacity="0.5"/>
+
+  <text x="215" y="115" fill="#c9d1d9" font-size="12" text-anchor="middle">LOW</text>
+  <text x="215" y="132" fill="#8b949e" font-size="10" text-anchor="middle">timing noise, log &amp; track</text>
+  <text x="445" y="115" fill="#c9d1d9" font-size="12" text-anchor="middle">HIGH</text>
+  <text x="445" y="132" fill="#8b949e" font-size="10" text-anchor="middle">large, possibly transient</text>
+  <text x="215" y="215" fill="#c9d1d9" font-size="12" text-anchor="middle">HIGH</text>
+  <text x="215" y="232" fill="#8b949e" font-size="10" text-anchor="middle">small but recurring</text>
+  <text x="445" y="215" fill="#c9d1d9" font-size="12" text-anchor="middle">CRITICAL</text>
+  <text x="445" y="232" fill="#8b949e" font-size="10" text-anchor="middle">large and persistent -- page</text>
+</svg>

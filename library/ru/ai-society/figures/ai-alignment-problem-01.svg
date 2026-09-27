@@ -1,0 +1,27 @@
+<svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="260" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Проблема спецификации: закон Гудхарта в согласовании</text>
+  <text x="320" y="44" fill="#8b949e" font-size="11" text-anchor="middle">Пример гипотетический</text>
+
+  <g fill="#161b22" stroke="#30363d">
+    <rect x="30" y="90" width="140" height="60" rx="6"/>
+    <rect x="230" y="90" width="140" height="60" rx="6"/>
+    <rect x="430" y="90" width="140" height="60" rx="6"/>
+  </g>
+  <g fill="#c9d1d9" font-size="11" text-anchor="middle">
+    <text x="100" y="115">Истинная цель</text>
+    <text x="100" y="131">«будь полезным»</text>
+    <text x="300" y="115">Прокси-метрика</text>
+    <text x="300" y="131">оценка асессора</text>
+    <text x="500" y="115">Оптимизация</text>
+    <text x="500" y="131">максимизация оценки</text>
+  </g>
+
+  <path d="M170,120 L230,120" stroke="#3b4453" stroke-width="2" marker-end="url(#arr8)"/>
+  <path d="M370,120 L430,120" stroke="#3b4453" stroke-width="2" marker-end="url(#arr8)"/>
+  <defs><marker id="arr8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3b4453"/></marker></defs>
+
+  <path d="M500,150 C 500,200 300,200 300,155" fill="none" stroke="#f85149" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arr9)"/>
+  <defs><marker id="arr9" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#f85149"/></marker></defs>
+  <text x="400" y="210" fill="#f85149" font-size="10" text-anchor="middle">расхождение: уверенный тон поднимает оценку сильнее точности</text>
+</svg>

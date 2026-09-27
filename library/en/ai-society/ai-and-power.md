@@ -23,6 +23,10 @@ Discussions of "AI and power" often jump straight to dramatic political scenario
 
 This scale requirement is the structural root of every power-concentration concern that follows in this essay, and it is worth being precise about why it exists rather than treating it as an inherent, unchangeable property of AI as a technology. Training the most capable current-generation models requires computational infrastructure costing hundreds of millions to billions of dollars, energy infrastructure to power that computation, and access to talent pools that remain genuinely scarce relative to demand. None of these three inputs is evenly distributed globally or even within wealthy economies, and each creates a natural chokepoint where a relatively small number of actors, whether corporations, well-funded research labs, or state actors with sufficient resources, can exert outsized influence over the trajectory of the technology relative to their share of the population or the economy.
 
+![A relationship diagram showing compute and data feeding frontier AI labs and states, which in turn shape deployed products and public accountability pressure flowing back](figures/ai-and-power-01.svg)
+
+*Figure 1: A simplified map of how compute and data bottlenecks flow into labs and states, and onward into deployed products, with public accountability as the comparatively weak feedback link.*
+
 It is worth noting, without resolving the question, that this scale-driven concentration is not necessarily permanent. Compute costs per unit of capability have historically fallen over time as hardware and algorithmic efficiency improve, a pattern that, if it continues, could gradually lower the barrier to entry and diffuse capability more broadly over a period of years, echoing how earlier waves of computing hardware started concentrated in a handful of institutions and eventually became widely accessible. Whether AI capability follows a similar democratizing trajectory, or remains persistently concentrated because the capability frontier keeps moving faster than the cost curve falls, is one of the central open questions this essay returns to throughout.
 
 ## 2. The Compute and Data Bottlenecks
@@ -76,6 +80,10 @@ A frequently cited counterweight to AI power concentration is the open-weight mo
 A fair-minded skeptic of the open-source counterweight raises two points worth taking seriously. First, even open-weight models still require the same concentrated infrastructure, specialized hardware and large capital outlays, to train in the first place. Open release diffuses access to a given capability level after it has been developed, but it does not by itself diffuse the capacity to develop the next capability level, leaving the actual frontier of research still concentrated among well-resourced actors even as broader access to already-achieved capability improves. Second, the same broad accessibility that diffuses beneficial uses also diffuses misuse potential, since open-weight release makes safety-relevant restrictions, such as refusing to assist with clearly harmful requests, considerably harder to enforce once a model's weights are in the hands of anyone willing to run them without those restrictions intact. A genuine tradeoff between diffusing power and diffusing risk, and it doesn't have a clean resolution.
 
 Both of these considerations are legitimate, and the honest conclusion is that open-weight release is a real, partial counterweight to power concentration at the application and access layer, not a complete solution to concentration at the frontier-research layer. It introduces its own distinct risk-distribution tradeoffs that a purely enthusiastic account of open source as a power-diffusing force tends to underweight.
+
+![A tug-of-war diagram showing forces pulling toward concentration, such as compute scale and data chokepoints, against forces pulling toward diffusion, such as falling costs and open-weight models](figures/ai-and-power-02.svg)
+
+*Figure 2: The competing forces currently pulling AI capability toward concentration and toward diffusion. Which set wins out is a matter of institutional choice, not technological inevitability.*
 
 ## 8. What Durable Distributed Power Might Require
 

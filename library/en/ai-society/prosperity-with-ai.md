@@ -65,11 +65,19 @@ It is worth stating plainly a point implicit throughout this essay: abundance is
 
 A useful mental model: AI capability determines the size of the potential prosperity gain, roughly the size of the economic pie that becomes available to create. Institutions, market structure, and policy determine how that pie actually gets divided and whether the division happens quickly or after a prolonged, painful transition. Technologists sometimes underweight the second half of this equation, treating capability progress as the whole story. Economists and policy analysts sometimes underweight the first half, treating institutional design as though it operates independent of what the underlying technology actually makes possible. A realistic vision of prosperity needs both halves held together.
 
+![A 2x2 diagram showing that AI capability and institutional response jointly determine whether the outcome is broad prosperity, narrow enrichment, stagnation, or a chaotic transition](figures/prosperity-with-ai-02.svg)
+
+*Figure 2: Capability sets the size of the potential gain; institutional response determines how it gets divided. Neither axis alone determines the outcome.*
+
 This is also where reasonable people most sharply disagree. Not about whether AI has strong productive potential, which is fairly uncontroversial among those close to the technology, but about how much weight proactive institutional and policy design should carry relative to trusting existing market mechanisms and historical adaptation patterns to handle the transition adequately on their own. It's a debate that echoes every previous general-purpose technology transition.
 
 ## 7. Realistic Timelines and the Adoption Lag
 
 One of the most persistent errors in public discussion of AI-driven prosperity is timeline compression: assuming that because a capability has been demonstrated in a research paper or a product demo, its economic effects will follow within a year or two. Economic history strongly suggests otherwise. The productivity gains from electrification, one of the best-studied cases in economic history, did not show up clearly in aggregate productivity statistics until roughly three decades after the core technology was commercially available. Factories had to be entirely re-architected around the possibilities electric motors created rather than simply swapping steam engines for electric ones in the same physical layout, a redesign process that took an entire generation of management and engineering practice to work out.
+
+![A timeline diagram comparing the illustrative lag between invention and measurable productivity impact for steam power, electrification, computers, and a hypothetical range for AI](figures/prosperity-with-ai-01.svg)
+
+*Figure 1: The gap between a core technology's introduction and its measurable productivity impact, shown qualitatively across past general-purpose technologies. The AI range is a hypothesis, not an observed measurement.*
 
 There is a reasonable case that AI's diffusion could be faster than electrification's, since it is a software technology that can be deployed and updated at a speed physical capital never could, and early adoption curves for AI tools do appear faster than for most historical technologies. But there is also a reasonable case for caution. Many of AI's highest-value applications require organizational redesign, new workflows, new trust structures, and new regulatory frameworks that move at institutional rather than software speed, and those bottlenecks have historically been the actual rate-limiting step in past general-purpose technology diffusion, not the underlying technical capability itself. A realistic prosperity narrative should expect a multi-decade diffusion process with meaningfully uneven pacing across sectors, not a sudden step change in living standards.
 

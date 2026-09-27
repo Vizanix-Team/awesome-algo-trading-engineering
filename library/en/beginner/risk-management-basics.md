@@ -33,6 +33,10 @@ A common, simple starting rule caps the amount you're willing to lose on any sin
 
 This approach means your position size shrinks automatically for trades with a wider stop loss, meaning trades where the price needs more room to move before you consider the idea proven wrong, and grows for trades with a tighter stop loss. This keeps your risk per trade roughly consistent even as the specific setup varies.
 
+![Two position sizes on a $10,000 account, each risking exactly $100, one with a 2% stop and one with a 5% stop](figures/risk-management-basics-01.svg)
+
+*Figure 1: A wider stop loss means a smaller position, keeping the dollar risk per trade constant at 1% of capital.*
+
 Resist the temptation to increase position size after a string of wins, a pattern sometimes called chasing. A winning streak doesn't change the underlying probability of your next trade losing, and oversized positions after a hot streak are a common way a single subsequent loss does outsized damage.
 
 ## 3. Stop Losses and Their Limits
@@ -57,6 +61,10 @@ Leverage, introduced briefly in the crypto connectivity book of this library, me
 
 A useful mental exercise before using any leverage is calculating exactly what price move would trigger a full loss of your posted collateral, given the leverage ratio you're considering. With ten times leverage, a mere ten percent adverse price move can wipe out your entire committed capital on that position. That kind of move would be a completely ordinary, unremarkable fluctuation for many assets over even a single volatile day.
 
+![Bar chart of the price move needed to lose all collateral at 1x, 5x, 10x, and 33x leverage](figures/risk-management-basics-02.svg)
+
+*Figure 2: Higher leverage shrinks the ordinary-looking price move that would wipe out your entire position.*
+
 As a beginner, treat leverage as something to understand thoroughly and generally avoid, or use only in small, deliberately limited amounts, until you have real experience gauging how much an instrument typically moves and how quickly. The apparent efficiency of leverage, doing more with less capital, is exactly matched by an equally real and unforgiving efficiency at destroying that same capital when a trade moves against you.
 
 ## 6. Drawdown: Living Through the Bad Stretch
@@ -66,6 +74,10 @@ Drawdown, introduced in the backtesting book of this library, is the decline in 
 A strategy's historical maximum drawdown gives you a reference point, but remember from the backtesting book that history doesn't set a hard ceiling. A strategy can eventually experience a drawdown larger than anything in its backtest, simply because markets produce new, previously unseen situations over time. Plan around a drawdown somewhat worse than your worst historical example, not exactly equal to it.
 
 The psychological dimension matters as much as the financial one. A drawdown that's financially survivable can still lead a trader to abandon a fundamentally sound strategy right before it recovers, purely because the emotional strain of watching sustained losses becomes unbearable. Deciding in advance, while calm, exactly what drawdown level would make you pause and reassess, versus what level is simply an expected, tolerable part of the strategy's normal behavior, prevents that decision from being made in a moment of panic.
+
+![A portfolio value curve marking a peak, a trough, and eventual recovery](figures/risk-management-basics-03.svg)
+
+*Figure 3: Drawdown is measured from the most recent peak to the lowest point reached before recovery.*
 
 ## 7. Operational Risk: When the Bug Is the Real Danger
 

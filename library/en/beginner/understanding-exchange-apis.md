@@ -45,6 +45,10 @@ Working with a WebSocket connection requires slightly different code discipline 
 
 A typical trading system uses both: a WebSocket connection for the continuous flow of market data, and REST calls for placing orders, checking account balances, and other actions that naturally happen as discrete, one-off requests rather than a continuous stream.
 
+![REST shown as a single request-and-response exchange; WebSocket shown as one open connection streaming continuous updates](figures/understanding-exchange-apis-01.svg)
+
+*Figure 1: REST suits one-off requests and actions, while WebSocket suits continuous, live market data.*
+
 ## 4. Authentication and Keeping Your Keys Safe
 
 Fetching public market data, like general price information, usually requires no special permission. But placing orders or viewing your own account details requires the exchange to know who you are and to trust that the request genuinely comes from you.
@@ -70,6 +74,10 @@ Placing an order through an API typically means sending a POST request specifyin
 Checking an order's status means sending a request with that identifier and receiving back its current state: still open and waiting, partially filled, completely filled, or canceled. Many exchanges also push order status updates directly through your WebSocket connection as they happen, which is generally faster and more efficient than repeatedly polling with REST requests to ask "has this filled yet?"
 
 Canceling an order means sending a request referencing that same identifier and asking the exchange to remove it from the book if it hasn't already filled. Be aware of a subtle race condition here: your cancel request and a matching trade might arrive at the exchange at nearly the same moment, so always check the actual resulting order status after a cancel attempt rather than assuming it succeeded just because you sent the request.
+
+![Order lifecycle diagram: submitted, open, partially filled, then filled, canceled, or rejected](figures/understanding-exchange-apis-02.svg)
+
+*Figure 2: An order moves through a small set of states, and a cancel attempt can race against a fill.*
 
 Test every one of these operations extensively on an exchange's testnet, a separate practice environment many exchanges provide that behaves like the real thing but uses fake funds, before ever sending real orders backed by real money.
 

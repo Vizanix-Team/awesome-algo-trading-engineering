@@ -48,6 +48,10 @@ Historical VaR (shown above, using actual past return scenarios) avoids assuming
 
 Monte Carlo VaR, a third common approach, simulates many possible future paths using an assumed or fitted statistical model of returns and their correlations, then computes the percentile loss across those simulated outcomes. It offers more flexibility than either historical or parametric VaR, you can model nonlinear payoffs like options far more naturally than the other two approaches, at the cost of introducing model risk from whatever distributional and correlation assumptions drive the simulation. A common, dangerous mistake is treating Monte Carlo VaR's apparent statistical sophistication as a substitute for validating those underlying assumptions against actual historical behavior. Parametric VaR (assuming returns are normally distributed) is easier to compute but understates tail risk for most real asset return distributions, which have fatter tails than the normal distribution predicts. A production system typically runs multiple VaR methodologies side by side and treats large disagreement between them as itself a risk signal worth investigating.
 
+![P&L distribution with a marked VaR threshold and a shaded tail region whose average defines Expected Shortfall](figures/portfolio-risk-engineering-01.svg)
+
+*Figure 1: VaR marks one percentile of the loss distribution; Expected Shortfall averages the losses beyond that point, capturing how bad the tail actually is.*
+
 ## 3. Building a Real-Time Exposure Engine
 
 Exposure, how much capital is at risk per instrument, per strategy, per desk, aggregated up to the firm level, needs to update continuously as positions and prices change, not on a batch schedule. Architecturally, this means your exposure engine subscribes to the same fill stream and market data stream as your trading systems, maintaining its own independent, continuously updated view rather than periodically querying the OMS for a snapshot.
@@ -88,6 +92,10 @@ A practical mitigation many systems use is shrinkage estimation: blend the raw s
 
 Correlation itself is not stable across market regimes, and this instability is precisely where naive risk models fail most visibly. Correlations across many asset pairs tend to rise sharply during broad market stress, a phenomenon sometimes described as correlations "going to one" during a crisis, meaning the diversification benefit your risk model assumed based on calmer-period historical correlations evaporates exactly when you need it most. Stress-adjusting your covariance matrix, either by explicitly recomputing it using a historical stress period's correlation structure or by applying a systematic correlation inflation factor scaled to current volatility, gives you a more honest picture of portfolio risk under exactly the conditions your normal-period model is most likely to understate.
 
+![Network diagram of four assets with sparse, mixed correlations in a normal regime versus dense, uniformly high correlations in a stress regime](figures/portfolio-risk-engineering-02.svg)
+
+*Figure 2: Correlations that look diversifying in calm markets can converge toward one under stress, erasing the diversification benefit exactly when it is needed most.*
+
 ## 5. Stress Testing and Scenario Analysis
 
 VaR and covariance-based risk measures both assume the future resembles some historical or modeled distribution. Stress testing sidesteps that assumption entirely by asking a different, more direct question: what happens to this exact portfolio if a specific, severe scenario occurs, regardless of how likely your model thinks that scenario is?
@@ -121,6 +129,10 @@ def pre_trade_check(order, current_exposure, limits):
 Design these checks to fail closed: if the risk engine cannot compute a confident answer (stale data, a missing price, a disconnected feed), the default behavior should be to reject or hold the order for manual review, never to silently approve on the assumption that "probably nothing changed."
 
 Balance the latency cost of pre-trade checks against their thoroughness deliberately, using a tiered structure rather than a single monolithic check applied uniformly to every order regardless of size or risk contribution. A small order from a well-established, historically low-risk strategy can reasonably pass through a lightweight, fast incremental check; a large order, or one from a newer strategy without an established track record, can justify the added latency of a fuller recomputation. Making this tiering explicit and documented, rather than an ad hoc performance optimization nobody remembers the rationale for, keeps the system both fast where speed matters and thorough where thoroughness matters most.
+
+![Incoming order routed to either a fast incremental check or a full portfolio recomputation depending on order size and strategy history](figures/portfolio-risk-engineering-03.svg)
+
+*Figure 3: Small orders from established strategies take a fast incremental path; large or novel orders pay the latency cost of a full recomputation.*
 
 ## 7. Concentration and Liquidity Risk
 

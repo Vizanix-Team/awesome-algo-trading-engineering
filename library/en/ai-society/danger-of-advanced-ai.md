@@ -27,6 +27,10 @@ A useful discipline is to ask two questions before accepting any risk claim. Wha
 
 This essay tries to hold four categories apart: misuse by humans, accidents from unreliable systems, slow-moving structural harms from how AI reshapes institutions, and the more speculative possibility of AI systems whose behavior escapes meaningful human control. Each deserves its own evidentiary standard, its own timeline assumptions, and its own response. Lumping them together produces exactly the kind of shallow, oscillating public debate we currently have, one that swings between complacency and panic without much stable ground in between.
 
+![A 2x2 diagram placing misuse, accident, structural, and loss-of-control risk in the space of demonstrated-versus-speculative capability and contained-versus-systemic consequence](figures/danger-of-advanced-ai-01.svg)
+
+*Figure 1: A qualitative map of the four risk categories along two axes — how demonstrated the underlying capability is, and how contained or systemic the resulting harm would be. Placement is illustrative, not a measured estimate.*
+
 ## 2. Misuse: The Danger That Needs No New Physics
 
 The most immediate category of AI danger requires no breakthrough in capability at all, only continued diffusion of tools that already exist. A capable language model can already draft a passable phishing campaign, personalized at a scale no human team could match. Voice cloning tools, trained on a few seconds of audio, can convincingly impersonate a person's spouse or employer for a fraud attempt. None of this needs a system with goals, agency, or anything resembling general intelligence. It needs only the multiplication of a human-directed harmful intent by a tool that is fast, cheap, and good enough.
@@ -84,6 +88,10 @@ A recurring frustration in AI risk debates is the demand for precise probability
 The right response to this kind of deep uncertainty is neither to throw up one's hands nor to pretend false precision. Decision theory offers a useful frame here, borrowed loosely from how engineers already treat rare, high-consequence failure modes in domains like structural engineering or nuclear safety: invest in mitigation proportional to the product of probability and consequence, weighted by how cheaply the mitigation can be achieved, and prefer actions that remain sensible across a wide range of possible future states rather than actions that pay off only if one specific, contested scenario turns out to be correct.
 
 Concretely, this favors interventions like interpretability research, which helps us understand what trained models are actually doing internally, along with robust testing regimes and institutional capacity to respond quickly to emerging evidence, because all of these remain valuable whether the most speculative scenarios materialize or not. It disfavors interventions that only make sense under one narrow, contested view of the future, whether that view is maximally alarmed or maximally dismissive.
+
+![A probability-versus-severity diagram placing the four risk categories qualitatively, with a shaded band indicating where mitigation investment is most justified](figures/danger-of-advanced-ai-02.svg)
+
+*Figure 2: A qualitative probability-and-severity frame for prioritizing mitigation. Axis labels are deliberately non-numeric; this is a reasoning aid, not a calibrated forecast.*
 
 ## 8. Where the Serious Disagreements Actually Lie
 

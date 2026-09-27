@@ -1,0 +1,23 @@
+<svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="300" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Влияние корреляции на волатильность портфеля</text>
+
+  <text x="150" y="60" fill="#8b949e" font-size="12" text-anchor="middle">ρ = 1 (нет диверсификации)</text>
+  <rect x="70" y="80" width="160" height="30" fill="#f85149" fill-opacity="0.8"/>
+  <text x="150" y="100" fill="#0d1117" font-size="11" text-anchor="middle">σ портфеля = сумма σ</text>
+
+  <text x="350" y="60" fill="#8b949e" font-size="12" text-anchor="middle">ρ = 0 (типичный случай)</text>
+  <rect x="270" y="80" width="100" height="30" fill="#a371f7" fill-opacity="0.8"/>
+  <text x="320" y="100" fill="#0d1117" font-size="11" text-anchor="middle">частичная компенсация</text>
+
+  <text x="560" y="60" fill="#8b949e" font-size="12" text-anchor="middle">ρ = -1 (идеальный хедж)</text>
+  <rect x="530" y="80" width="20" height="30" fill="#3fb950" fill-opacity="0.8"/>
+  <text x="595" y="100" fill="#3fb950" font-size="11" text-anchor="middle">σ ≈ 0</text>
+
+  <line x1="60" y1="150" x2="640" y2="150" stroke="#30363d"/>
+  <text x="350" y="140" fill="#8b949e" font-size="11" text-anchor="middle">относительный масштаб итоговой волатильности портфеля</text>
+
+  <text x="350" y="190" fill="#c9d1d9" font-size="13" text-anchor="middle">σ_p = sqrt(w1²σ1² + w2²σ2² + 2·w1·w2·ρ·σ1·σ2)</text>
+  <text x="350" y="230" fill="#8b949e" font-size="12" text-anchor="middle">Наивная сумма индивидуальных лимитов недооценивает риск</text>
+  <text x="350" y="250" fill="#8b949e" font-size="12" text-anchor="middle">концентрированного портфеля и переоценивает риск диверсифицированного</text>
+</svg>

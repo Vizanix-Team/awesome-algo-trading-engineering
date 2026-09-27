@@ -1,0 +1,21 @@
+<svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="260" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Многоуровневая частота сверки</text>
+
+  <g fill="#161b22" stroke="#3fb950" stroke-width="1.5">
+    <rect x="60" y="60" width="500" height="40" rx="6"/>
+  </g>
+  <text x="80" y="85" fill="#c9d1d9" font-size="12">lightweight_reconcile — каждые 5 секунд</text>
+
+  <g fill="#161b22" stroke="#58a6ff" stroke-width="1.5">
+    <rect x="60" y="110" width="500" height="40" rx="6"/>
+  </g>
+  <text x="80" y="135" fill="#c9d1d9" font-size="12">full_reconcile — каждую минуту</text>
+
+  <g fill="#161b22" stroke="#a371f7" stroke-width="1.5">
+    <rect x="60" y="160" width="500" height="40" rx="6"/>
+  </g>
+  <text x="80" y="185" fill="#c9d1d9" font-size="12">deep_reconcile — раз в час</text>
+
+  <text x="320" y="230" fill="#8b949e" font-size="11" text-anchor="middle">Лёгкие проверки дёшевы и частые; глубокая сверка реже, но полнее</text>
+</svg>

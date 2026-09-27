@@ -1,0 +1,42 @@
+<svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="700" height="320" fill="#0d1117"/>
+  <text x="350" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Parent Order Split Across Venues</text>
+  <defs>
+    <marker id="sr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <g fill="#161b22" stroke="#a371f7" stroke-width="1.5">
+    <rect x="280" y="50" width="140" height="50" rx="6"/>
+  </g>
+  <text x="350" y="72" fill="#a371f7" font-size="12" text-anchor="middle">Parent Order</text>
+  <text x="350" y="88" fill="#8b949e" font-size="10" text-anchor="middle">Buy 10,000 shares</text>
+
+  <g fill="#161b22" stroke="#30363d" stroke-width="1.5">
+    <rect x="30" y="170" width="140" height="70" rx="6"/>
+    <rect x="200" y="170" width="140" height="70" rx="6"/>
+    <rect x="370" y="170" width="140" height="70" rx="6"/>
+    <rect x="540" y="170" width="130" height="70" rx="6"/>
+  </g>
+  <g fill="#c9d1d9" text-anchor="middle" font-size="11">
+    <text x="100" y="195">Venue A (lit)</text>
+    <text x="100" y="212" fill="#3fb950">3,000 filled</text>
+    <text x="100" y="228" fill="#8b949e" font-size="9">rebate: 0.20bps</text>
+    <text x="270" y="195">Venue B (lit)</text>
+    <text x="270" y="212" fill="#3fb950">2,500 filled</text>
+    <text x="270" y="228" fill="#8b949e" font-size="9">fee: 0.30bps</text>
+    <text x="440" y="195">Venue C (dark)</text>
+    <text x="440" y="212" fill="#3fb950">1,800 filled</text>
+    <text x="440" y="228" fill="#8b949e" font-size="9">midpoint match</text>
+    <text x="605" y="195">Venue D (lit)</text>
+    <text x="605" y="212" fill="#d29922">2,700 open</text>
+    <text x="605" y="228" fill="#8b949e" font-size="9">resting, unfilled</text>
+  </g>
+  <g stroke="#58a6ff" stroke-width="1.5" fill="none" marker-end="url(#sr1)">
+    <line x1="320" y1="100" x2="120" y2="170"/>
+    <line x1="340" y1="100" x2="270" y2="170"/>
+    <line x1="360" y1="100" x2="430" y2="170"/>
+    <line x1="380" y1="100" x2="600" y2="170"/>
+  </g>
+  <text x="350" y="285" fill="#8b949e" font-size="11" text-anchor="middle">7,300 of 10,000 shares filled across three venues; 2,700 still working at Venue D.</text>
+</svg>

@@ -31,6 +31,10 @@ Metrics, logs, and traces are the standard three pillars, and each needs a tradi
 
 A useful mental model: infrastructure observability tells you whether your machine is healthy; business observability tells you whether your trading is correct. You need both, instrumented separately, because a machine can be perfectly healthy (low CPU, low latency, no errors in the logs) while still producing subtly wrong trading outcomes due to a logic bug that never throws an exception.
 
+![Metrics, logs, and traces feeding into a layer of business correctness checks such as position matching and risk currency](figures/observability-for-trading-infrastructure-01.svg)
+
+*Figure 1: The three standard observability pillars still need a business-correctness layer on top, since infrastructure can look perfectly healthy while trading outcomes are quietly wrong.*
+
 The tracing layer specifically benefits from being designed around the order lifecycle as its organizing unit, rather than around individual service calls in isolation, which is the more typical default in general-purpose distributed tracing setups. A trace that spans "strategy decision through final settlement" for a single order, even though it touches many services and may span minutes or hours rather than the milliseconds typical of a web request trace, gives you a single coherent narrative object to reason about, rather than a collection of technically-linked but conceptually disjointed spans that require manual stitching together during an investigation.
 
 ## 3. Metrics That Actually Matter
@@ -95,11 +99,19 @@ def send_order(order):
 
 The payoff is concrete: when a client asks why their order took 400 milliseconds longer than usual to acknowledge, a trace immediately shows whether that time was spent in your risk check, waiting for an internal queue, or in the network hop to the exchange, rather than requiring an engineer to manually correlate timestamps across five separate log files.
 
+![Waterfall trace showing spans for strategy decision, risk check, OMS submit, exchange gateway, and fill process along a shared timeline](figures/observability-for-trading-infrastructure-03.svg)
+
+*Figure 3: A single trace ID links every hop an order takes; a slow exchange-gateway span is visible directly instead of being inferred from scattered log timestamps.*
+
 ## 6. Alerting Without Alert Fatigue
 
 An alert that fires constantly and gets ignored is worse than no alert, because it trains your on-call engineers to reflexively dismiss notifications, including the one time it matters. Tier your alerts explicitly: page-worthy (wake someone up, financial or correctness risk is active right now), urgent-but-not-paging (needs attention within the hour, post to a monitored channel), and informational (log it, review during business hours, never interrupt anyone).
 
 Reconciliation breaks, risk limit breaches, and market data feed outages during market hours belong in the page-worthy tier without exception. A single failed retry on an otherwise-healthy connection, or a latency metric briefly crossing a soft threshold, belongs several tiers down. Review your alert-to-actual-incident ratio periodically and prune alerts that fire often but rarely correspond to real action taken. That ratio drifting upward over time is the leading indicator of an alerting system nobody trusts anymore.
+
+![Three alert tiers: page-worthy, urgent-but-not-paging, and informational, each with example triggers](figures/observability-for-trading-infrastructure-02.svg)
+
+*Figure 2: Tiering alerts by real urgency, rather than treating every threshold breach the same, protects the value of a page for the moments that actually need one.*
 
 Alert routing should also account for time of day and market state explicitly, not just severity. A latency degradation during active market hours on a heavily traded instrument deserves a different response urgency than the identical degradation on the same instrument overnight when nothing is trading. Building this context-awareness into your alerting logic, rather than applying uniform thresholds regardless of market state, meaningfully reduces the volume of alerts that technically meet a threshold but carry no real urgency given the actual conditions at the time they fired.
 

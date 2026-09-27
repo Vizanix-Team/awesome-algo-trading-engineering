@@ -31,6 +31,10 @@ Think of reconciliation as comparing at least three independent views of the sam
 
 These three views should agree, and the interesting engineering work is entirely about what to do in the moments they don't. Two-way reconciliation (your system versus the exchange) catches processing bugs and message loss on your side. Three-way reconciliation (adding the clearing/custodian view) catches a different, often more serious class of problem: cases where your system and the exchange agree with each other but both are wrong relative to what actually settles, which can happen due to trade allocation errors, corporate actions, or clearing-level breaks that never surface in the exchange's live trading records at all.
 
+![Reconciliation triangle linking internal OMS state, exchange state, and clearing/custodian records](figures/state-reconciliation-01.svg)
+
+*Figure 1: Three-way reconciliation catches the case where internal state and exchange state agree with each other yet both disagree with the authoritative clearing record.*
+
 Prioritize which reconciliation triangle to build first based on where your actual operational risk concentrates, rather than trying to build all three simultaneously from day one. A firm trading a single instrument type through a single clearing relationship might reasonably defer building full three-way reconciliation until volume justifies the investment, while a firm operating across many venues with complex allocation logic across multiple underlying accounts needs the three-way view from the start, because the allocation step itself is exactly where the kind of break that two-way reconciliation is structurally blind to tends to originate.
 
 ## 3. Designing a Reconciliation Engine
@@ -73,6 +77,10 @@ def classify_break(break_record, history):
 
 Persisting breaks in a database with their full history, not just their current state, lets you distinguish "this specific instrument has had a flapping one-lot break for three days, probably a lot-size rounding issue" from "this is a new, large, and growing break that needs immediate attention." Pattern recognition on break history is often what actually catches subtle bugs, more than any single reconciliation run in isolation.
 
+![2x2 matrix classifying breaks by magnitude and persistence into LOW, HIGH, and CRITICAL severity](figures/state-reconciliation-02.svg)
+
+*Figure 2: Severity depends on both how large a break is and how long it persists across reconciliation cycles, not magnitude alone.*
+
 Assign every recurring break category an explicit owner and a target resolution date, tracked the same way you'd track any other engineering backlog item, rather than letting known, low-severity flapping breaks accumulate indefinitely as tolerated background noise. A break tolerated long enough eventually becomes invisible to the team, and that invisibility is exactly the condition under which a genuinely new and unrelated break, arriving with a similar signature, goes unnoticed because everyone has learned to filter out "the usual noise" without checking whether this particular instance is actually the usual noise or something new wearing a familiar disguise.
 
 ## 5. Real-Time vs Batch Reconciliation
@@ -94,6 +102,10 @@ Even for the narrow, pre-approved auto-correction categories, log every automate
 Firms trading across multiple exchanges or brokers face a compounded version of this problem: aggregate position reconciliation needs to correctly net positions that may be held at different venues under different conventions (some venues report net position, others report separate long and short positions that need netting on your side), and a single logical position might legitimately be split across venues at any moment during an active rebalancing or migration between brokers.
 
 The design principle that scales here is maintaining venue-level reconciliation as the primary, most granular check, reconcile against each venue independently first, and only aggregate up to a firm-wide net position view as a secondary, derived check. If you reconcile only at the aggregate level, a compensating error (long 100 at venue A wrongly recorded, short 100 at venue B wrongly recorded, netting to a correct-looking zero) can hide completely, which is exactly the kind of break that aggregate-only reconciliation is structurally blind to.
+
+![Two venues each holding an opposite-signed erroneous position that nets to a falsely correct firm-wide total](figures/state-reconciliation-03.svg)
+
+*Figure 3: A wrongly-long position at one venue and a wrongly-short position at another can net to a clean-looking firm-wide total, hiding two real breaks at once.*
 
 Currency and asset-class boundaries introduce a related aggregation trap: netting positions denominated in different currencies into a single reporting-currency figure before reconciling can mask a genuine break in one currency that happens to be offset by an unrelated, coincidental discrepancy in another. Reconcile within each native currency and asset class first, and only convert to a common reporting currency for presentation after the underlying, granular reconciliation has already confirmed correctness at the level where the actual positions and cash movements live.
 

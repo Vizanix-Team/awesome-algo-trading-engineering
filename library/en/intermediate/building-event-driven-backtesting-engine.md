@@ -62,6 +62,10 @@ while not queue.empty():
 
 Every downstream component only reacts to what has already happened; nothing peeks ahead into the queue.
 
+![Event-driven backtest loop showing MarketEvent, SignalEvent, OrderEvent, and FillEvent flowing through a single priority queue](figures/building-event-driven-backtesting-engine-01.svg)
+
+*Figure 1: The event loop routes all four event types through one timestamp-and-sequence-ordered queue, with each handler only able to see events that already occurred.*
+
 ## 3. Avoiding Lookahead Bias
 
 Lookahead bias is the single most common reason a backtest looks profitable and a live strategy doesn't. It creeps in through several specific mechanisms worth naming explicitly.
@@ -81,6 +85,10 @@ The fidelity of your fill simulation determines how trustworthy your results are
 A better approach simulates against synthetic or historical order book depth: for a market order of size Q, walk the book levels and compute a volume-weighted average fill price across however many levels of depth Q consumes, rather than a single fixed price. For limit orders, only fill when the simulated market price crosses your limit, and be honest about queue position. A passive limit order sitting behind other orders at the same price level doesn't fill just because the price touched your level once; it needs the volume ahead of you in the queue to trade through first.
 
 Modeling queue position accurately requires tracking, for every simulated resting limit order, an estimate of how much volume sits ahead of it at that price level at the moment it was placed, and decrementing that estimate as trades print at that price. This is more implementation effort than most backtesting tutorials show. It's exactly the effort that separates a backtester whose passive-order fill rates are trustworthy from one that systematically overstates how often a passive strategy actually gets filled, since a naive "fill whenever price touches my limit" rule assumes you're always first in line. In a competitive market with many other participants resting orders at the same attractive price, that's rarely true.
+
+![Diagram of a market order walking three ask price levels to compute a volume-weighted fill price](figures/building-event-driven-backtesting-engine-02.svg)
+
+*Figure 2: A market order for 850 shares consumes three price levels; the simulated fill price is the volume-weighted average across the levels it touches, not the last traded price.*
 
 ```
 def simulate_market_fill(book_levels, quantity):
@@ -104,6 +112,10 @@ Live trading has a real, nonzero delay between deciding to trade and the exchang
 Model latency as explicit event delays: when your strategy emits an `OrderEvent`, don't process it against the current market state. Schedule its arrival at the simulated exchange some milliseconds (or more, depending on your infrastructure) later, using the same event queue. This single change often meaningfully reduces the apparent edge of short-horizon strategies, which is valuable information, not an inconvenience.
 
 Go a step further and model latency as a distribution rather than a fixed constant, since real network and processing latency varies observation to observation, sometimes with a heavy tail from occasional congestion or garbage collection pauses on your own infrastructure. Sampling delay from an empirically measured latency distribution, rather than applying a single average delay uniformly, captures the effect of your worst-case latency moments occasionally costing you a fill you would have otherwise gotten. A fixed-delay model smooths that away entirely, and it can matter enormously for a strategy whose edge depends on winning races against other market participants for the same fleeting opportunity.
+
+![Timeline showing signal generation, order arrival, and fill confirmation separated by sampled network delays, next to a latency distribution histogram with a heavy tail](figures/building-event-driven-backtesting-engine-03.svg)
+
+*Figure 3: Latency is modeled as event-arrival delay sampled from an empirical distribution, so occasional heavy-tail delays can realistically cost a fill.*
 
 ## 6. Transaction Costs and Slippage Models
 

@@ -21,6 +21,10 @@ The single most common mistake this library sees among new algo traders is treat
 
 A backtest that shows a smooth, steadily rising equity curve with an enormous return over a short historical period should trigger suspicion before excitement. Real trading is messy; a suspiciously clean result is far more likely to reflect a coding bug, a subtle instance of look-ahead bias, or an unrealistic cost assumption than a genuinely powerful, previously undiscovered edge.
 
+![A suspiciously smooth, steadily rising equity curve next to a messier, more realistic one](figures/common-mistakes-new-algo-traders-01.svg)
+
+*Figure 1: A too-clean curve should raise suspicion of a bug or bias, not excitement about a discovered edge.*
+
 Build the habit of actively trying to break your own backtest before trusting it. Deliberately check whether any input could have leaked future information. Rerun the same strategy on a completely different time period or instrument and see whether the result holds up reasonably, rather than accepting the very first promising result you produce and moving straight to live deployment.
 
 ## 2. Ignoring Costs Until It's Too Late
@@ -62,6 +66,10 @@ A common beginner instinct is to assume that a more sophisticated approach, more
 Complexity also makes a strategy harder to debug and harder to reason about when something goes wrong live. A simple strategy you fully understand lets you diagnose unexpected behavior quickly, tracing exactly which rule triggered a given trade. A complex strategy with many interacting parts can behave in ways that surprise even the person who built it, making live problems much harder to catch and fix promptly.
 
 None of this means sophisticated techniques, including the machine learning approaches covered later in this library, have no place. It means earning the right to add complexity by first building genuine understanding and a working, well-tested simple version, then adding sophistication deliberately and incrementally, testing carefully at each step, rather than starting from maximum complexity because it seems more impressive.
+
+![In-sample performance climbing with more tuned parameters while out-of-sample performance falls](figures/common-mistakes-new-algo-traders-02.svg)
+
+*Figure 2: More tuned parameters make the in-sample result look better while widening the gap to out-of-sample reality.*
 
 ## 7. Skipping the Testnet Because It Feels Like a Waste of Time
 

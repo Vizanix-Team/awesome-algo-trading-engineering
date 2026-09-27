@@ -80,6 +80,10 @@ def ewma_variance(returns, lam=0.94):
 
 The decay parameter `lam` controls the effective memory of the estimate. Closer to 1 means slower adaptation, closer to 0 means faster reaction but noisier estimates. For systems that need to size positions or set risk limits in near real time, this kind of adaptive estimator is far more useful than a fixed-window historical standard deviation recomputed once a day.
 
+![Line chart of EWMA variance over trading days showing clustered periods of high volatility separated by calm stretches](figures/time-series-analysis-for-trading-systems-01.svg)
+
+*Figure 1: Volatility clustering means large moves group together in time; an EWMA estimate tracks these clusters far better than a stale fixed-window estimate.*
+
 GARCH-family models extend this idea by explicitly modeling how today's variance depends on both yesterday's variance and yesterday's squared return, capturing the clustering dynamic with a small number of estimated parameters rather than a fixed decay constant chosen by hand. The added complexity earns its place primarily when you need forward-looking variance forecasts over a specific horizon, useful for options-adjacent risk work, rather than just a smoothed estimate of current variance, where the simpler EWMA approach is usually adequate and considerably easier to implement, monitor, and explain to a risk committee unfamiliar with the details of a fitted GARCH specification.
 
 ## 5. Cointegration and Pairs Relationships
@@ -102,6 +106,10 @@ The practical trap here is testing many candidate pairs and only reporting the o
 
 Even a genuinely cointegrated pair with a solid economic rationale is not a static, permanent relationship. The hedge ratio itself can drift over time as the underlying businesses or exposures evolve, and a pairs strategy using a hedge ratio estimated once at the start and never revisited will accumulate a growing, unhedged directional exposure as that ratio drifts away from its estimated value. Reestimate the hedge ratio on a rolling basis, and monitor the spread's mean-reversion speed over time as an early warning indicator. A spread that is reverting noticeably more slowly than its historical norm is a sign the underlying relationship may be weakening before it fully breaks down, giving you a chance to reduce exposure ahead of an outright cointegration failure rather than discovering it only after the strategy has already lost money on a broken relationship.
 
+![Two diverging price series for a cointegrated pair, with their hedge-ratio-weighted spread oscillating around an equilibrium level](figures/time-series-analysis-for-trading-systems-02.svg)
+
+*Figure 2: Each leg of a cointegrated pair can trend independently while the hedge-ratio-weighted spread between them keeps reverting to a stable equilibrium.*
+
 ## 6. Resampling and the Bar Construction Problem
 
 Most trading systems work with "bars," OHLCV summaries over some interval, rather than raw tick data, for tractability. The default choice, time bars (one bar per fixed clock interval), has a subtle statistical drawback: trading activity is not uniform in time, so a time bar during a quiet period represents very little information while a time bar during a burst of activity compresses a huge amount of information into the same-sized bucket.
@@ -123,6 +131,10 @@ def build_volume_bars(ticks, volume_threshold):
 ```
 
 Switching from time bars to volume or dollar bars is a low-effort change that measurably improves the statistical properties of downstream signal calculations for many strategies, and it deserves a place in an intermediate engineer's default toolkit rather than being treated as an exotic technique.
+
+![Comparison of fixed-width time bars with uneven information content versus volume bars of varying clock width but uniform traded quantity](figures/time-series-analysis-for-trading-systems-03.svg)
+
+*Figure 3: Time bars compress bursts of activity into the same-sized bucket as quiet periods; volume bars instead close each bar after a fixed amount of trading, producing more uniform statistical properties.*
 
 ## 7. Detecting Regime Shifts
 

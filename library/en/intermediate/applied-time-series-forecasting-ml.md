@@ -98,6 +98,10 @@ Whichever architecture you choose, budget real time for a rigorous comparison ag
 
 The infrastructure cost differential between the two approaches is also worth weighing explicitly, not just their raw predictive comparison. A gradient-boosted model typically trains in minutes on commodity hardware and deploys as a lightweight artifact with straightforward, well-understood serving infrastructure. A sequence model, particularly one large enough to meaningfully leverage its architectural advantages, often needs specialized training hardware, longer training cycles, and a more involved serving pipeline. Factor this operational cost into the decision alongside pure predictive performance, since a marginal accuracy improvement that costs substantially more to build, deploy, and maintain reliably is not automatically the right engineering tradeoff for a given team's resources and priorities.
 
+![Quadrant chart placing gradient-boosted trees and sequence models by input richness and data volume needed](figures/applied-time-series-forecasting-ml-02.svg)
+
+*Figure 2: Gradient-boosted trees are the stronger default on daily/hourly bars with engineered features; sequence models earn their cost mainly on rich, high-frequency input like tick or order-book data.*
+
 ## 6. Cross-Validation for Time Series (and Why K-Fold Fails)
 
 Standard K-fold cross-validation shuffles data randomly into folds, which for time series means training on future data and validating on past data within some folds, a direct and often invisible form of lookahead leakage that inflates validation performance in a way that will not survive contact with live, forward-only production data.
@@ -118,6 +122,10 @@ def walk_forward_splits(n_samples, train_size, test_size, step):
 
 Also insert a purge gap between the end of a training window and the start of its corresponding test window whenever your labels have forward-looking horizons (a label using the next 5 days of returns needs those 5 days excluded or gapped from the adjacent training data), or you'll leak information about the test period's outcomes into features that were technically computed from timestamps just before it.
 
+![Three walk-forward splits, each with a training window, a purge gap, and a test window that only follows the training period in time](figures/applied-time-series-forecasting-ml-01.svg)
+
+*Figure 1: Walk-forward validation trains only on the past and tests strictly on the following period, with a purge gap sized to the label's forward-looking horizon.*
+
 ## 7. Evaluation Metrics Beyond Accuracy
 
 Standard ML metrics like accuracy or R-squared can be actively misleading for financial forecasting, because they weight every prediction equally, while in trading, a small number of large, correct directional calls at the right moments matter far more than a high hit rate on small, unimportant moves. Evaluate forecasts using metrics that better reflect trading value: rank correlation (Spearman's) between predicted and realized returns, since many trading strategies only need reliable relative ordering, not precise magnitude; hit rate specifically on larger predicted moves; and, most directly, the outcome of running predictions through a simplified backtest that turns forecasts into positions and reports realized P&L after estimated transaction costs.
@@ -132,6 +140,10 @@ A model with mediocre raw accuracy but a consistently positive, stable informati
 ## 8. From Forecast to Trading Signal
 
 A forecast is not a trading signal until it passes through a deliberate translation layer: sizing (how much capital to commit given the forecast's confidence and typical error magnitude), thresholding (should a weak, near-zero forecast actually trigger a trade at all, given transaction costs), and risk overlay (does executing on this forecast respect existing position and exposure limits). Treat this translation layer as a first-class, separately tested component, not an afterthought bolted onto the model's raw output. Many otherwise-promising models fail in live trading not because the forecast itself was wrong, but because the translation from forecast to position was naive, oversized, or ignored transaction costs that erased the entire modeled edge.
+
+![Pipeline from raw forecast through thresholding, sizing, and risk overlay to a final position sent to the OMS](figures/applied-time-series-forecasting-ml-03.svg)
+
+*Figure 3: A forecast becomes a trading signal only after passing through separately tested thresholding, sizing, and risk-overlay stages.*
 
 ## Summary
 

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="260" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Пять этапов постепенной автоматизации</text>
+
+  <g font-size="9.5" text-anchor="middle" fill="#c9d1d9">
+    <rect x="20" y="70" width="105" height="80" rx="6" fill="#161b22" stroke="#58a6ff"/>
+    <text x="72" y="95">1. Таблица</text>
+    <text x="72" y="112" fill="#8b949e" font-size="8">ручной анализ</text>
+
+    <rect x="135" y="70" width="105" height="80" rx="6" fill="#161b22" stroke="#3fb950"/>
+    <text x="187" y="95">2. Скрипт</text>
+    <text x="187" y="112" fill="#8b949e" font-size="8">исторические данные</text>
+
+    <rect x="250" y="70" width="105" height="80" rx="6" fill="#161b22" stroke="#a371f7"/>
+    <text x="302" y="95">3. Живые данные</text>
+    <text x="302" y="112" fill="#8b949e" font-size="8">через API биржи</text>
+
+    <rect x="365" y="70" width="105" height="80" rx="6" fill="#161b22" stroke="#8b949e"/>
+    <text x="417" y="90">4. Человек</text>
+    <text x="417" y="103">в контуре</text>
+    <text x="417" y="118" fill="#8b949e" font-size="8">подтверждает заявку</text>
+
+    <rect x="480" y="70" width="140" height="80" rx="6" fill="#161b22" stroke="#f85149"/>
+    <text x="550" y="90">5. Полная</text>
+    <text x="550" y="103">автоматизация</text>
+    <text x="550" y="118" fill="#8b949e" font-size="8">с риск-контролем</text>
+  </g>
+  <g stroke="#8b949e" stroke-width="1.5" marker-end="url(#a9)">
+    <line x1="125" y1="110" x2="133" y2="110"/>
+    <line x1="240" y1="110" x2="248" y2="110"/>
+    <line x1="355" y1="110" x2="363" y2="110"/>
+    <line x1="470" y1="110" x2="478" y2="110"/>
+  </g>
+  <defs><marker id="a9" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#8b949e"/></marker></defs>
+
+  <text x="320" y="195" fill="#8b949e" font-size="11" text-anchor="middle">Каждый этап вводит ровно один новый уровень автоматизации,</text>
+  <text x="320" y="215" fill="#8b949e" font-size="11" text-anchor="middle">полностью проверив и сверив с предыдущим</text>
+</svg>
