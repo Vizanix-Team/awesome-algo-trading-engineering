@@ -424,26 +424,30 @@ Machine learning applied to markets is unusually prone to data leakage and overf
 
 ## Books
 
-**Market Microstructure**
+Every book below is free to read online, in full, with no paywall or signup. No paid titles here — for priced references on the same topics, see [Further Reading](#further-reading) and the citations throughout this README.
 
-- *Market Microstructure Theory* — Maureen O'Hara
-- *Trading and Exchanges: Market Microstructure for Practitioners* — Larry Harris
-- *Empirical Market Microstructure* — Joel Hasbrouck
+### English
 
-**Trading Systems**
+- [Think Stats](https://greenteapress.com/wp/think-stats-2e/) — Allen B. Downey. Free book on applying statistics with Python; solid grounding for anyone processing market data.
+- [Think Bayes](https://greenteapress.com/wp/think-bayes/) — Allen B. Downey. Free book on Bayesian methods in Python, relevant to regime detection and probabilistic forecasting.
+- [Forecasting: Principles and Practice](https://otexts.com/fpp3/) — Rob J Hyndman & George Athanasopoulos. Free online textbook on time-series forecasting, published openly by the authors.
+- [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/) — Jake VanderPlas. Free online book covering NumPy, pandas, and scikit-learn, core tools for quant research pipelines.
+- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) — Al Sweigart. Free online book; useful onboarding material for engineers new to the Python tooling used across this list.
+- [The Rust Programming Language](https://doc.rust-lang.org/book/) — Steve Klabnik & Carol Nichols. The official free book, relevant given Rust's growing use in low-latency trading infrastructure.
+- [The Rust Performance Book](https://nnethercote.github.io/perf-book/) — Nicholas Nethercote. Free online guide to profiling and optimizing Rust, applicable to latency-sensitive trading components.
+- [Convex Optimization](https://web.stanford.edu/~boyd/cvxbook/) — Stephen Boyd & Lieven Vandenberghe. Free PDF published by the authors; foundational for portfolio optimization and risk modeling.
+- [Mining of Massive Datasets](http://www.mmds.org/) — Jure Leskovec, Anand Rajaraman, Jeffrey Ullman. Free PDF from Stanford; relevant to large-scale market data processing.
+- [Site Reliability Engineering](https://sre.google/books/) — Google. Free online book on production reliability practices, directly applicable to trading infrastructure uptime and incident response.
 
-- *Algorithmic Trading and DMA* — Barry Johnson
-- *Building Algorithmic Trading Systems* — Kevin Davey
+### Russian / Русскоязычные
 
-**Quantitative Finance**
+Открытых бесплатных книг, посвящённых именно инженерии алгоритмической торговли, на русском языке немного — большинство изданий в этой узкой области выходят только платно. Раздел будет расширяться по мере проверки конкретных материалов; предложения принимаются через [issue](.github/ISSUE_TEMPLATE/suggest-resource.md) — только с рабочей ссылкой на бесплатный полный текст.
 
-- *Advances in Financial Machine Learning* — Marcos López de Prado
-- *Options, Futures, and Other Derivatives* — John Hull
+<!-- VERIFY RESOURCE --> Открытые бесплатные книги на русском языке по алгоритмической торговле, микроструктуре рынка или бэктестингу — подтверждённых вариантов пока нет. Если вы знаете такое издание с полностью бесплатным легальным доступом, откройте issue с названием, автором и прямой ссылкой.
 
-**Software Engineering**
+### Vizanix
 
-- *Designing Data-Intensive Applications* — Martin Kleppmann
-- *Release It!* — Michael Nygard
+Vizanix has not yet published a book. This section is reserved for future open, freely readable material from the team — added here only once it exists and is verifiably free to read in full.
 
 ## Papers
 
