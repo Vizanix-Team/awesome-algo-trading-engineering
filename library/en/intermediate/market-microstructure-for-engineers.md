@@ -38,6 +38,8 @@ The best bid and best ask define the "top of book," and the gap between them is 
 
 Understanding this data structure directly, not just abstractly, matters because it explains behavior that otherwise looks mysterious: why a limit order sitting at the best price for a long time without filling might still be "worth" more than it looks (queue position has value), and why canceling and resubmitting an order at the same price resets you to the back of the queue, a cost many new systems accidentally incur by canceling and replacing orders more often than necessary.
 
+Some exchanges support an in-place quantity reduction that preserves your queue position, distinct from a full cancel-replace that does not, and the difference between these two operations is exactly the kind of detail that separates a naive integration from one that respects the underlying mechanics. If your system needs to shrink a resting order's size, using the quantity-reduction operation where available keeps your place in line; using cancel-and-resubmit with a smaller size, even though it achieves the same superficial end state, quietly costs you queue priority and can meaningfully reduce your realized fill rate over many such adjustments across a trading day.
+
 ## 2. Matching Engines and Priority Rules
 
 A matching engine's core job, on every incoming order, is deceptively simple to state: check whether the incoming order crosses the opposite side of the book (a buy at or above the best ask, or a sell at or below the best bid), and if so, match it against resting orders following the priority rule, walking through price levels until the incoming order is exhausted or no more crossing prices remain.

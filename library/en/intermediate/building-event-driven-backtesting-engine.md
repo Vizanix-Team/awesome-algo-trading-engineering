@@ -25,6 +25,8 @@ An event-driven backtester processes a chronologically ordered stream of events 
 
 The intermediate-level insight worth internalizing: the value of an event-driven engine is not realism for its own sake, it is that it structurally prevents you from accidentally using future information. A vectorized backtest lets you write `df['signal'] = df['price'].rolling(20).mean()` and forget that at row `i`, you can only see prices up to `i`, not the future rows pandas happily computed for you. An event loop that only ever hands your strategy the current event, with no reference to the future, makes that mistake much harder to commit.
 
+There's also a code-reuse argument that matters as much in practice as the correctness argument. If your event-driven backtester exposes the exact same interface your live trading system uses — the same `on_market_event`, the same `on_fill` callback signatures, the same order submission API — then your strategy code genuinely does not need to change between backtest and production. This is a meaningfully different engineering posture than maintaining two parallel implementations of the same strategy logic, one for research and one for production, which inevitably drift apart over time as each gets modified independently, until the backtest and the live system are effectively testing two different strategies that happen to share a name.
+
 ## 2. The Event Loop and Event Types
 
 At minimum, define four event types: `MarketEvent` (new tick or bar arrives), `SignalEvent` (strategy decides to act), `OrderEvent` (order sent to the simulated exchange), and `FillEvent` (simulated exchange reports an execution). Route all of them through a single priority queue ordered by timestamp.
@@ -70,11 +72,15 @@ Survivorship bias: backtesting only against instruments that still exist today s
 
 Parameter fitting leakage: if you tune a strategy's parameters by testing many variations against the same historical window and picking the best one, you have not backtested a strategy, you have overfit a curve to noise. Reserve out-of-sample data you never touch during parameter selection, and treat that final test as a one-shot evaluation, not something you also iterate against.
 
+Corporate action leakage is a subtler variant worth naming: stock splits, dividends, and mergers change a price series in ways your feature calculations need to handle consistently, but many historical data sources retroactively adjust an entire price history for a split as if it had always traded at the split-adjusted price. This means a naive backtest computing a feature "as it would have looked on that historical date" using a fully-adjusted price series is quietly using information — the fact that a future split would occur and at what ratio — that was not knowable to anyone trading on that historical date. Point-in-time-correct data means using the raw, unadjusted price as of each historical date and applying adjustments only for events that had already occurred by then, which is materially more effort to source and maintain than a single split-adjusted price series, but it is the only version that reflects real historical decision-making conditions.
+
 ## 4. Modeling the Order Book and Fills
 
 The fidelity of your fill simulation determines how trustworthy your results are. A naive backtester fills every order instantly at the last traded price, regardless of size — this overstates performance for any strategy that trades enough size to move the market, or that relies on passive limit orders capturing spread.
 
 A better approach simulates against synthetic or historical order book depth: for a market order of size Q, walk the book levels and compute a volume-weighted average fill price across however many levels of depth Q consumes, rather than a single fixed price. For limit orders, only fill when the simulated market price crosses your limit, and be honest about queue position — a passive limit order sitting behind other orders at the same price level does not fill just because the price touched your level once; it needs the volume ahead of you in the queue to trade through first.
+
+Modeling queue position accurately requires tracking, for every simulated resting limit order, an estimate of how much volume sits ahead of it at that price level at the moment it was placed, and decrementing that estimate as trades print at that price. This is more implementation effort than most backtesting tutorials show, and it is exactly the effort that separates a backtester whose passive-order fill rates are trustworthy from one that systematically overstates how often a passive strategy actually gets filled, since a naive "fill whenever price touches my limit" rule assumes you are always first in line, which in a competitive market with many other participants resting orders at the same attractive price is rarely true.
 
 ```
 def simulate_market_fill(book_levels, quantity):
@@ -97,6 +103,8 @@ Live trading has a real, nonzero delay between deciding to trade and the exchang
 
 Model latency as explicit event delays: when your strategy emits an `OrderEvent`, do not process it against the current market state — schedule its arrival at the simulated exchange some milliseconds (or more, depending on your infrastructure) later, using the same event queue. This single change often meaningfully reduces the apparent edge of short-horizon strategies, which is valuable information, not an inconvenience.
 
+Go a step further and model latency as a distribution rather than a fixed constant, since real network and processing latency varies observation to observation, sometimes with a heavy tail from occasional congestion or garbage collection pauses on your own infrastructure. Sampling delay from an empirically measured latency distribution, rather than applying a single average delay uniformly, captures the effect of your worst-case latency moments occasionally costing you a fill you would have otherwise gotten, which a fixed-delay model smooths away entirely and which can matter enormously for a strategy whose edge depends on winning races against other market participants for the same fleeting opportunity.
+
 ## 6. Transaction Costs and Slippage Models
 
 Every fill should incur a modeled cost: exchange fees or rebates depending on maker/taker status, and a slippage component reflecting the fact that your own order size affects price. A simple but honest slippage model scales cost with the square root of order size relative to typical volume, reflecting the commonly observed pattern that impact grows sublinearly with size rather than linearly.
@@ -109,6 +117,8 @@ def slippage_bps(order_qty, avg_daily_volume, impact_coefficient):
 
 Calibrate `impact_coefficient` conservatively rather than optimistically — an under-modeled cost is far more dangerous to a strategy's live viability than an over-modeled one, because it lets a marginal strategy look profitable in backtest when it is not.
 
+Run every backtest result through a sensitivity analysis against your cost model's key parameters before trusting it: double the assumed slippage coefficient and rerun, and see whether the strategy's apparent profitability survives. A strategy whose backtested Sharpe ratio collapses when transaction costs double is telling you something important about how much margin for error you actually have once live costs turn out somewhat worse than modeled, which they routinely do, especially in the early period after a strategy launches before you have accumulated enough live fills to recalibrate the cost model against reality.
+
 ## 7. Position and Portfolio Accounting
 
 Route every fill through a single portfolio object that maintains cash, positions, and mark-to-market value consistently. Compute portfolio equity at every market event, not just at trade events, so your equity curve reflects unrealized P&L moving with the market between trades, not a staircase that only changes when you trade.
@@ -120,6 +130,8 @@ Track realized and unrealized P&L separately using a defined cost-basis method, 
 Before trusting any strategy result from your engine, validate the engine itself. Run a strategy that should be trivially unprofitable after costs (e.g., pure noise trading) and confirm it loses money at roughly the rate your cost model implies. Run a known buy-and-hold benchmark through the full pipeline and confirm it matches a simple manual calculation. Feed the engine a single synthetic order book scenario with a hand-computed expected fill price and assert your simulator matches exactly.
 
 Finally, whenever feasible, paper-trade the strategy live for a period and compare live fills against what your backtester would have simulated for the same market conditions. Persistent, systematic divergence here is the clearest signal that your backtest has a fidelity gap worth closing before risking real capital.
+
+Build this comparison into a recurring, automated process rather than a one-time validation exercise performed only before a strategy's initial launch. Feed the exact market data your live paper-trading session observed back into the backtesting engine after the fact, run the same strategy logic through both paths, and diff the resulting fills and P&L systematically. Any strategy change, market data provider change, or infrastructure upgrade is a candidate to reintroduce fidelity gaps that a one-time validation would never catch, and treating this comparison as an ongoing regression check, run on a schedule alongside your other tests, closes that gap.
 
 ## Summary
 

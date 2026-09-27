@@ -24,6 +24,8 @@ If you need to buy 200,000 shares of a stock that trades 2 million shares a day,
 
 The core tension every execution algorithm manages is speed versus footprint. Trade fast and you finish before conditions change, but you pay more for immediacy through market impact. Trade slow and you reduce your visible footprint per unit time, but you take on timing risk: the price might drift against you over the longer horizon regardless of your own impact. Every algorithm in this chapter is a different answer to that tradeoff.
 
+It helps to think about this as a genuine resource allocation problem rather than a fixed recipe. You have a finite amount of "patience budget" set by however much time you can reasonably take before the order becomes stale relative to the reason you wanted to trade in the first place. Every execution algorithm spends that budget differently: some spend it uniformly, some spend more of it early, some spend it adaptively based on what the market is doing right now. None of them eliminate the underlying tradeoff; they just make different, deliberate bets about how to spend a scarce resource, and the right bet depends on why you're trading in the first place, not just on the order's raw size.
+
 ## 2. TWAP: The Simplest Honest Baseline
 
 Time-Weighted Average Price execution slices your order into equal-sized (or near-equal) pieces spread evenly across a time window. If you need to buy 60,000 shares over one hour, a naive TWAP sends 1,000 shares every minute for sixty minutes.
@@ -43,6 +45,8 @@ def twap_schedule(total_qty, start, end, interval_seconds):
 TWAP's appeal is predictability and simplicity: no dependency on volume forecasts, easy to audit, easy to explain to a risk committee. Its weakness is that real trading volume is never uniform across a session — it typically spikes at the open and close and sags at midday. A pure TWAP schedule trades a larger fraction of a thin period's volume than it should, increasing impact exactly when liquidity is scarcest.
 
 In practice, engineers rarely deploy pure equal-interval TWAP for anything beyond a benchmark or a fallback algorithm when better volume data is unavailable. It remains valuable precisely because it is simple enough to reason about when everything else is failing.
+
+A useful refinement that still keeps TWAP's simplicity is randomized interval jitter: instead of sending exactly 1,000 shares every sixty seconds on the dot, randomize both the interval (55 to 65 seconds) and the clip size (900 to 1,100 shares) around the nominal schedule. This does not change the algorithm's fundamental behavior or its exposure to volume-shape mismatch, but it meaningfully reduces the pattern's visibility to other participants watching for a metronomic, easily-detected order flow signature. Any production TWAP implementation worth deploying includes this kind of randomization as a default, not an optional extra.
 
 ## 3. VWAP: Trading With the Crowd
 
@@ -65,6 +69,8 @@ The subtlety engineers miss: VWAP execution against a *static, pre-computed* cur
 
 VWAP as a benchmark (not just an algorithm) is also how most buy-side desks measure execution quality after the fact: your average execution price compared to the market's VWAP over the same window tells you whether you traded better or worse than the crowd.
 
+One engineering wrinkle that trips up first-time implementers: the market's own VWAP over your execution window necessarily includes your own trades, since you traded within that window and your volume contributes to the total. For a small order relative to the day's volume this self-inclusion barely matters, but for an order that represents a meaningful fraction of the period's volume, you are partly being benchmarked against yourself, which can flatter or penalize your apparent performance depending on how your own trading correlated with the price path. Some desks compute an "arrival-adjusted" or "ex-self" VWAP that backs out your own contribution for a cleaner comparison, particularly for larger orders where the distortion is material enough to matter for performance attribution.
+
 ## 4. Implementation Shortfall and Why It Changes the Objective
 
 TWAP and VWAP both optimize for tracking a benchmark price series. Implementation shortfall algorithms optimize for something different and arguably more honest: the difference between the price at the moment you decided to trade (the "arrival price") and your actual average execution price, including the cost of never finishing (opportunity cost on unfilled shares).
@@ -83,11 +89,15 @@ def front_loaded_schedule(total_qty, n_slices, front_weight=1.5):
 
 This produces a decaying schedule: bigger clips early, smaller clips late, front-loading urgency without dumping the whole order at once.
 
+The right amount of front-loading depends on a genuine, quantifiable input: your estimate of the asset's short-term volatility relative to its typical impact cost. A highly volatile instrument with modest impact cost justifies aggressive front-loading, since the risk of adverse drift dominates the cost calculus. A relatively stable instrument with high impact cost per unit traded justifies a flatter, more patient schedule, since impact cost dominates and there's little timing risk to hedge against by rushing. Production implementation shortfall algorithms typically expose this balance as a single tunable urgency parameter, letting a trader dial the schedule shape between something close to a flat TWAP and something close to an aggressive front-loaded execution, based on their specific read of current conditions for that specific order.
+
 ## 5. Participation-Rate Algorithms
 
 A participation-rate (or "percentage of volume") algorithm targets trading a fixed fraction — say 10% — of whatever volume actually trades, rather than following a pre-set clock schedule. If the market suddenly gets busy, your order trades faster; if it goes quiet, you slow down automatically. This adapts naturally to realized liquidity without needing a forecast at all.
 
 The engineering challenge is measurement lag: you only know volume that has already printed, and you are deciding how much to send next based on a rolling window of recent trades. Set the window too short and your rate becomes jumpy, chasing noise. Set it too long and you react too slowly to genuine regime shifts, like a news-driven volume surge.
+
+A practical middle ground uses two windows simultaneously: a short window (a minute or two) for fast reaction to genuine bursts, and a longer window (fifteen to thirty minutes) as a stabilizing anchor, blending the two with a weighting that shifts toward the short window only when the two disagree by more than some threshold, which is a reasonable proxy for "something unusual is happening right now" rather than ordinary noise. This dual-window approach costs little in implementation complexity and meaningfully reduces the whipsaw behavior that a naive single-window participation algorithm exhibits around volume spikes, where it might briefly send an outsized clip chasing a one-off print and then overcorrect immediately after.
 
 ## 6. Handling Adverse Conditions Mid-Schedule
 
@@ -107,6 +117,8 @@ total_shortfall = avg_exec_price - arrival_price  # = market_drift + your_impact
 
 This decomposition, even when approximate, tells you something actionable: if your impact term is consistently large relative to peers trading similar sizes, your algorithm's clip sizing or aggressiveness needs tuning. If drift dominates, the problem may be more about timing decisions upstream of the algorithm than the algorithm itself.
 
+Report these numbers per algorithm, per instrument class, and per order size bucket rather than as a single firm-wide aggregate, because averaging across very different order profiles hides exactly the patterns you need to see to improve anything. An algorithm performing well on small, liquid-instrument orders and poorly on large, illiquid ones will look mediocre-but-acceptable in an aggregate view, while a size-bucketed breakdown immediately shows where the actual problem concentrates, letting you target improvement effort at the specific regime that needs it rather than tuning the algorithm's general behavior based on a misleading blended signal.
+
 ## 8. Building Your Own Scheduler
 
 A practical, extensible scheduler separates three concerns cleanly: a volume/urgency model that outputs a target schedule, a live adjustment layer that reacts to realized volume and price action, and an order placement layer that decides how to work each child slice (limit at the near touch, cross the spread, use a pegged order, and so on). Keeping these as separate, composable modules lets you swap a VWAP volume model for a participation-rate model without touching your order placement logic at all, and lets you unit test each layer independently against synthetic market data.
@@ -114,6 +126,8 @@ A practical, extensible scheduler separates three concerns cleanly: a volume/urg
 ## 9. Common Failure Modes
 
 Watch for these recurring problems: stale volume curves that do not account for a known event day (earnings, index rebalance) inflating or deflating expected volume; child order sizes so small they get eaten by exchange minimum-size or lot-size rules and silently rejected; schedules that do not account for the close auction properly when a meaningful fraction of daily volume trades in a single auction print; and algorithms with no kill switch, unable to stop cleanly mid-execution when a human operator needs to intervene.
+
+A subtler failure mode worth calling out on its own: algorithms that treat every venue as equally accessible for every child order, ignoring that liquidity fragmentation across multiple trading venues means your scheduled clip size at any given moment may need splitting across venues to actually execute at the intended pace, rather than resting the full clip at a single venue and hoping it fills there. An execution algorithm's scheduling layer and its venue routing layer are conceptually distinct responsibilities, and conflating them tends to produce brittle systems that work fine on a single-venue backtest and then underperform once deployed against the genuinely fragmented liquidity landscape of live, multi-venue markets.
 
 ## Summary
 
