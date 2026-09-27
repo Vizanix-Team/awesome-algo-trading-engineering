@@ -19,13 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check for duplicate URLs
+      - name: Check for duplicate internal links in the README catalog
         run: |
-          grep -oE '\]\(https?://[^)]+\)' README.md \
+          grep -oE '\]\((library/[^)]+)\)' README.md \
             | sed -E 's/^\]\((.*)\)$/\1/' \
             | sort | uniq -d > duplicates.txt
           if [ -s duplicates.txt ]; then
-            echo "Duplicate URLs found in README.md:"
+            echo "Duplicate catalog links found in README.md:"
             cat duplicates.txt
             exit 1
           fi
@@ -39,6 +39,6 @@ jobs:
           check-modified-files-only: 'no'
           base-branch: 'main'
 
-      # Broken links are reported as a failed check / annotated output for
-      # maintainer review. This workflow never edits or removes content —
-      # removal always goes through a reviewed pull request.
+      # This checks that the README catalog and every book's internal links
+      # (chapter anchors, relative diagram paths, cross-book links) resolve.
+      # It never edits or removes content — fixes go through a reviewed PR.

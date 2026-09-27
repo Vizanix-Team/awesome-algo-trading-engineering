@@ -1,27 +1,22 @@
 ## Type of change
 
-- [ ] Add a resource
-- [ ] Update/fix an existing entry
-- [ ] Remove a resource (dead link / no longer qualifies)
-- [ ] Other (docs, workflow, templates)
+- [ ] Correction to an existing book (factual error, typo, outdated code, unclear explanation)
+- [ ] Translation (porting a book between English and Russian)
+- [ ] New or improved diagram in `library/assets/`
+- [ ] Tooling / workflow change
+- [ ] Other
 
-## Resource details (required for additions)
+## What changed
 
-- **Name:**
-- **URL:**
-- **Category / section:**
-- **Description (1–2 sentences, neutral tone):**
-- **Why it's useful for algorithmic trading engineering:**
+- **File(s):**
+- **What was wrong or missing:**
+- **What you changed:**
 
 ## Checklist
 
 - [ ] I have read [CONTRIBUTING.md](../CONTRIBUTING.md).
-- [ ] This resource meets the [inclusion criteria](../README.md#what-belongs-here) and does not fall under [excluded content](../README.md#what-does-not-belong-here).
-- [ ] The link is not an affiliate, referral, or tracking link.
-- [ ] I have no undisclosed financial relationship with this resource, **or** I have disclosed it below.
-- [ ] I checked the README and this resource is not already listed.
-- [ ] The entry follows the existing formatting style.
-
-## Disclosure (if applicable)
-
-<!-- e.g. "Disclosure: I am the maintainer of this project." Leave blank if not applicable. -->
+- [ ] This PR does not add content copied or closely paraphrased from an external book, article, or paper.
+- [ ] This PR does not link to or promote third-party books, courses, or projects.
+- [ ] The file still follows the standard structure (title, byline, abstract, table of contents, numbered chapters, summary, CC BY 4.0 footer).
+- [ ] If this is a translation, the file is placed in the mirrored location under the other language tree with a matching slug and level.
+- [ ] I agree this contribution is licensed under [CC BY 4.0](../LICENSE), same as the rest of the library.

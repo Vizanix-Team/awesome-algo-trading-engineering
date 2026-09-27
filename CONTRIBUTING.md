@@ -1,75 +1,38 @@
 # Contributing
 
-Thanks for considering a contribution to Awesome Algorithmic Trading Engineering. This list is only as good as the resources in it, and community submissions are how it stays current.
+This repository is the Vizanix Quant Engineering Library: a set of original books on algorithmic trading engineering, written entirely by Vizanix. It is not a curated list of external resources, and it does not accept links to third-party books, courses, blogs, or projects. Contributions here are about improving Vizanix's own material, not adding outside content.
 
-## Before you submit
+## What you can contribute
 
-1. Read [What Belongs Here](README.md#what-belongs-here) and [What Does NOT Belong Here](README.md#what-does-not-belong-here) in the README.
-2. Search the README to confirm the resource isn't already listed.
-3. Confirm the resource is publicly accessible (no login-walled content unless it's a widely recognized, high-value reference).
-4. Confirm the link works and points to the canonical source (official docs, official repository, publisher page — not a mirror or aggregator).
+- **Corrections** — factual errors, broken internal links, typos, unclear explanations, outdated code/pseudocode in an existing book.
+- **Translations** — porting an existing book between English and Russian, or adding a new language, while preserving the original meaning and the Vizanix voice.
+- **Diagrams** — new or improved SVG illustrations for a chapter, following the visual style already used in `library/assets/`.
+- **New book proposals** — a gap in the library (a topic at a given level that isn't covered yet). Proposals are welcome; the actual writing is done by the Vizanix team to keep the voice, structure, and licensing consistent across the library.
+- **Tooling** — improvements to the link-check and lint workflows, or to the catalog generation in the README.
 
-## How to propose a resource
+## What you cannot contribute
 
-Open a pull request that adds your resource to the correct section, or open an issue using the **Suggest a resource** template if you'd rather not write the PR yourself.
+- Content copied or closely paraphrased from any external book, article, or paper.
+- Links to, or summaries of, third-party books, courses, trading tools, or projects, however good they are. This library only contains Vizanix's own writing.
+- Trading signals, strategy claims, profit projections, or anything implying guaranteed returns.
+- AI-generated filler with no substantive correction — a PR should fix something specific, not pad word count.
 
-Your PR description (or issue) must include:
+## How to submit a correction or translation
 
-- **Name** of the resource.
-- **URL**.
-- **Category** — which section of the README it belongs in.
-- **Description** — one to two sentences, written neutrally, explaining what the resource is and why it's useful. Avoid superlatives ("best", "amazing", "revolutionary").
-- **Why it's useful** — a short note on the specific engineering or research value, not just "it's good."
-- **Affiliate/referral disclosure** — explicit confirmation that the submitted link is not an affiliate or referral link, and that you have no undisclosed financial relationship with the resource that would bias its inclusion.
+1. Open a pull request against the relevant file under `library/en/` or `library/ru/`.
+2. Describe what was wrong and what you changed, referencing the section or chapter.
+3. Keep the existing file structure: title, byline, abstract, table of contents, numbered chapters, summary, license footer.
+4. If translating, place the new file in the mirror location on the other language tree, using the same directory (`beginner`, `intermediate`, or `professional`) and a matching slug.
 
-### Format
+Use the [pull request template](.github/pull_request_template.md) — it walks through the checklist above.
 
-Match the existing list style:
+## How to propose a new book
 
-```markdown
-- [Resource Name](https://example.com/) — Neutral, specific description of what it does and why it's useful.
-```
+Open an issue using the **Suggest a book topic** template, describing the gap: the level (beginner, intermediate, professional), the subject, and why it belongs in the library. Vizanix maintainers decide what gets written and when.
 
-For GitHub projects, include the primary language:
+## License and attribution
 
-```markdown
-- [Project Name](https://github.com/org/project) `Python` — Neutral description of what it does and why it's useful.
-```
-
-### If you're not sure of an exact URL
-
-Do not guess or fabricate a link. If you're confident a resource exists but unsure of the canonical URL, flag it in your PR/issue description and a maintainer will help verify it before merge.
-
-## Self-promotion
-
-Self-promotion is allowed, but it is not a shortcut around review — a self-submitted resource is held to the same [inclusion criteria](README.md#what-belongs-here) as any other submission.
-
-If you are affiliated with the resource you're submitting (author, maintainer, employee, or similar), disclose it in the PR description, for example:
-
-> Disclosure: I am the maintainer of this project.
-
-Undisclosed self-promotion discovered after merge may result in the resource being removed and future submissions from the same contributor receiving closer scrutiny.
-
-## Anti-spam policy
-
-The following are not accepted, regardless of how they're framed:
-
-- SEO-motivated submissions with no clear engineering or research value.
-- Affiliate links or referral codes of any kind.
-- Paid placements or "sponsored" listings mixed into the curated list.
-- Hidden sponsorships (a financial relationship with the resource that isn't disclosed).
-
-If sponsored or paid resources are ever accepted into this repository in the future, they will be clearly labeled as such and kept in a separate, clearly marked section — never mixed into the curated list itself.
-
-## Removing a resource
-
-If you believe a resource should be removed (dead link, no longer maintained in a way that matters, or it no longer meets the inclusion criteria), open an issue using the **Report a broken link** template, or a general issue explaining the removal rationale. See [docs/curation-policy.md](docs/curation-policy.md) for the full removal criteria.
-
-## Review process
-
-- A maintainer will review your PR against the inclusion criteria.
-- You may be asked to tighten the description or confirm details.
-- PRs that clearly violate the [anti-spam policy](#anti-spam-policy) or [What Does NOT Belong Here](README.md#what-does-not-belong-here) will be closed without extended discussion.
+All content is released under [CC BY 4.0](LICENSE). By contributing a correction, translation, or diagram, you agree that your contribution is licensed under the same terms and becomes part of the Vizanix-authored library.
 
 ## Code of Conduct
 

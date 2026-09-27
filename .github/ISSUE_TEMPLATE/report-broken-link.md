@@ -1,30 +1,28 @@
 ---
-name: Report a broken link
-about: Flag a dead link or a resource that no longer qualifies
-title: "[Broken Link] "
-labels: broken-link
+name: Report an error
+about: Flag a factual error, broken internal link, or outdated content in a book
+title: "[Error] "
+labels: correction
 assignees: ''
 ---
 
-## Resource
+## Location
 
-- **Name / current README entry:**
-- **URL:**
+- **File:** (e.g. `library/en/beginner/reading-the-order-book.md`)
+- **Chapter / section:**
 
 ## Issue
 
-- [ ] Link is dead (404 / DNS failure / domain expired)
-- [ ] Link redirects to unrelated or low-quality content
-- [ ] Project is abandoned and superseded by a better alternative already in the list
-- [ ] Resource's nature has changed (e.g. now promotional, signal-selling, or affiliate-driven)
-- [ ] Other (explain below)
+- [ ] Factual or technical error
+- [ ] Broken internal link or missing diagram
+- [ ] Outdated code or pseudocode
+- [ ] Unclear or confusing explanation
+- [ ] Other
 
 ## Details
 
-<!-- What did you find when you checked the link? A replacement/canonical URL if you know one? -->
+<!-- What's wrong, and what should it say instead? -->
 
-## Suggested replacement (optional)
+## Suggested fix (optional)
 
-- **Name:**
-- **URL:**
-- **Why it should replace the current entry:**
+<!-- If you already know the correct text, propose it here, or open a pull request directly. -->

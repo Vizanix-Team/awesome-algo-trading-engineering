@@ -1,28 +1,27 @@
 ---
-name: Suggest a resource
-about: Propose a resource to add to the list
-title: "[Suggestion] "
-labels: suggestion
+name: Suggest a book topic
+about: Propose a gap in the library for Vizanix to write
+title: "[Book Proposal] "
+labels: book-proposal
 assignees: ''
 ---
 
-## Resource details
+## Proposed book
 
-- **Name:**
-- **URL:**
-- **Category / section it belongs in:**
-- **Description (1–2 sentences, neutral tone):**
-- **Why it's useful for algorithmic trading engineering:**
+- **Working title:**
+- **Language:** English / Russian / both
+- **Level:** Beginner / Intermediate / Professional
+- **Topic:**
 
-## Disclosures
+## Why this belongs in the library
 
-- [ ] This link is not an affiliate, referral, or tracking link.
-- [ ] I have no undisclosed financial relationship with this resource, **or** I have disclosed it below.
+<!-- What gap does this fill? What can't a reader currently learn from the existing 60 books? -->
 
-<!-- e.g. "Disclosure: I am the maintainer of this project." Leave blank if not applicable. -->
+## Related existing books (if any)
+
+<!-- Link any books already in library/ that this would sit next to or build on. -->
 
 ## Checklist
 
-- [ ] I have read [CONTRIBUTING.md](../../CONTRIBUTING.md) and the [inclusion criteria](../../README.md#what-belongs-here).
-- [ ] I searched the README and this resource is not already listed.
-- [ ] I am reasonably confident this URL is correct and current.
+- [ ] I checked `library/en/` and `library/ru/` and this topic isn't already covered.
+- [ ] This is a proposal for original Vizanix-authored content, not a request to add a link to an external resource (this repository doesn't accept those — see [CONTRIBUTING.md](../../CONTRIBUTING.md)).

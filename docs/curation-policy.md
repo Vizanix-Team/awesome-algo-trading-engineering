@@ -1,77 +1,52 @@
-# Curation Policy
+# Editorial Policy
 
-This document describes how resources are evaluated for inclusion in, and removal from, Awesome Algorithmic Trading Engineering. It expands on the summary in the [README](../README.md#what-belongs-here).
+This document describes how the Vizanix Quant Engineering Library is written, structured, and maintained. It replaces the earlier curation policy that governed an external links list; this repository no longer links out to third-party books, papers, courses, or projects — everything in `library/` is original Vizanix work.
 
 ## Scope
 
-This list covers the engineering, infrastructure, and research tooling side of algorithmic trading:
+The library covers the engineering and research side of algorithmic trading:
 
 - Market microstructure and market data
 - Exchange connectivity and execution
 - Backtesting and simulation
 - Risk management
 - Production engineering, observability, and testing
-- Quantitative research tooling, including ML applied to markets
+- Quantitative research tooling
+- Machine learning and neural networks as applied to markets
 - Crypto-specific infrastructure
 
-It explicitly does **not** cover trading strategies, signals, or performance claims of any kind.
+It does not cover trading strategies, signals, or performance claims of any kind, at any level.
 
-## Inclusion criteria
+## Structure
 
-A resource should meet most of the following to be added:
+Every book belongs to exactly one language tree and one level:
 
-1. **Technically substantial.** It explains, implements, or documents something concrete — a protocol, an algorithm, a library, a methodology. It is not a marketing page.
-2. **Practically useful.** Someone building, testing, researching, or operating trading infrastructure would plausibly use or reference it.
-3. **Maintained or historically important.** Actively maintained software/documentation is preferred; unmaintained resources may still qualify if they remain a standard reference (e.g., a foundational paper or book).
-4. **Transparent.** Commercial resources disclose pricing or access model where relevant; nothing hides its actual purpose.
-5. **Relevant.** Directly related to algorithmic trading engineering or a closely adjacent discipline (distributed systems, low-latency engineering, applied statistics) with a clear tie back to trading infrastructure.
-6. **Not primarily promotional.** The resource's main purpose is not to sell a product, course, or signal service.
-7. **No unrealistic claims.** No "guaranteed returns," "100% win rate," or similarly unfalsifiable performance language.
-8. **No spam patterns.** No obvious affiliate chains, referral codes, or SEO-farm content.
-9. **Not disguised signal-selling.** Educational framing does not exempt a resource whose actual product is trading signals or copy-trading.
+- `library/en/` and `library/ru/` — language.
+- `beginner/`, `intermediate/`, `professional/` — level, inside each language tree.
 
-## Exclusion criteria
+**Beginner** books assume no prior trading or finance background and define every term on first use. **Intermediate** books assume working trading vocabulary and programming ability, and focus on design tradeoffs. **Professional** books assume a practicing production engineer and go deep on edge cases, failure modes, and rigorous treatment, including formulas or pseudocode where they clarify a mechanism.
 
-The following are excluded outright, regardless of framing:
+The library intentionally weights toward beginner material, since the widest audience is engineers and researchers just entering the field.
 
-- Strategy or signal-selling content, including "free" signal groups used as funnels.
-- Copy-trading platforms or their promotional content.
-- Pump-and-dump or coordinated trading communities.
-- Referral-link collections.
-- Content generated primarily to manipulate search rankings, with no original technical substance.
-- Unverified "holy grail" strategies presented without methodology, code, or peer review.
-- Tools or repositories whose primary purpose is credential theft, account takeover, exchange abuse, or other malicious activity.
+## Editorial standards
 
-## Evaluation process
+Every book in the library must:
 
-1. A contributor submits a resource via pull request or the **Suggest a resource** issue template, including the disclosures described in [CONTRIBUTING.md](../CONTRIBUTING.md).
-2. A maintainer checks the submission against the inclusion and exclusion criteria above.
-3. If the resource qualifies, it is merged into the appropriate section, matching the existing description style (neutral, specific, no superlatives).
-4. If it does not qualify, the PR/issue is closed with a brief explanation referencing the specific criterion it fails.
-5. Borderline cases (genuinely useful but partially promotional, for example) are discussed openly in the PR/issue rather than silently accepted or rejected.
+1. Be written entirely by Vizanix, with no content copied or closely paraphrased from an external source.
+2. Avoid attributing ideas to real named authors, papers, or companies — general technical facts (what a limit order book is, what TWAP means) are described in Vizanix's own words and examples, not sourced to a specific outside work.
+3. Use clearly hypothetical, illustrative examples rather than presenting fabricated data as real-world case studies.
+4. Avoid unrealistic profit claims, "guaranteed returns" language, or anything resembling a trading signal.
+5. Follow the standard book format: title, byline, one-line abstract, table of contents, numbered chapters, summary, and the CC BY 4.0 license footer.
+6. Include diagrams from `library/assets/` only where they genuinely clarify the content, not as decoration.
 
-## Removal criteria
+## Corrections and translations
 
-A resource may be removed when:
+Corrections (factual errors, outdated code, unclear explanations) and translations between English and Russian are the main way the community contributes. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the process. A correction is evaluated on whether it makes an existing book more accurate or clearer, not on introducing new external material.
 
-- The link is dead and no canonical replacement URL exists.
-- The underlying project is abandoned **and** has been meaningfully superseded by a better-maintained alternative already in the list.
-- The resource's nature has changed since inclusion (e.g., a previously neutral blog pivoted to signal-selling or affiliate marketing).
-- It's later discovered that the resource violates the exclusion criteria (e.g., undisclosed affiliate relationship, misrepresented authorship).
-- A rights holder requests removal for a valid reason.
+## New books
 
-Removal is done via pull request, same as addition, so the change is visible and reviewable in the project's history. Automated tooling (see [the link-check workflow](../.github/workflows/links.yml)) flags candidates for review — it does not remove resources automatically.
+New book proposals go through an issue, but the writing itself is done by Vizanix to keep voice, structure, and licensing consistent across sixty-plus books. A proposal that identifies a genuine gap (a level or subject not yet covered) is the most useful kind.
 
-## Placeholder markers
+## Removal
 
-Where a resource is known to exist but its canonical URL isn't confirmed, the list uses an explicit marker:
-
-```markdown
-<!-- VERIFY RESOURCE -->
-```
-
-These markers are tracked as open items — see the [First 10 issues](../README.md) tracked at launch — and should be resolved (verified and linked, or removed) rather than left indefinitely.
-
-## Vizanix's role
-
-Vizanix maintains this repository as a public resource and applies this policy consistently, including to any resource submitted by Vizanix team members, which is held to the same criteria as any other submission.
+A book is retired or rewritten when it becomes materially inaccurate (e.g., describes a protocol or practice that has changed in a way that misleads readers) or is superseded by a clearer replacement covering the same ground. Retirement happens via pull request, same as any other change, so it stays visible in the project history.

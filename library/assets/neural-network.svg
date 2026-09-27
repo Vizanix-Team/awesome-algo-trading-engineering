@@ -1,0 +1,32 @@
+<svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="320" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">Feedforward Network over Market Features</text>
+  <g stroke="#30363d" stroke-width="1">
+    <!-- connections input->hidden1 -->
+    <g stroke="#3b4453">
+      <line x1="90" y1="70" x2="240" y2="60"/><line x1="90" y1="70" x2="240" y2="120"/><line x1="90" y1="70" x2="240" y2="180"/><line x1="90" y1="70" x2="240" y2="240"/>
+      <line x1="90" y1="140" x2="240" y2="60"/><line x1="90" y1="140" x2="240" y2="120"/><line x1="90" y1="140" x2="240" y2="180"/><line x1="90" y1="140" x2="240" y2="240"/>
+      <line x1="90" y1="210" x2="240" y2="60"/><line x1="90" y1="210" x2="240" y2="120"/><line x1="90" y1="210" x2="240" y2="180"/><line x1="90" y1="210" x2="240" y2="240"/>
+      <line x1="90" y1="280" x2="240" y2="60"/><line x1="90" y1="280" x2="240" y2="120"/><line x1="90" y1="280" x2="240" y2="180"/><line x1="90" y1="280" x2="240" y2="240"/>
+    </g>
+    <g stroke="#3b4453">
+      <line x1="240" y1="60" x2="400" y2="90"/><line x1="240" y1="60" x2="400" y2="150"/><line x1="240" y1="60" x2="400" y2="210"/>
+      <line x1="240" y1="120" x2="400" y2="90"/><line x1="240" y1="120" x2="400" y2="150"/><line x1="240" y1="120" x2="400" y2="210"/>
+      <line x1="240" y1="180" x2="400" y2="90"/><line x1="240" y1="180" x2="400" y2="150"/><line x1="240" y1="180" x2="400" y2="210"/>
+      <line x1="240" y1="240" x2="400" y2="90"/><line x1="240" y1="240" x2="400" y2="150"/><line x1="240" y1="240" x2="400" y2="210"/>
+    </g>
+    <g stroke="#3b4453">
+      <line x1="400" y1="90" x2="540" y2="150"/><line x1="400" y1="150" x2="540" y2="150"/><line x1="400" y1="210" x2="540" y2="150"/>
+    </g>
+  </g>
+  <g fill="#58a6ff"><circle cx="90" cy="70" r="10"/><circle cx="90" cy="140" r="10"/><circle cx="90" cy="210" r="10"/><circle cx="90" cy="280" r="10"/></g>
+  <g fill="#a371f7"><circle cx="240" cy="60" r="10"/><circle cx="240" cy="120" r="10"/><circle cx="240" cy="180" r="10"/><circle cx="240" cy="240" r="10"/></g>
+  <g fill="#a371f7"><circle cx="400" cy="90" r="10"/><circle cx="400" cy="150" r="10"/><circle cx="400" cy="210" r="10"/></g>
+  <g fill="#3fb950"><circle cx="540" cy="150" r="12"/></g>
+  <g fill="#8b949e" font-size="11" text-anchor="middle">
+    <text x="90" y="305">Input features</text>
+    <text x="240" y="305">Hidden layer 1</text>
+    <text x="400" y="305">Hidden layer 2</text>
+    <text x="580" y="155">Output</text>
+  </g>
+</svg>

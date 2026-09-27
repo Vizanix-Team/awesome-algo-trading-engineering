@@ -1,0 +1,14 @@
+<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="300" fill="#0d1117"/>
+  <text x="320" y="26" fill="#c9d1d9" font-size="16" text-anchor="middle">TWAP vs VWAP Execution Schedule</text>
+  <line x1="50" y1="250" x2="600" y2="250" stroke="#30363d"/>
+  <line x1="50" y1="50" x2="50" y2="250" stroke="#30363d"/>
+  <polyline points="50,220 100,200 150,180 200,160 250,140 300,120 350,100 400,80 450,60 500,50"
+    fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+  <polyline points="50,235 100,225 150,150 200,110 250,150 300,190 350,120 400,70 450,90 500,50"
+    fill="none" stroke="#3fb950" stroke-width="2.5"/>
+  <text x="510" y="55" fill="#58a6ff" font-size="11">TWAP (linear)</text>
+  <text x="510" y="90" fill="#3fb950" font-size="11">VWAP (volume-weighted)</text>
+  <text x="320" y="270" fill="#8b949e" font-size="11" text-anchor="middle">Time</text>
+  <text x="25" y="150" fill="#8b949e" font-size="11" transform="rotate(-90 25 150)">Cumulative Filled Quantity</text>
+</svg>

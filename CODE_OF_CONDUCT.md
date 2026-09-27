@@ -22,7 +22,7 @@ Examples of unacceptable behavior:
 - Trolling, insulting or derogatory comments, and personal or political attacks.
 - Public or private harassment.
 - Publishing others' private information, such as a physical or email address, without their explicit permission.
-- Submitting resources primarily for financial gain (undisclosed affiliate links, referral spam) in violation of the [contribution guidelines](CONTRIBUTING.md).
+- Submitting content that violates the [contribution guidelines](CONTRIBUTING.md), including copied or closely paraphrased external material, or links promoting third-party products, courses, or projects.
 - Other conduct which could reasonably be considered inappropriate in a professional setting.
 
 ## Enforcement Responsibilities
