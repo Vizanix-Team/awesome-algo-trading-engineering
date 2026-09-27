@@ -17,7 +17,7 @@
 
 ## 1. Trusting a Backtest Too Quickly
 
-The single most common mistake this library sees among new algo traders is treating a good-looking backtest as proof of a good strategy, rather than as one piece of evidence that still needs scrutiny. The backtesting book earlier in this library covered look-ahead bias and overfitting in detail, but knowing about these traps in theory and actually catching them in your own specific backtest are different skills, and the gap between them is where this mistake lives.
+The single most common mistake this library sees among new algo traders is treating a good-looking backtest as proof of a good strategy, rather than as one piece of evidence that still needs scrutiny. The backtesting book earlier in this library covered look-ahead bias and overfitting in detail, but knowing about these traps in theory and actually catching them in your own specific backtest are different skills. The gap between them is where this mistake lives.
 
 A backtest that shows a smooth, steadily rising equity curve with an enormous return over a short historical period should trigger suspicion before excitement. Real trading is messy; a suspiciously clean result is far more likely to reflect a coding bug, a subtle instance of look-ahead bias, or an unrealistic cost assumption than a genuinely powerful, previously undiscovered edge.
 
@@ -29,7 +29,7 @@ New traders frequently build and test a strategy without trading costs, get exci
 
 This mistake hits frequent-trading strategies especially hard, since costs are paid on every single trade and compound quickly. A strategy trading a hundred times a day with a small edge per trade can look wonderful before costs and become a reliable loser after them, simply because the accumulated cost of crossing the spread a hundred times a day outweighs the accumulated small edges.
 
-Build cost assumptions into your backtest from the very first version you run, not as a later refinement, and make those assumptions at least as pessimistic as your best honest estimate of real trading conditions, since underestimating costs is a far more common and more damaging error among beginners than overestimating them.
+Build cost assumptions into your backtest from the very first version you run, not as a later refinement, and make those assumptions at least as pessimistic as your best honest estimate of real trading conditions. Underestimating costs is a far more common and more damaging error among beginners than overestimating them.
 
 ## 3. Confusing a Good Idea With a Tested Idea
 
@@ -43,7 +43,7 @@ Treat every strategy idea, no matter how intuitively appealing, with exactly the
 
 Even traders who carefully test their entry and exit logic often size their positions inconsistently, adding more to trades that "feel" more confident and less to trades that feel uncertain, rather than following the disciplined, calculated approach from the risk management book of this library. This feels reasonable in the moment, since confidence seems like relevant information, but it quietly reintroduces exactly the kind of unmeasured human judgment that a systematic strategy was supposed to remove.
 
-The practical danger is that "feeling more confident" correlates poorly with actual outcome probability and often correlates instead with recent results: traders tend to feel more confident right after a winning streak, precisely the moment position sizing discipline from the risk management book warns against increasing size. Sizing by feel during a hot streak is a direct, well-worn path to an oversized position at exactly the wrong time.
+The practical danger is that "feeling more confident" correlates poorly with actual outcome probability and often correlates instead with recent results. Traders tend to feel more confident right after a winning streak, precisely the moment position sizing discipline from the risk management book warns against increasing size. Sizing by feel during a hot streak is a direct, well-worn path to an oversized position at exactly the wrong time.
 
 Define your position sizing rule explicitly and mechanically, as covered in the risk management book, and apply it identically regardless of how a given trade happens to feel. If your strategy's testing suggests confidence levels genuinely predict better outcomes, encode that insight explicitly as a measurable input to your sizing formula, rather than trusting your own in-the-moment gut sense of it.
 
@@ -61,7 +61,7 @@ A common beginner instinct is to assume that a more sophisticated approach, more
 
 Complexity also makes a strategy harder to debug and harder to reason about when something goes wrong live. A simple strategy you fully understand lets you diagnose unexpected behavior quickly, tracing exactly which rule triggered a given trade. A complex strategy with many interacting parts can behave in ways that surprise even the person who built it, making live problems much harder to catch and fix promptly.
 
-This doesn't mean sophisticated techniques, including the machine learning approaches covered later in this library, have no place. It means earning the right to add complexity by first building genuine understanding and a working, well-tested simple version, then adding sophistication deliberately and incrementally, testing carefully at each step, rather than starting from maximum complexity because it seems more impressive.
+None of this means sophisticated techniques, including the machine learning approaches covered later in this library, have no place. It means earning the right to add complexity by first building genuine understanding and a working, well-tested simple version, then adding sophistication deliberately and incrementally, testing carefully at each step, rather than starting from maximum complexity because it seems more impressive.
 
 ## 7. Skipping the Testnet Because It Feels Like a Waste of Time
 

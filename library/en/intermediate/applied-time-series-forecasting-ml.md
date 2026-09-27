@@ -19,7 +19,7 @@
 
 ## 1. Why Forecasting Prices Directly Is the Wrong Framing
 
-New practitioners often frame the problem as "predict tomorrow's closing price," feed a model historical prices, and get a model that appears to forecast well — because it has effectively learned that tomorrow's price is close to today's price, which is true and also useless for trading, since acting on that "forecast" produces a strategy indistinguishable from buy-and-hold with extra steps.
+New practitioners often frame the problem as "predict tomorrow's closing price," feed a model historical prices, and get a model that appears to forecast well. It has effectively learned that tomorrow's price is close to today's price, which is true and also useless for trading, since acting on that "forecast" produces a strategy indistinguishable from buy-and-hold with extra steps.
 
 Reframe the target as something with genuine decision value: a return over a specific, tradeable horizon, a probability of exceeding some threshold, or a directional classification with an associated confidence. This reframing forces you to confront directly how hard the actual problem is, rather than being lulled by a low error metric on a target that was never predictive of anything useful in the first place.
 
@@ -39,13 +39,13 @@ fitted = model.fit()
 forecast = fitted.forecast(steps=5)
 ```
 
-If your elaborate gradient-boosted or deep learning model can't beat this simple baseline out of sample, on the same data and same evaluation protocol, that's a finding, not a failure to hide — it tells you the complexity isn't earning its keep for this particular problem and dataset, and you should either simplify or go find better features rather than tuning hyperparameters indefinitely.
+If your elaborate gradient-boosted or deep learning model can't beat this simple baseline out of sample, on the same data and same evaluation protocol, that's a finding, not a failure to hide. It tells you the complexity isn't earning its keep for this particular problem and dataset, and you should either simplify or go find better features rather than tuning hyperparameters indefinitely.
 
-A useful practice many teams skip: document baseline performance in the same tracked, versioned system you use to track experimental model results, not as a one-off number computed once and forgotten. As your feature set and modeling approach evolve over months, re-running the same classical baseline on the current data periodically gives you an ongoing sanity check — if a change to your data pipeline suddenly makes the naive random-walk baseline itself look unusually good or bad relative to its historical norm, that's a signal something upstream of modeling has changed, possibly a data quality issue, well before it would otherwise surface as a mysterious change in your main model's apparent performance.
+A useful practice many teams skip: document baseline performance in the same tracked, versioned system you use to track experimental model results, not as a one-off number computed once and forgotten. As your feature set and modeling approach evolve over months, re-running the same classical baseline on the current data periodically gives you an ongoing sanity check. If a change to your data pipeline suddenly makes the naive random-walk baseline itself look unusually good or bad relative to its historical norm, that's a signal something upstream of modeling has changed, possibly a data quality issue, well before it would otherwise surface as a mysterious change in your main model's apparent performance.
 
 ## 3. Feature Windows and Sequence Framing for ML Models
 
-Most tabular ML models (gradient boosting, random forests) need you to manually engineer the "memory" of the time series into fixed-width feature columns — lagged returns, rolling statistics, and momentum indicators computed at each point in time, each becoming one column in your training matrix.
+Most tabular ML models (gradient boosting, random forests) need you to manually engineer the "memory" of the time series into fixed-width feature columns, lagged returns, rolling statistics, and momentum indicators computed at each point in time, each becoming one column in your training matrix.
 
 ```
 def build_lag_features(returns, n_lags=10):
@@ -55,11 +55,11 @@ def build_lag_features(returns, n_lags=10):
     return df.dropna()
 ```
 
-Sequence models (recurrent networks, temporal convolutional networks, transformers) instead consume a raw or lightly processed window of recent observations directly and learn their own internal representation of relevant history, removing some manual feature engineering burden but adding a data-hunger and interpretability cost in exchange. Neither framing is universally superior; the right choice depends heavily on how much clean historical data you actually have relative to the model's capacity, and how much you value being able to explain a specific prediction after the fact.
+Sequence models (recurrent networks, temporal convolutional networks, transformers) instead consume a raw or lightly processed window of recent observations directly and learn their own internal representation of relevant history, removing some manual feature engineering burden but adding a data-hunger and interpretability cost in exchange. Neither framing is universally superior. The right choice depends heavily on how much clean historical data you actually have relative to the model's capacity, and how much you value being able to explain a specific prediction after the fact.
 
 ## 4. Tree-Based Models for Tabular Financial Features
 
-Gradient-boosted trees (implementations like XGBoost, LightGBM, or similar) are a strong default for financial tabular data because they handle nonlinear feature interactions well, are relatively robust to unscaled or oddly distributed features, and — importantly for a domain with a real risk of overfitting to noise — support straightforward regularization through tree depth, learning rate, and minimum samples per leaf.
+Gradient-boosted trees (implementations like XGBoost, LightGBM, or similar) are a strong default for financial tabular data because they handle nonlinear feature interactions well, are relatively robust to unscaled or oddly distributed features, and, importantly for a domain with a real risk of overfitting to noise, support straightforward regularization through tree depth, learning rate, and minimum samples per leaf.
 
 ```
 import lightgbm as lgb
@@ -75,7 +75,7 @@ params = {
 model = lgb.train(params, train_data, num_boost_round=300)
 ```
 
-Keep trees shallow and require a meaningful minimum sample count per leaf for financial applications specifically, because with enough boosting rounds and deep enough trees, gradient boosting will happily memorize noise in a dataset where the true signal-to-noise ratio is low, which describes most short-horizon return prediction problems. Feature importance output from these models is also a genuinely useful diagnostic tool for pruning your feature set, not just a nice-to-have visualization — features with consistently near-zero importance across multiple retraining runs are strong candidates for removal.
+Keep trees shallow and require a meaningful minimum sample count per leaf for financial applications specifically, because with enough boosting rounds and deep enough trees, gradient boosting will happily memorize noise in a dataset where the true signal-to-noise ratio is low, which describes most short-horizon return prediction problems. Feature importance output from these models is also a genuinely useful diagnostic tool for pruning your feature set, not just a nice-to-have visualization. Features with consistently near-zero importance across multiple retraining runs are strong candidates for removal.
 
 Retrain cadence deserves explicit engineering decision-making rather than defaulting to "retrain nightly" or "retrain never." Retraining too frequently on a rolling window risks the model chasing recent noise and producing unstable predictions that shift meaningfully day to day for reasons that don't reflect genuine new information. Retraining too infrequently risks the model drifting away from current market conditions as the relationships it originally learned decay. A reasonable middle ground retrains on a fixed schedule (weekly or monthly, depending on how fast your specific domain's relationships tend to shift) using an expanding or sufficiently long rolling window, and separately monitors live prediction quality continuously so an unexpected performance drop between scheduled retrains triggers an out-of-cycle investigation rather than waiting silently for the next scheduled refresh.
 
@@ -83,7 +83,7 @@ Retrain cadence deserves explicit engineering decision-making rather than defaul
 
 Recurrent and attention-based sequence models can, in principle, capture more complex temporal dependencies than a fixed lag-feature representation. In practice, for the amount and signal-to-noise ratio of most financial time series (compared to, say, the volume of text or image data these architectures were originally developed against), they frequently underperform well-regularized tree-based models on tabular financial features, because they need substantially more data to reliably learn useful patterns without overfitting to the specific noise realizations in your training window.
 
-Where sequence models genuinely tend to earn their added complexity is on problems with richer, higher-frequency input (full order book snapshots over short windows, tick-level microstructure sequences) where the temporal structure itself is complex and voluminous enough to reward a model that learns its own representation, rather than problems using coarse daily or hourly bars with a modest number of engineered features, where the simpler tabular approach is usually both more robust and much easier to validate and debug.
+Where sequence models genuinely tend to earn their added complexity is on problems with richer, higher-frequency input (full order book snapshots over short windows, tick-level microstructure sequences) where the temporal structure itself is complex and voluminous enough to reward a model that learns its own representation. That's different from problems using coarse daily or hourly bars with a modest number of engineered features, where the simpler tabular approach is usually both more robust and much easier to validate and debug.
 
 ```
 # Illustrative sketch, not literal library code
@@ -100,7 +100,7 @@ The infrastructure cost differential between the two approaches is also worth we
 
 ## 6. Cross-Validation for Time Series (and Why K-Fold Fails)
 
-Standard K-fold cross-validation shuffles data randomly into folds, which for time series means training on future data and validating on past data within some folds — a direct and often invisible form of lookahead leakage that inflates validation performance in a way that will not survive contact with live, forward-only production data.
+Standard K-fold cross-validation shuffles data randomly into folds, which for time series means training on future data and validating on past data within some folds, a direct and often invisible form of lookahead leakage that inflates validation performance in a way that will not survive contact with live, forward-only production data.
 
 Use a time-respecting validation scheme instead: walk-forward validation, where you train on an expanding or rolling historical window and validate strictly on the period immediately following it, then roll the window forward and repeat.
 
@@ -131,7 +131,7 @@ A model with mediocre raw accuracy but a consistently positive, stable informati
 
 ## 8. From Forecast to Trading Signal
 
-A forecast is not a trading signal until it passes through a deliberate translation layer: sizing (how much capital to commit given the forecast's confidence and typical error magnitude), thresholding (should a weak, near-zero forecast actually trigger a trade at all, given transaction costs), and risk overlay (does executing on this forecast respect existing position and exposure limits). Treat this translation layer as a first-class, separately tested component, not an afterthought bolted onto the model's raw output — many otherwise-promising models fail in live trading not because the forecast itself was wrong, but because the translation from forecast to position was naive, oversized, or ignored transaction costs that erased the entire modeled edge.
+A forecast is not a trading signal until it passes through a deliberate translation layer: sizing (how much capital to commit given the forecast's confidence and typical error magnitude), thresholding (should a weak, near-zero forecast actually trigger a trade at all, given transaction costs), and risk overlay (does executing on this forecast respect existing position and exposure limits). Treat this translation layer as a first-class, separately tested component, not an afterthought bolted onto the model's raw output. Many otherwise-promising models fail in live trading not because the forecast itself was wrong, but because the translation from forecast to position was naive, oversized, or ignored transaction costs that erased the entire modeled edge.
 
 ## Summary
 

@@ -21,13 +21,13 @@
 
 Almost nobody starts their algorithmic trading journey by writing a polished piece of software. Most people start with a spreadsheet: a column of dates, a column of prices, maybe a formula computing a moving average, and a manual eyeball check of whether buying when the price crosses above that average seems to work out over the visible history.
 
-This is a perfectly reasonable starting point, and this book treats it as one rather than something to be embarrassed about. A spreadsheet lets you explore an idea quickly, see the actual numbers, and build genuine intuition about how a rule behaves, all without the overhead of writing a full program. The problems appear later: a spreadsheet doesn't scale to more than a modest amount of data, it makes subtle errors easy to introduce and hard to spot, like accidentally referencing tomorrow's price today, and it has no way to actually execute a trade in the real world.
+This is a perfectly reasonable starting point, and this book treats it as one rather than something to be embarrassed about. A spreadsheet lets you explore an idea quickly, see the actual numbers, and build genuine intuition about how a rule behaves, all without the overhead of writing a full program. The problems appear later. A spreadsheet doesn't scale to more than a modest amount of data, it makes subtle errors easy to introduce and hard to spot, like accidentally referencing tomorrow's price today, and it has no way to actually execute a trade in the real world.
 
-This book takes exactly this kind of spreadsheet idea and walks it through every step to becoming a small working system, using the vocabulary and concepts already introduced throughout this library: market data, backtesting, exchange APIs, and risk management. Nothing here is exotic; it's the practical stitching together of what you've already learned.
+This book takes exactly this kind of spreadsheet idea and walks it through every step to becoming a small working system, using the vocabulary and concepts already introduced throughout this library: market data, backtesting, exchange APIs, and risk management. Nothing here is exotic. It's the practical stitching together of what you've already learned.
 
 ## 2. Formalizing the Idea Into Rules
 
-Before opening any code editor, write your strategy's rules in plain, unambiguous language, precise enough that another person, or a computer, could follow them without needing to ask you a clarifying question. Vague phrasing like "buy when the trend looks strong" isn't a rule yet; it's a feeling. A real rule looks more like "buy when the twenty-period moving average of the closing price is above the fifty-period moving average, and I currently hold no position in this instrument."
+Before opening any code editor, write your strategy's rules in plain, unambiguous language, precise enough that another person, or a computer, could follow them without needing to ask you a clarifying question. Vague phrasing like "buy when the trend looks strong" isn't a rule yet, it's a feeling. A real rule looks more like "buy when the twenty-period moving average of the closing price is above the fifty-period moving average, and I currently hold no position in this instrument."
 
 Write down the exit rule with equal precision. When do you sell? Is there a stop loss, and at what level or distance from entry? Is there a target profit level where you take gains? Is there a maximum holding time after which you exit regardless of price? Leaving the exit vague is one of the most common ways a strategy that seemed clear in your head turns into something inconsistent once you try to code it.
 
@@ -35,7 +35,7 @@ Finally, write down the position sizing rule from the risk management book of th
 
 ## 3. From Spreadsheet Formulas to Code
 
-Translating your written rules into code, using the Python skills from earlier in this library, forces a kind of honesty your spreadsheet couldn't. Code has no tolerance for ambiguity: every condition needs an exact, unambiguous comparison, and every edge case, like what happens on the very first day when you don't yet have enough history to compute a fifty-period moving average, needs an explicit answer.
+Translating your written rules into code, using the Python skills from earlier in this library, forces a kind of honesty your spreadsheet couldn't. Code has no tolerance for ambiguity. Every condition needs an exact, unambiguous comparison, and every edge case, like what happens on the very first day when you don't yet have enough history to compute a fifty-period moving average, needs an explicit answer.
 
 Start by loading your historical data and computing whatever indicators your rules reference, like the moving averages in the earlier example, using the time series techniques from the Python book of this library. Then write a function that looks at the data available up to a given point in time and returns a clear decision: buy, sell, or hold. Keep this function pure in the sense that, given the same inputs, it always produces the same output, since that predictability is exactly what let you test and trust it in the first place.
 
@@ -61,7 +61,7 @@ Structure the live loop to separate clearly the parts covered in the exchange AP
 
 Before your live loop touches real money, connect it to a real, live data feed, using the WebSocket concepts from the exchange API book, and run it against a testnet, the practice environment with fake funds introduced in the crypto connectivity book, if your chosen exchange offers one.
 
-This step surfaces an entirely new category of problems that a backtest, working with clean historical data, simply cannot reveal: what happens if the data feed briefly disconnects, what happens if an order gets rejected for a reason your backtest never considered, like a precision or minimum size rule, what happens if two decision triggers fire in quick succession before the first order has finished processing.
+This step surfaces an entirely new category of problems that a backtest, working with clean historical data, simply cannot reveal. What happens if the data feed briefly disconnects? What happens if an order gets rejected for a reason your backtest never considered, like a precision or minimum size rule? What happens if two decision triggers fire in quick succession before the first order has finished processing?
 
 Run this testnet version for long enough to see it handle a reasonable number of real decision points, not just a few minutes, and deliberately introduce some failure conditions yourself if you can, like disconnecting your own internet connection briefly, to confirm your reconnection and reconciliation logic from the exchange API book actually works as intended rather than just in theory.
 
@@ -79,7 +79,7 @@ As you gain confidence and consider scaling up capital, expect several things to
 
 You'll likely want more sophisticated monitoring than a simple log file: dashboards, alerts that reach you promptly if something looks wrong, and more systematic ways to compare live performance against backtest expectations over time. You may also want to run multiple strategies or instruments simultaneously, which reintroduces the diversification and correlation considerations from the risk management book, now with real, not just backtested, capital behind the decision.
 
-None of this growth requires abandoning what you built here. The same core structure, a decision function, a backtest, a live loop, a wrapper around your exchange, and explicit risk checks, scales conceptually even as each individual piece becomes more sophisticated. The spreadsheet you started with was never the wrong place to begin; it was simply the first, roughest sketch of the system you've now built properly.
+None of this growth requires abandoning what you built here. The same core structure, a decision function, a backtest, a live loop, a wrapper around your exchange, and explicit risk checks, scales conceptually even as each individual piece becomes more sophisticated. The spreadsheet you started with was never the wrong place to begin. It was simply the first, roughest sketch of the system you've now built properly.
 
 ## Summary
 

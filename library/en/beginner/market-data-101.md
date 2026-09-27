@@ -17,7 +17,7 @@
 
 ## 1. Market Data Is Not One Thing
 
-When people say "market data," they usually mean one of several different things, and confusing them causes real bugs. There's tick data, the record of every individual trade or quote change as it happens. There's bar data, tick data compressed into fixed intervals like one minute or one day. There's order book data, the live snapshot of resting orders covered in the previous book. And there's reference data, things like an instrument's name, trading hours, and contract details that don't change minute to minute.
+When people say "market data," they usually mean one of several different things, and confusing them causes real bugs. There's tick data, the record of every individual trade or quote change as it happens. There's bar data, tick data compressed into fixed intervals like one minute or one day. There's order book data, the live snapshot of resting orders covered in the previous book. And there's reference data: things like an instrument's name, trading hours, and contract details that don't change minute to minute.
 
 Every one of these serves a different purpose. A strategy that reacts to fleeting order book shifts needs tick-level or order book data. A strategy that looks at daily trends can work perfectly well with daily bars and never touch a single tick. Grabbing the wrong granularity either drowns you in data you don't need or starves your strategy of detail it actually requires.
 
@@ -29,7 +29,7 @@ A tick is a single data point representing one event: a trade occurred, or the b
 
 Tick data is the closest thing to "the truth" of what happened in a market, since nothing has been summarized or thrown away. If you want to reconstruct exactly what any trader could have seen at a precise moment, you need tick data.
 
-The catch is volume. A liquid instrument can generate thousands of ticks per second during busy periods. Storing, processing, and analyzing that much data requires real engineering effort: efficient storage formats, careful indexing, and code that doesn't fall over when the data rate spikes. A beginner project working with daily strategies rarely needs to touch raw ticks at all, while a beginner project studying short-term order flow has no substitute for them.
+The catch is volume. A liquid instrument can generate thousands of ticks per second during busy periods, and storing, processing, and analyzing that much data requires real engineering effort: efficient storage formats, careful indexing, and code that doesn't fall over when the data rate spikes. A beginner project working with daily strategies rarely needs to touch raw ticks at all, while a beginner project studying short-term order flow has no substitute for them.
 
 It's worth internalizing early that ticks arrive irregularly in time. Sometimes ten trades happen in a second, sometimes none happen for a minute. This irregular spacing is exactly why bars exist: many analytical techniques, and much of classical statistics, assume observations arrive in regular intervals, which raw ticks simply don't provide.
 
@@ -37,7 +37,7 @@ It's worth internalizing early that ticks arrive irregularly in time. Sometimes 
 
 A bar summarizes all the ticks within a fixed period into a handful of numbers: the opening price (the first trade price in the period), the closing price (the last trade price), the highest price reached, and the lowest price reached. Add up the trading volume during that period and you have a complete one-minute, one-hour, or one-day bar.
 
-This compression throws away a lot of detail, obviously, but it gains you something valuable: a regular, predictable structure. A day's worth of one-minute bars always contains the same number of rows regardless of how many actual trades occurred, which makes bars far easier to feed into standard analysis tools, spreadsheets, and most machine learning pipelines.
+This compression throws away a lot of detail. What it gains you is a regular, predictable structure. A day's worth of one-minute bars always contains the same number of rows regardless of how many actual trades occurred, which makes bars far easier to feed into standard analysis tools, spreadsheets, and most machine learning pipelines.
 
 Building a bar from ticks is a simple aggregation once you understand the rule: group ticks by time window, take the first price as open, the last price as close, the maximum price as high, the minimum price as low, and sum the quantities as volume. Most data providers hand you bars already built this way, but understanding the underlying computation matters because it explains bars' limitations. A bar tells you the range of prices touched during the period, but nothing about the order in which they occurred within it, nor how many separate trades contributed to that range.
 
@@ -47,11 +47,11 @@ There are variations beyond simple time-based bars. Volume bars close after a fi
 
 A candlestick is simply a visual representation of a bar, drawn to make the relationship between open, close, high, and low immediately visible at a glance. Picture a small rectangle, called the body, spanning from the open price to the close price. If the close is higher than the open, the body is typically shown in one color (commonly green or white); if the close is lower, it's shown in another (commonly red or black). Thin lines called wicks or shadows extend above and below the body to mark the high and low reached during the period.
 
-This visual encoding lets a trader scan a chart of hundreds of candles and immediately spot patterns: a long green body suggests strong buying pressure through the period, a small body with long wicks on both ends suggests a period of indecision where price moved a lot but ended close to where it started.
+This visual encoding lets a trader scan a chart of hundreds of candles and immediately spot patterns. A long green body suggests strong buying pressure through the period. A small body with long wicks on both ends suggests a period of indecision where price moved a lot but ended close to where it started.
 
-Some traders build entire strategies around named candlestick shapes and sequences, believing certain visual patterns predict future price movement. As a beginner, treat these patterns with healthy skepticism: they describe what already happened in a visually memorable way, but whether a particular shape reliably predicts the future is a claim that needs rigorous statistical testing, not just visual pattern-matching, before you trust it with real capital. The backtesting book in this library shows you how to test such claims properly.
+Some traders build entire strategies around named candlestick shapes and sequences, believing certain visual patterns predict future price movement. As a beginner, treat these patterns with healthy skepticism. They describe what already happened in a visually memorable way, but whether a particular shape reliably predicts the future is a claim that needs rigorous statistical testing, not just visual pattern-matching, before you trust it with real capital. The backtesting book in this library shows you how to test such claims properly.
 
-Candlesticks contain exactly the same information as a plain OHLC (open-high-low-close) bar; the value is purely in how quickly a human eye can extract meaning from the picture rather than from a table of four numbers.
+Candlesticks contain exactly the same information as a plain OHLC (open-high-low-close) bar. The value is purely in how quickly a human eye can extract meaning from the picture rather than from a table of four numbers.
 
 ## 5. Choosing a Timeframe
 
@@ -65,7 +65,7 @@ Match your timeframe to your strategy's holding period, established in the first
 
 Volume, the total quantity traded during a period, gets less attention than price from beginners, but it carries genuine information. A price move on unusually high volume suggests broad participation and conviction behind the move. The identical price move on unusually low volume suggests it might be driven by just a few participants and could reverse more easily.
 
-Volume also matters practically: it's your best simple proxy for liquidity when deeper order book data isn't available. If an instrument's typical daily volume is small relative to the position size you want to trade, you should expect meaningful slippage, regardless of how attractive its price chart looks.
+Volume also matters practically. It's your best simple proxy for liquidity when deeper order book data isn't available. If an instrument's typical daily volume is small relative to the position size you want to trade, expect meaningful slippage, regardless of how attractive its price chart looks.
 
 Get in the habit of looking at volume alongside price on every chart you study, not as an afterthought squeezed into a small panel at the bottom, but as a genuine second dimension of the story the data is telling you.
 
@@ -75,7 +75,7 @@ Real market data is messier than any textbook example. Gaps appear when an excha
 
 Timestamps deserve particular caution. Different data sources may use different time zones, different precision (seconds versus milliseconds versus microseconds), or even different definitions of when a bar "starts" versus "ends." Mixing data from two sources without reconciling these details produces subtly wrong analysis that can be very hard to spot after the fact.
 
-Before trusting any dataset for a strategy, do a basic sanity pass: check for missing periods, check that high is always greater than or equal to both open and close, check that volume is never negative, and spot-check a handful of bars against another source if one is available. This unglamorous work saves you from building an entire strategy on top of a data bug.
+Before trusting any dataset for a strategy, do a basic sanity pass. Check for missing periods, check that high is always greater than or equal to both open and close, check that volume is never negative, and spot-check a handful of bars against another source if one is available. This unglamorous work saves you from building an entire strategy on top of a data bug.
 
 ## 8. Storing and Working With Market Data
 

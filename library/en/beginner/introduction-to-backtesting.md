@@ -21,17 +21,17 @@
 
 A backtest runs your trading strategy's rules against historical market data to see what would have happened if you'd traded that way in the past. You feed it a history of prices, it applies your buy and sell logic step by step through that history, and it produces a simulated record of trades, profits, and losses.
 
-It's tempting to treat a backtest as a rehearsal of the future, but that's not quite what it does. It tests whether your specific rules, applied mechanically to a specific slice of the past, would have produced a specific outcome. Whether that past pattern continues into the future is a separate question a backtest cannot answer by itself. What a good backtest gives you is a disciplined way to reject clearly bad ideas cheaply, and to build calibrated confidence, never certainty, in ideas that survive careful scrutiny.
+It's tempting to treat a backtest as a rehearsal of the future. That's not quite what it does, though. It tests whether your specific rules, applied mechanically to a specific slice of the past, would have produced a specific outcome. Whether that past pattern continues into the future is a separate question a backtest cannot answer by itself. What a good backtest gives you is a disciplined way to reject clearly bad ideas cheaply, and to build calibrated confidence, never certainty, in ideas that survive careful scrutiny.
 
 Think of a backtest as similar to a flight simulator for a pilot. It doesn't guarantee a real flight goes perfectly, but it lets you practice, catch obvious mistakes, and build familiarity with how the aircraft, or in this case the strategy, behaves under various conditions, all without the cost of a real crash.
 
 ## 2. The Anatomy of a Backtest
 
-Every backtest needs four ingredients. First, historical data: the prices, and possibly volume or order book information, that your strategy will run against, cleaned according to the practices covered earlier in this library. Second, a strategy definition: the exact, mechanical rules for when to buy, sell, or hold, expressed precisely enough that a computer can execute them without ambiguity.
+Every backtest needs four ingredients. The first is historical data: the prices, and possibly volume or order book information, that your strategy will run against, cleaned according to the practices covered earlier in this library. The second is a strategy definition: the exact, mechanical rules for when to buy, sell, or hold, expressed precisely enough that a computer can execute them without ambiguity.
 
-Third, a simulation engine: the code that walks through the historical data step by step, in the correct chronological order, applies your strategy's rules at each step, and tracks the resulting simulated positions and cash. Fourth, a set of assumptions about costs and execution: how much slippage to assume, what commission to charge per trade, and how quickly an order is assumed to fill after your strategy decides to trade.
+The third is a simulation engine: the code that walks through the historical data step by step, in the correct chronological order, applies your strategy's rules at each step, and tracks the resulting simulated positions and cash. The fourth is a set of assumptions about costs and execution, covering how much slippage to assume, what commission to charge per trade, and how quickly an order is assumed to fill after your strategy decides to trade.
 
-The engine typically works one time step at a time: look at the data available up to and including this moment, ask the strategy whether it wants to act, simulate the resulting trade if so, then move to the next time step and repeat. This step-by-step discipline, never letting the strategy see data from the future relative to its current simulated moment, is the single most important property a correct backtest engine must have, and it's exactly what the next section addresses in detail.
+The engine typically works one time step at a time: look at the data available up to and including this moment, ask the strategy whether it wants to act, simulate the resulting trade if so, then move to the next time step and repeat. This step-by-step discipline, never letting the strategy see data from the future relative to its current simulated moment, is the single most important property a correct backtest engine must have. It's exactly what the next section addresses in detail.
 
 At the end of the run, you get a record of every simulated trade along with a time series of your simulated portfolio's value, from which you calculate performance measures covered later in this book.
 
@@ -43,7 +43,7 @@ A classic example: computing a day's average price using that day's own closing 
 
 Another subtle version involves data revisions. Some data providers restate historical values after the fact, correcting errors or reflecting later adjustments. If your backtest uses the revised version of a data point that wouldn't have looked that way in real time, you're testing against information from the future disguised as the past.
 
-Survivorship bias is a related trap: if your historical dataset only includes instruments that still exist today, you've silently excluded everything that went bankrupt, got delisted, or otherwise disappeared, which biases your results toward "survivors" and inflates apparent performance. Guard against these traps by explicitly asking, for every input your strategy uses, "would a trader actually have known this value at this exact moment in real time?" If the honest answer is no, that input doesn't belong in your backtest.
+Survivorship bias is a related trap. If your historical dataset only includes instruments that still exist today, you've silently excluded everything that went bankrupt, got delisted, or otherwise disappeared, which biases your results toward "survivors" and inflates apparent performance. Guard against these traps by explicitly asking, for every input your strategy uses, "would a trader actually have known this value at this exact moment in real time?" If the honest answer is no, that input doesn't belong in your backtest.
 
 ## 4. Overfitting: When You Fit the Noise, Not the Signal
 
@@ -67,7 +67,7 @@ Strategies that trade frequently are especially sensitive to cost assumptions, s
 
 A backtest typically reports a handful of summary numbers: total return, the overall percentage gain or loss over the tested period; maximum drawdown, the largest peak-to-trough decline your simulated portfolio experienced along the way; and some measure of risk-adjusted return, which weighs your profit against how much your portfolio value bounced around to get there.
 
-Look at the full equity curve, the chart of simulated portfolio value over time, not just the final summary numbers. A strategy that ends with an attractive total return might have gotten there through one lucky period concentrated in a small slice of your test, with the rest of the time essentially flat or losing, which tells a very different story than a smooth, steadily rising curve.
+Look at the full equity curve, the chart of simulated portfolio value over time, not just the final summary numbers. A strategy that ends with an attractive total return might have gotten there through one lucky period concentrated in a small slice of your test, with the rest of the time essentially flat or losing. That tells a very different story than a smooth, steadily rising curve.
 
 Pay close attention to drawdown and how long recovery from it took. A strategy with an excellent average return but occasional brutal drawdowns might be mathematically profitable over a long enough horizon while being practically unbearable to actually hold through, since real capital and real nerves have limits that a spreadsheet doesn't.
 
