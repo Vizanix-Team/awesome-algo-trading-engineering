@@ -32,7 +32,7 @@ Read [What This Library Is](#what-this-library-is) and [What This Library Is Not
 
 Pick your level, not just your interest. A professional-level book on price impact modeling assumes you've already built something like a backtester; if you haven't, start in Beginner and work up. Each book stands alone, so you don't need to read the whole shelf in order, but within a level the books are sequenced to build on each other.
 
-Every book follows the same shape: a one-line abstract, a table of contents, numbered chapters, a summary, and a license footer. Diagrams are inline SVG, drawn specifically for this library, and shared in [`library/assets/`](library/assets/) so you'll see the same visual language reused across books (the same order book depth chart style, the same architecture diagram style, and so on).
+Every book follows the same shape: a one-line abstract, a table of contents, numbered chapters, a summary, and a license footer. Diagrams are inline SVG, drawn specifically for this library: a handful of shared, reusable ones live in [`library/assets/`](library/assets/), and each book also has its own `figures/` folder next to it with two to four diagrams built for that book's specific content (a real hypothetical order book snapshot, a specific execution-cost curve, a specific system's state machine), captioned and placed next to the paragraph they illustrate, in the book's own language. Over 200 diagrams sit across the library this way.
 
 Books are mirrored between English and Russian: the same 30 topics, same levels, same slugs, so if you find a book useful in one language, its counterpart is one click away in the other.
 
