@@ -89,4 +89,4 @@ The most defensible position available today is neither confident belief nor con
 
 ---
 
-*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0, free to read, share, and adapt with attribution to Vizanix.*
+*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0 — free to read, share, and adapt with attribution to Vizanix.*

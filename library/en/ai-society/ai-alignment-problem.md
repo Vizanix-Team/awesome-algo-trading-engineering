@@ -105,4 +105,4 @@ The accelerationist and precautionary positions each capture something true. Unn
 
 ---
 
-*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0, free to read, share, and adapt with attribution to Vizanix.*
+*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0 — free to read, share, and adapt with attribution to Vizanix.*

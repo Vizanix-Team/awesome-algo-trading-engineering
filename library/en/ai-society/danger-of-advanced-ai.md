@@ -99,4 +99,4 @@ What seems most intellectually honest is to resist two temptations at once: trea
 
 ---
 
-*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0, free to read, share, and adapt with attribution to Vizanix.*
+*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0 — free to read, share, and adapt with attribution to Vizanix.*

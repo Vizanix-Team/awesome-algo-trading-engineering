@@ -93,4 +93,4 @@ What can be said with confidence is that the range of technically serious opinio
 
 ---
 
-*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0, free to read, share, and adapt with attribution to Vizanix.*
+*This essay is part of the Vizanix Quant Engineering Library. Licensed under CC BY 4.0 — free to read, share, and adapt with attribution to Vizanix.*
