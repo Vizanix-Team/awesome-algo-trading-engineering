@@ -49,6 +49,10 @@ class MarketLSTM(nn.Module):
         return self.head(self.dropout(h_n[-1]))
 ```
 
+![Conceptual LSTM cell with forget, input, and output gates controlling a cell state that flows across time steps](figures/deep-learning-architectures-market-prediction-01.svg)
+
+*Figure 1: The forget and input gates jointly update the cell's long-term memory each time step, and the output gate decides how much of it becomes the visible hidden state.*
+
 Note the deliberately small hidden size and aggressive dropout in this sketch. Given the low signal-to-noise ratio and typically modest effective sample size in financial applications relative to, say, vision or language tasks, oversized architectural capacity is a liability, not a feature, because it gives the model ample room to memorize training-set-specific noise rather than learning genuine, generalizable structure.
 
 ## 3. Attention Mechanisms for Multi-Asset and Multi-Horizon Prediction
