@@ -23,6 +23,8 @@ New practitioners often frame the problem as "predict tomorrow's closing price,"
 
 Reframe the target as something with genuine decision value: a return over a specific, tradeable horizon, a probability of exceeding some threshold, or a directional classification with an associated confidence. This reframing forces you to confront directly how hard the actual problem is, rather than being lulled by a low error metric on a target that was never predictive of anything useful in the first place.
 
+It helps to work backward from the actual downstream decision your forecast will inform, and design the target around that decision rather than around whatever is easiest to compute from your data. If the eventual use case is deciding whether to enter a position at all, a binary or probabilistic target framed around a meaningful move threshold, net of expected costs, is more directly useful than a continuous regression target that treats a tiny, economically meaningless price wiggle with the same weight as a large, tradeable move. Building the target this deliberately, informed by how it will actually be consumed, is one of the highest-leverage design decisions in the entire modeling pipeline, and it's one that's easy to shortcut past in the rush to start fitting models.
+
 ## 2. Classical Baselines You Must Beat First
 
 Before reaching for a neural network, establish honest classical baselines, because a sophisticated model that fails to beat a naive one has told you something important: either the signal isn't there in your feature set, or your evaluation methodology has a flaw letting the naive baseline look artificially strong.
@@ -38,6 +40,8 @@ forecast = fitted.forecast(steps=5)
 ```
 
 If your elaborate gradient-boosted or deep learning model can't beat this simple baseline out of sample, on the same data and same evaluation protocol, that's a finding, not a failure to hide — it tells you the complexity isn't earning its keep for this particular problem and dataset, and you should either simplify or go find better features rather than tuning hyperparameters indefinitely.
+
+A useful practice many teams skip: document baseline performance in the same tracked, versioned system you use to track experimental model results, not as a one-off number computed once and forgotten. As your feature set and modeling approach evolve over months, re-running the same classical baseline on the current data periodically gives you an ongoing sanity check — if a change to your data pipeline suddenly makes the naive random-walk baseline itself look unusually good or bad relative to its historical norm, that's a signal something upstream of modeling has changed, possibly a data quality issue, well before it would otherwise surface as a mysterious change in your main model's apparent performance.
 
 ## 3. Feature Windows and Sequence Framing for ML Models
 
@@ -73,6 +77,8 @@ model = lgb.train(params, train_data, num_boost_round=300)
 
 Keep trees shallow and require a meaningful minimum sample count per leaf for financial applications specifically, because with enough boosting rounds and deep enough trees, gradient boosting will happily memorize noise in a dataset where the true signal-to-noise ratio is low, which describes most short-horizon return prediction problems. Feature importance output from these models is also a genuinely useful diagnostic tool for pruning your feature set, not just a nice-to-have visualization — features with consistently near-zero importance across multiple retraining runs are strong candidates for removal.
 
+Retrain cadence deserves explicit engineering decision-making rather than defaulting to "retrain nightly" or "retrain never." Retraining too frequently on a rolling window risks the model chasing recent noise and producing unstable predictions that shift meaningfully day to day for reasons that don't reflect genuine new information. Retraining too infrequently risks the model drifting away from current market conditions as the relationships it originally learned decay. A reasonable middle ground retrains on a fixed schedule (weekly or monthly, depending on how fast your specific domain's relationships tend to shift) using an expanding or sufficiently long rolling window, and separately monitors live prediction quality continuously so an unexpected performance drop between scheduled retrains triggers an out-of-cycle investigation rather than waiting silently for the next scheduled refresh.
+
 ## 5. Sequence Models: When They Help and When They Don't
 
 Recurrent and attention-based sequence models can, in principle, capture more complex temporal dependencies than a fixed lag-feature representation. In practice, for the amount and signal-to-noise ratio of most financial time series (compared to, say, the volume of text or image data these architectures were originally developed against), they frequently underperform well-regularized tree-based models on tabular financial features, because they need substantially more data to reliably learn useful patterns without overfitting to the specific noise realizations in your training window.
@@ -89,6 +95,8 @@ model = Sequential([
 ```
 
 Whichever architecture you choose, budget real time for a rigorous comparison against the tree-based baseline on identical data splits before committing production infrastructure to the more complex approach.
+
+The infrastructure cost differential between the two approaches is also worth weighing explicitly, not just their raw predictive comparison. A gradient-boosted model typically trains in minutes on commodity hardware and deploys as a lightweight artifact with straightforward, well-understood serving infrastructure. A sequence model, particularly one large enough to meaningfully leverage its architectural advantages, often needs specialized training hardware, longer training cycles, and a more involved serving pipeline. Factor this operational cost into the decision alongside pure predictive performance, since a marginal accuracy improvement that costs substantially more to build, deploy, and maintain reliably is not automatically the right engineering tradeoff for a given team's resources and priorities.
 
 ## 6. Cross-Validation for Time Series (and Why K-Fold Fails)
 

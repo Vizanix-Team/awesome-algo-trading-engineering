@@ -15,7 +15,9 @@ The library covers the engineering and research side of algorithmic trading:
 - Machine learning and neural networks as applied to markets
 - Crypto-specific infrastructure
 
-It does not cover trading strategies, signals, or performance claims of any kind, at any level.
+Alongside the trading library, the `library/en/ai-society/` and `library/ru/ai-society/` trees hold a separate, level-agnostic collection of essays reasoning about AI's broader trajectory: existential and near-term risk, economic and social disruption, alignment, governance, and open philosophical questions. These are analytical and exploratory, not activist — they weigh competing views rather than argue a single conclusion, and they don't make policy recommendations on behalf of any real government, company, or political actor.
+
+Neither collection covers trading strategies, signals, or performance claims of any kind, at any level.
 
 ## Structure
 

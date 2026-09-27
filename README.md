@@ -1,10 +1,10 @@
 # Vizanix Quant Engineering Library [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE) [![Link Check](https://github.com/vizanix/awesome-algo-trading-engineering/actions/workflows/links.yml/badge.svg)](https://github.com/vizanix/awesome-algo-trading-engineering/actions/workflows/links.yml) [![Markdown Lint](https://github.com/vizanix/awesome-algo-trading-engineering/actions/workflows/lint.yml/badge.svg)](https://github.com/vizanix/awesome-algo-trading-engineering/actions/workflows/lint.yml)
 
-> Sixty original books on algorithmic trading engineering, written by Vizanix, free to read in full, in English and Russian.
+> Eighty original books and essays on algorithmic trading engineering and on AI's trajectory as a technology and a social force, written by Vizanix, free to read in full, in English and Russian.
 
-This is not a list of links. Every book here is written by the Vizanix team, from a first explanation of an order book to production risk systems and deep learning architectures for market prediction. You read the whole thing here, on GitHub, for free, with no signup and no paywall.
+This is not a list of links. Every book here is written by the Vizanix team, from a first explanation of an order book to production risk systems, deep learning architectures for market prediction, and sober essays on where AI as a technology is taking society. You read the whole thing here, on GitHub, for free, with no signup and no paywall.
 
-The library is organized into three levels, weighted toward beginners, because the widest audience for this material is engineers and researchers just entering algorithmic trading. Intermediate and professional books go deeper into architecture, math, and production tradeoffs.
+The trading library is organized into three levels, weighted toward beginners, because the widest audience for this material is engineers and researchers just entering algorithmic trading. Intermediate and professional books go deeper into architecture, math, and production tradeoffs. Alongside it sits a separate [AI & Society](#ai--society) collection: essays that step back from trading specifically and reason about AI's risks, benefits, and long-term trajectory, since the two fields are converging and a serious trading engineer today is, increasingly, also an AI engineer.
 
 Read [What This Library Is](#what-this-library-is) and [What This Library Is Not](#what-this-library-is-not) before contributing — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to submit a correction, a translation, or a new diagram.
 
@@ -20,6 +20,9 @@ Read [What This Library Is](#what-this-library-is) and [What This Library Is Not
   - [Средний уровень](#средний-уровень)
   - [Профессиональный уровень](#профессиональный-уровень)
 - [AI, Machine Learning, and Markets](#ai-machine-learning-and-markets)
+- [AI & Society](#ai--society)
+  - [English essays](#ai--society-english)
+  - [Русские эссе](#ai--society-русский)
 - [What This Library Is](#what-this-library-is)
 - [What This Library Is Not](#what-this-library-is-not)
 - [License](#license)
@@ -131,13 +134,47 @@ Books are mirrored between English and Russian: the same 30 topics, same levels,
 
 Six books across the two languages are marked `AI/ML` above, one pair at each level. They're kept inside the normal level structure rather than split into a separate track, because applying machine learning to markets is an extension of the same engineering discipline as the rest of the library, not a separate field: the same leakage discipline that matters in a backtest matters twice as much in a training pipeline, and the same production rigor that matters in an order gateway matters in a model-serving path. As neural network and general AI tooling keeps merging into trading infrastructure, expect this set to grow faster than the rest of the library.
 
+## AI & Society
+
+Trading infrastructure is one place AI shows up. It isn't the only one, and it won't stay the biggest one for long. This collection sets trading aside and asks harder, slower questions: what advanced AI actually threatens, what it could plausibly deliver, whether talk of a singularity means anything precise, and what institutions a world with increasingly capable AI systems might need. These essays are analytical, not promotional and not alarmist. They weigh real disagreement among serious people in the field rather than picking a side and arguing only for it, and they're explicit about where the honest answer is "nobody knows yet."
+
+### AI & Society (English)
+
+| Essay | Central question |
+|---|---|
+| [The Danger of Advanced AI: Mapping the Real Risks](library/en/ai-society/danger-of-advanced-ai.md) | Which AI risks are concrete engineering problems, and which are speculative? |
+| [Prosperity with AI: A Realistic Vision of Abundance](library/en/ai-society/prosperity-with-ai.md) | What does plausible, non-utopian abundance from AI look like? |
+| [The Singularity: What It Might Actually Mean](library/en/ai-society/the-singularity-explained.md) | Stripped of hype, what claim is the singularity idea actually making? |
+| [Alignment: Can We Steer a Mind We Don't Fully Understand](library/en/ai-society/ai-alignment-problem.md) | Is steering increasingly capable AI systems a solvable engineering problem? |
+| [Economic Disruption and Reinvention in an AI World](library/en/ai-society/ai-economic-disruption.md) | How does an economy absorb rapid, uneven automation of cognitive work? |
+| [AI and Power: Concentration, Governance, and Control](library/en/ai-society/ai-and-power.md) | Who ends up holding power as AI capability concentrates? |
+| [The Post-Labor Society: Work, Meaning, and AI](library/en/ai-society/post-labor-society.md) | What replaces work as a source of income and meaning? |
+| [Superintelligence: Timelines, Uncertainty, and Humility](library/en/ai-society/superintelligence-timelines.md) | How seriously should specific timelines to superintelligence be taken? |
+| [AI Rights and Moral Status: A Speculative Inquiry](library/en/ai-society/ai-rights-and-moral-status.md) | Could a machine ever warrant moral consideration, and how would we know? |
+| [Coexistence: Designing Institutions for an AI Century](library/en/ai-society/coexistence-ai-institutions.md) | What institutions does a long coexistence with AI actually require? |
+
+### AI & Society (Русский)
+
+| Эссе | Центральный вопрос |
+|---|---|
+| [Опасность продвинутого ИИ: карта реальных рисков](library/ru/ai-society/danger-of-advanced-ai.md) | Какие риски ИИ — инженерная реальность, а какие — спекуляция? |
+| [Процветание с ИИ: реалистичный взгляд на изобилие](library/ru/ai-society/prosperity-with-ai.md) | Как выглядит правдоподобное, неутопичное изобилие благодаря ИИ? |
+| [Сингулярность: что это может означать на самом деле](library/ru/ai-society/the-singularity-explained.md) | Какое именно утверждение делает идея сингулярности, если убрать шумиху? |
+| [Согласование целей ИИ: можно ли направлять разум, который мы не до конца понимаем](library/ru/ai-society/ai-alignment-problem.md) | Управление всё более способными системами ИИ — решаемая инженерная задача? |
+| [Экономические потрясения и перезапуск в мире ИИ](library/ru/ai-society/ai-economic-disruption.md) | Как экономика переживает быструю, неравномерную автоматизацию когнитивного труда? |
+| [ИИ и власть: концентрация, управление, контроль](library/ru/ai-society/ai-and-power.md) | В чьих руках оказывается власть по мере концентрации возможностей ИИ? |
+| [Общество после труда: работа, смысл и ИИ](library/ru/ai-society/post-labor-society.md) | Что заменяет труд как источник дохода и смысла? |
+| [Сверхинтеллект: сроки, неопределённость и скромность прогнозов](library/ru/ai-society/superintelligence-timelines.md) | Насколько серьёзно стоит воспринимать конкретные сроки появления сверхинтеллекта? |
+| [Права ИИ и моральный статус: спекулятивное исследование](library/ru/ai-society/ai-rights-and-moral-status.md) | Может ли машина заслуживать морального отношения, и как мы это узнаем? |
+| [Сосуществование: проектирование институтов для века ИИ](library/ru/ai-society/coexistence-ai-institutions.md) | Какие институты на самом деле нужны для долгого сосуществования с ИИ? |
+
 ## What This Library Is
 
-- Original writing, entirely produced by Vizanix, on the engineering and research side of algorithmic trading.
-- Organized by level (beginner, intermediate, professional) and mirrored across English and Russian.
+- Original writing, entirely produced by Vizanix, on the engineering and research side of algorithmic trading, and on AI's broader trajectory as a technology and a social force.
+- Organized by level (beginner, intermediate, professional) for the trading library, mirrored across English and Russian; the AI & Society collection is a separate, level-agnostic set of essays, also mirrored across both languages.
 - Free to read in full, here, with no signup, no paywall, and no ads.
 - Licensed under [CC BY 4.0](LICENSE): free to share and adapt, with attribution.
-- Focused on infrastructure, market microstructure, execution, backtesting, risk, production engineering, and the machine learning techniques that increasingly sit alongside all of it.
+- Focused on infrastructure, market microstructure, execution, backtesting, risk, production engineering, the machine learning techniques that increasingly sit alongside all of it, and — in the AI & Society collection — the wider risks, benefits, and open questions of advanced AI.
 
 ## What This Library Is Not
 

@@ -23,6 +23,8 @@ A quant can derive an elegant risk model on a whiteboard. Turning that model int
 
 The central engineering principle worth internalizing up front: a risk number that is theoretically correct but arrives five minutes late, or silently stops updating when an instrument's market data feed drops, is worse than a cruder number that is reliably current. Timeliness and reliability are risk properties in their own right, not just implementation details layered on top of the "real" math.
 
+This reframing has a direct consequence for how you prioritize engineering effort on a risk system. A team that spends its time perfecting a sophisticated multi-factor risk model while leaving the underlying data pipeline fragile to feed outages has misallocated its effort relative to what actually protects the firm. A simpler risk model computed reliably, continuously, and with well-understood failure modes will serve a trading desk better in practice than a more sophisticated model that occasionally goes silent or stale without anyone noticing until a subsequent reconciliation catches the gap.
+
 ## 2. Value at Risk: What It Is and What It Is Not
 
 Value at Risk (VaR) answers a specific, narrow question: over some horizon and confidence level, what loss level will the portfolio not exceed, except in the worst X% of outcomes? A one-day 95% VaR of $2 million means, roughly, that you expect to lose more than $2 million on about one trading day in twenty, under the assumptions baked into your model.
@@ -42,7 +44,9 @@ def expected_shortfall(pnl_history, confidence=0.95):
     return -sum(tail) / len(tail)
 ```
 
-Historical VaR (shown above, using actual past return scenarios) avoids assuming a specific distribution shape but inherits whatever biases exist in your particular historical window — if your lookback period happened to miss a genuine tail event, your VaR will understate risk for exactly the scenario that matters most. Parametric VaR (assuming returns are normally distributed) is easier to compute but understates tail risk for most real asset return distributions, which have fatter tails than the normal distribution predicts. A production system typically runs multiple VaR methodologies side by side and treats large disagreement between them as itself a risk signal worth investigating.
+Historical VaR (shown above, using actual past return scenarios) avoids assuming a specific distribution shape but inherits whatever biases exist in your particular historical window — if your lookback period happened to miss a genuine tail event, your VaR will understate risk for exactly the scenario that matters most.
+
+Monte Carlo VaR, a third common approach, simulates many possible future paths using an assumed or fitted statistical model of returns and their correlations, then computes the percentile loss across those simulated outcomes. It offers more flexibility than either historical or parametric VaR — you can model nonlinear payoffs like options far more naturally than the other two approaches — at the cost of introducing model risk from whatever distributional and correlation assumptions drive the simulation. As with parametric VaR, a Monte Carlo approach is only as good as the assumptions feeding it, and a common, dangerous mistake is treating Monte Carlo VaR's apparent statistical sophistication as a substitute for validating those underlying assumptions against actual historical behavior. Parametric VaR (assuming returns are normally distributed) is easier to compute but understates tail risk for most real asset return distributions, which have fatter tails than the normal distribution predicts. A production system typically runs multiple VaR methodologies side by side and treats large disagreement between them as itself a risk signal worth investigating.
 
 ## 3. Building a Real-Time Exposure Engine
 
@@ -66,6 +70,8 @@ class ExposureEngine:
 
 Independence from the OMS matters for a specific failure-mode reason: if your OMS has a bug or an outage, you want your risk system to be a separate check that can still function and flag the discrepancy, rather than sharing a single point of failure with the very system it's meant to be checking. This is the same principle as reconciliation applied to risk: independent views that should agree, with disagreement itself being actionable information.
 
+Latency in this exposure pipeline deserves its own budget and monitoring, distinct from the trading system's own latency requirements. A risk system does not need microsecond-level responsiveness the way an execution path might, but it does need a bounded, known worst-case delay between a fill occurring and that fill's impact reflecting in the published exposure figures, because a trader or an automated pre-trade check relying on a stale exposure number to make a decision is making that decision on outdated information, and the size of that staleness window directly bounds how large an error such a decision could produce.
+
 ## 4. Correlation, Covariance, and Why Naive Sums Lie
 
 Summing individual position risk numbers to get portfolio risk is wrong whenever positions are correlated, which in practice is almost always. Two positions that each have $1 million of standalone risk can combine to much less than $2 million of portfolio risk if they're negatively correlated (one tends to gain when the other loses), or to more than the naive sum if leverage or correlation breakdown during stress pushes them to move together more than usual.
@@ -79,6 +85,8 @@ portfolio_variance = w^T * Σ * w
 where `w` is the vector of position weights and `Σ` is the covariance matrix of asset returns. The engineering challenge is maintaining a covariance matrix that's both current (correlations genuinely shift over time, especially during stress) and numerically well-behaved (a covariance matrix estimated from too few observations relative to the number of assets can become singular or near-singular, producing unstable and untrustworthy risk numbers).
 
 A practical mitigation many systems use is shrinkage estimation: blend the raw sample covariance matrix with a simpler, more stable structure (like a single-factor or diagonal matrix), which trades a small amount of bias for a meaningful reduction in estimation noise, especially for portfolios with many correlated instruments and a limited historical window to estimate from.
+
+Correlation itself is not stable across market regimes, and this instability is precisely where naive risk models fail most visibly. Correlations across many asset pairs tend to rise sharply during broad market stress, a phenomenon sometimes described as correlations "going to one" during a crisis, meaning the diversification benefit your risk model assumed based on calmer-period historical correlations evaporates exactly when you need it most. Stress-adjusting your covariance matrix, either by explicitly recomputing it using a historical stress period's correlation structure or by applying a systematic correlation inflation factor scaled to current volatility, gives you a more honest picture of portfolio risk under exactly the conditions your normal-period model is most likely to understate.
 
 ## 5. Stress Testing and Scenario Analysis
 
@@ -111,6 +119,8 @@ def pre_trade_check(order, current_exposure, limits):
 ```
 
 Design these checks to fail closed: if the risk engine cannot compute a confident answer (stale data, a missing price, a disconnected feed), the default behavior should be to reject or hold the order for manual review, never to silently approve on the assumption that "probably nothing changed."
+
+Balance the latency cost of pre-trade checks against their thoroughness deliberately, using a tiered structure rather than a single monolithic check applied uniformly to every order regardless of size or risk contribution. A small order from a well-established, historically low-risk strategy can reasonably pass through a lightweight, fast incremental check; a large order, or one from a newer strategy without an established track record, can justify the added latency of a fuller recomputation. Making this tiering explicit and documented, rather than an ad hoc performance optimization nobody remembers the rationale for, keeps the system both fast where speed matters and thorough where thoroughness matters most.
 
 ## 7. Concentration and Liquidity Risk
 

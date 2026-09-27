@@ -68,6 +68,8 @@ If any incoming quantity remains after matching, it rests on the book as a new p
 
 The practical lesson for engineers building order routing logic: you are never just "sending an order," you are inserting into a specific position in a specific data structure, and the exact rules of that insertion (time priority vs pro-rata, whether hidden orders exist, whether there's a minimum resting time) vary by venue and materially affect your fill probability and cost.
 
+Pro-rata matching deserves a concrete example because it inverts intuitions built on time-priority venues. Imagine three resting orders at the best price: 100, 300, and 600 shares, in that arrival order. Under time priority, a new incoming order for 200 shares fully executes against the first order and part of the second, in strict arrival sequence. Under pro-rata, that same 200-share incoming order splits proportionally across all three resting orders roughly according to their relative size, meaning the largest resting order captures the largest share of the fill regardless of when it arrived. This changes the optimal strategy for a market maker meaningfully: on a pro-rata venue, posting large size matters more than posting early, while on a time-priority venue, being first at a price level matters more than being large.
+
 ## 3. Spread, Depth, and What They Tell You
 
 The bid-ask spread is the most visible but least informative single number in microstructure. A tight spread signals competitive liquidity provision at the very top of book, but tells you nothing about how much size sits behind that top price. Depth — the cumulative quantity available at each price level moving away from the touch — tells you how much you can trade before your own order starts consuming multiple levels and paying a worse average price.
@@ -90,17 +92,23 @@ def effective_cost_bps(book_side, quantity, mid_price):
 
 Depth also thins out predictably around scheduled events (economic releases, earnings) as market makers widen or pull quotes to avoid being picked off by informed order flow reacting faster than they can update. Systems that size orders without accounting for this get worse fills specifically at the moments liquidity matters most.
 
+Build depth monitoring as a continuous, per-instrument background process rather than something you only check at order-sizing time. A instrument's typical depth profile through the trading day has a shape — often deeper around the open and close, thinner around midday, thinner still in the minutes before a scheduled announcement — and comparing current depth against that instrument's own historical profile at the same time of day gives you a much more useful signal than comparing against an arbitrary fixed threshold. An instrument that normally shows thin midday depth is not necessarily signaling anything unusual by being thin at noon; the same absolute depth level at the open would be a genuine anomaly worth reacting to.
+
 ## 4. Order Types Beyond Market and Limit
 
 Real exchanges support a rich vocabulary of order types beyond the two everyone learns first. Stop orders convert to market or limit orders once a trigger price trades. Iceberg orders display only a portion of their true size, refreshing the visible quantity as it fills, letting a large participant trade without revealing full size to the book. Pegged orders automatically track a reference price (often the near-touch or the midpoint) without requiring the sender to resubmit on every tick.
 
 Each of these order types exists to solve a specific engineering-adjacent problem for the trader using it: icebergs manage information leakage, pegged orders manage the operational cost of constantly re-quoting, stop orders encode a conditional trigger without needing a separate monitoring process. When you build an OMS or a smart order router, supporting these types correctly — including their exchange-specific quirks around how they interact with priority rules — is often what separates a toy system from one professionals will actually route flow through.
 
+The queue-priority treatment of an iceberg's refreshed visible slice is a detail worth internalizing specifically: when an iceberg's displayed portion fully fills and the exchange refreshes a new visible slice from the hidden reserve, that fresh slice typically goes to the back of the time-priority queue at that price level, exactly as if it were a brand-new order. This means an iceberg does not preserve queue priority across refreshes, only within a single visible slice, and any routing logic that assumes an iceberg maintains continuous priority throughout its full hidden size is making an assumption the mechanics simply don't support.
+
 ## 5. Auctions: Open, Close, and Why They're Different
 
 Continuous trading, where the matching engine processes orders one at a time as they arrive, is not how every session begins and ends. Most equity exchanges run call auctions at the open and close, where orders accumulate over a window without executing, and the exchange computes a single clearing price that maximizes matched volume, executing all crossing orders simultaneously at that one price.
 
 This matters enormously for anyone building execution logic, because a meaningful fraction of a stock's daily volume — sometimes a very large fraction for index-included names near rebalance dates — trades in the closing auction alone, at a single price determined by an auction algorithm rather than continuous order book matching. An execution algorithm that ignores this and tries to work a large residual order into the close using continuous-market logic will behave very differently than one that properly participates in the auction imbalance.
+
+Many exchanges publish an indicative imbalance feed in the minutes leading up to the close, showing the current estimated clearing price and the size of any buy/sell imbalance that would need matching to clear it. Building logic to consume and act on this imbalance feed is a genuinely different engineering task than building continuous-market order logic: you're reacting to a periodically updating, aggregate signal rather than a continuously streaming order book, and your order submission logic needs to respect auction-specific rules around when orders can still be modified or canceled before the final matching cutoff, which vary by exchange and are stricter than continuous trading's essentially unrestricted cancel rights.
 
 ## 6. Market Makers and the Economics of Providing Liquidity
 
@@ -113,6 +121,8 @@ Understanding this from the taker's side explains a lot of observed exchange beh
 Every order you send, even one that never executes, is information. A large limit order resting at a price level signals demand at that level; a pattern of repeated small orders at increasing prices signals an accumulating buyer; a canceled-and-replaced order at a tighter price signals urgency. Sophisticated market participants and their systems watch for exactly these patterns, and if your own trading system produces recognizable patterns, you should expect the market to react to them, typically to your disadvantage.
 
 This is the deep justification for execution algorithms discussed elsewhere in this library: randomizing clip sizes and timing, avoiding round-number order sizes that stand out, and varying your venue and order type choices are not paranoid overengineering, they are a direct response to the fact that the order book is a public information channel and every message you send into it is observable.
+
+Round-number bias deserves a specific mention because it's an easy, cheap mistake to fix once you know to look for it. Human traders and simple execution logic both gravitate toward round quantities (100, 500, 1,000 shares) and round prices (a whole dollar, a nickel increment), and this clustering is itself a detectable pattern that sophisticated counterparties' systems specifically look for as a marker of unsophisticated or predictable flow. Deliberately introducing small, meaningless variation into order sizes and, where price improvement rules allow, price increments costs nothing and measurably reduces how easily your own flow can be fingerprinted and reacted to by others.
 
 ## 8. Building Systems That Respect Microstructure
 
